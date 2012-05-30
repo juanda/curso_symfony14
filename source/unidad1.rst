@@ -390,9 +390,9 @@ de recursos necesarios para desarrollar con *symfony*. Por ello realizaremos a
 continuación una relación de dicha documentación:
 
 +-----------------------------------+-------------------------------------------+
-| **Documento**                     | **Descripción**                           |
-+-----------------------------------+-------------------------------------------+
-| A Gentle Introduction to symfony  |En este manual se tratan todos los aspectos|
+| Documento                         |   Descripción                             |
++===================================+===========================================+
+| *A Gentle Introduction to symfony*|En este manual se tratan todos los aspectos|
 |                                   |fundamentales y no tan fundamentales sobre |
 |                                   |*symfony*. A nuestro modo de ver es más que|
 |                                   |una introducción.                          |
@@ -407,7 +407,7 @@ continuación una relación de dicha documentación:
 +-----------------------------------+-------------------------------------------+
 |*The symfony Reference Book*       |Es el manual de referencia de *symfony*.   |
 |                                   |Muy apropiado cuando uno ya se siente      |
-|                                   |cómodo con el *framework*.                 !
+|                                   |cómodo con el *framework*.                 |
 +-----------------------------------+-------------------------------------------+
 |*More with symfony*                |Es un libro solo apto para para “symfony   |
 |                                   |masters”. En él se explican recovecos de   |

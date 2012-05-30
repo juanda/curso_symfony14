@@ -163,14 +163,15 @@ la función que realice en la aplicación.
 
 También crearemos un directorio denominado *web* el cual, al menos en un entorno
 de producción real, debe ser el único al que se pueda acceder a través de una
-petición *HTTP*. Es decir, este directorio será el directorio raíz (*document 
-root*) del *host* que sirva la aplicación. De esta manera protegemos el código 
+petición *HTTP*. Es decir, este directorio será el directorio raíz (*document root*)i
+del *host* que sirva la aplicación. De esta manera protegemos el código 
 fuente de la aplicación, ya que los archivos que no se alojen bajo el directorio
-*web* no son recursos accesibles al servidor *web*3.
+*web* no son recursos accesibles al servidor *web*.
 
 .. code-block:: bash
-	$ cd /opt/lamp/htdocs/unidad2
-	$ mkdir modelo vista acciones web
+
+   $ cd /opt/lamp/htdocs/unidad2
+   $ mkdir modelo vista acciones web
 
 
 **El controlador frontal.**
@@ -199,6 +200,7 @@ tradición en el mundo de *PHP*, lo denominaremos *index.php*, y lo ubicaremos
 colgando directamente del directorio *web*.
 
 .. code-block:: php
+
 	<?php
 
 	include('../configuracion.php');
@@ -264,9 +266,9 @@ algunas de ellas, y en el siguiente cuadro se muestran todas las que utilizaremo
 en el desarrollo de la aplicación.
 
 +-------------------------+----------------------------------------------------+
-|**Variable**             |**Significado**                                     |
-+-------------------------+----------------------------------------------------+
-|``$mvc_bd_conexion``     |*Recurso PHP* de conexión a la base de datos        |
+|    Variable             |  Significado                                       |
++==============================================================================+
+|``$mvc_bd_conexion``     | Recurso PHP de conexión a la base de datos         |
 +-------------------------+----------------------------------------------------+
 |``$mvc_bd_hostname``     |Nombre del servidor donde reside la  base de datos  |
 +-------------------------+----------------------------------------------------+
@@ -295,6 +297,7 @@ Las acciones, que forman parte del controlador, serán implementadas en ficheros
 *PHP* que serán nombrados según el siguiente patrón:
 
 .. code-block:: bash
+
 	{nombre_accion}Accion.php
 
 De esa manera sabremos por el nombre del fichero, que pertenece al componente 

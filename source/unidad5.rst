@@ -1181,13 +1181,13 @@ y para comprobar la existencia de dichos parámetros. Los métodos más usados s
 
 ================================= ================================================
 hasParameter('nombre_parametro'); Devuelve ``true`` si la petición contiene un
-								  parámetro llamado ``nombre_parametro`` y 
-								  false en caso contrario.
+				  parámetro llamado ``nombre_parametro`` y 
+				  false en caso contrario.
 
 getParameter('nombre_parametro',  Devuelve el valor del parámetro 
-'valor_defecto);				  ``nombre_parametro`` de la petición si este
-								  existe o el valor indicado en ``valor_defecto``
-								  si no existe.
+'valor_defecto);		  ``nombre_parametro`` de la petición si este
+				  existe o el valor indicado en ``valor_defecto``
+				  si no existe.
 ================================= ================================================
 
 Este objeto es uno de los más utilizados en la implementación de las acciones, 

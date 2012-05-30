@@ -1,5 +1,5 @@
-Unidad 4: Análisis de la aplicación “Gestor Documental”
-==============================================================
+**Unidad 4: Análisis de la aplicación “Gestor Documental”**
+===========================================================
 
 Continuaremos el estudio de *symfony* desarrollando una aplicación *web* con 
 unas funcionalidades que permitan aplicar la mayor parte de las herramientas 
@@ -131,8 +131,8 @@ U.06    La aplicación presentará en la cabecera de cada pantalla el nombre y
 
 ======= =======================================================================
 D.01    Por cuestiones de seguridad, la aplicación permitirá al administrador 
-		decidir qué tipo de archivos se podrán subir al repositorio. Se 
-		utilizará para ello la comprobación de tipos MIME.
+	decidir qué tipo de archivos se podrán subir al repositorio. Se 
+	utilizará para ello la comprobación de tipos MIME.
 		
 D.02    Los documentos tendrán asociados los siguientes *metadatos*:
 
@@ -149,29 +149,29 @@ D.02    Los documentos tendrán asociados los siguientes *metadatos*:
 		* categorías
 		
 D.03    El administrador de la aplicación podrá añadir, modificar y eliminar 
-		las categorías
+	las categorías
 		
 D.04	Las versiones de los documentos, una vez subidas al servidor, no se 
-		podrán borrar ni modificar
+	podrán borrar ni modificar
 		
 D.05	Los ficheros de las versiones deben ser del tipo indicado por el 
-		documento al que pertenecen.
+	documento al que pertenecen.
 		
 D.06	El autor podrá subir nuevas versiones de sus documentos. La numeración
-		de las versiones será automática.
+	de las versiones será automática.
 		
 D.07	Cada autor tendrá asociado un directorio físico en el servidor donde 
-		serán alojadas las versiones de sus documentos.
+	serán alojadas las versiones de sus documentos.
 		
 D.08	Las búsquedas podrán ser realizadas por título, descripción, tipo, 
-		autor y categorías
+	autor y categorías
 		
 D.09	Los resultados de las búsquedas se presentarán como listados paginados.
-		Cada fila corresponderá a un documento y sobre la misma fila se 
-		indicarán las operaciones que se pueden realizar sobre el documento en 
-		función del perfil que esté registrado. Las operaciones son las 
-		siguientes, entre paréntesis se muestran los perfiles que pueden
-		realizarlas:
+	Cada fila corresponderá a un documento y sobre la misma fila se 
+	indicarán las operaciones que se pueden realizar sobre el documento en 
+	función del perfil que esté registrado. Las operaciones son las 
+	siguientes, entre paréntesis se muestran los perfiles que pueden
+	realizarlas:
 
 		* Descargar (lector, autor, administrador)
 

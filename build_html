@@ -1,2 +1,2 @@
-sphinx-build -b html source ~/Sites/cursosf14_texto/
+sphinx-build -b html source ~/sites/cursosf14_texto/
 

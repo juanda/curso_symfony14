@@ -163,7 +163,8 @@ Vamos a describir la función de cada directorio del proyecto:
 |                   |conseguir esto hay que configurar adecuadamente el        |
 |                   |servidor *web*. En esta *URL* del proyecto *symfony* se   |
 |                   |explica con detalle como hacerlo:                         |
-|                   |``http://www.symfony-project.org/getting-started/1_4/en/05-Web-Server-Configuration``
+|                   |``http://www.symfony-project.org/getting-started/1_4/en/05|
+|                   |-Web-Server-Configuration``                               |
 |                   |No obstante, en los entornos de desarrollo este hecho no  |
 |                   |es tan importante, por ello en el desarrollo de nuestro   |
 |                   |ejercicio no lo tendremos en cuenta y desplegaremos todos |
@@ -1599,7 +1600,7 @@ Según lo que hemos visto en el apartado anterior, debemos definir una clase
 derivada de *sfForm* para definir dicho formulario. Sin embargo *symfony* ya 
 hizo esto por nosotros cuando comenzamos el proyecto; en efecto, la tarea
 
-.. code-block:: blash
+.. code-block:: bash
 
 	$ symfony propel:build-forms
 
@@ -1750,6 +1751,7 @@ La función *Utilidades::pintaBarra* la hemos definido en un archivo denominado
 contenido se detalla a continuación:
 
 .. code-block:: php
+
 	<?php
 	
 	class Utilidades
