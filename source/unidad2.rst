@@ -1,1313 +1,1191 @@
-**Unidad 2. Desarrollo de una aplicación siguiendo el patrón *MVC*.**
-=====================================================================
+.. codeauthor:: Juan David Rodríguez García <juandavid.rodriguez@ite.educacion.es>
 
-En esta unidad desarrollaremos una sencilla aplicación que realiza consultas 
-sobre una base de datos compuesta por una tabla que contiene la siguiente 
-información sobre alimentos:
+Unidad 2: Desarrollo de una aplicación web siguiendo el patrón MVC
+==================================================================
+
+El patrón MVC en el desarrollo de aplicaciones web
+--------------------------------------------------
+
+Muchos de los problemas que aparecen  en la ingeniería del software son similares
+en su estructura. Y, por tanto, se resuelven de manera parecida. A lo largo de la
+historia  de  esta  disciplina  se  han elaborado  un  buen  número  de  esquemas
+resolutivos que son conocidos con el nombre  des *patrones de diseño* [1]_ y cuyo
+conocimiento y  aplicación son de  una inestimáble ayuda a  la hora de  diseñar y
+construir una aplicación informática.
+
+Posiblemente uno de los más conocidos y utilizados sea el patrón *"Modelo, Vista,
+Controlador" (MVC)*,  que propone  organizar una aplicación  en tres  partes bien
+diferenciadas y débilmente  acopladas entre sí, de manera que  los cambios que se
+produzcan en  una no afecten demasiado  a las otras (idealmente  nada). El nombre
+del patrón enumera cada una de las partes:
+
+* **El Controlador**. En este artefacto se incluye todo lo referente a la lógica
+  de control de la aplicación, que no tiene nada que ver con las características
+  propias del negocio para el que se está construyendo la aplicación. En el caso
+  de una aplicación web, un ejemplo sería la manipulación de la *request HTTP*.
+
+* **El Modelo**. Donde se implementa todo lo relativo a la lógica de negocio,
+  es decir, los aspectos particulares del problema que la aplicación resuelve.
+  Si, por ejemplo estamos desarrollando un *blog*, un ejemplo sería una
+  librería de funciones para la gestión de los comentarios.
+
+* **La Vista**. Aquí se ubica el código encargado de "pintar" el resultado de 
+  los procesos de la aplicación. En una aplicación web la vista se encarga de
+  producir documentos *HTML*, *XML*, *JSON*, etcétera, con los datos que se hayan 
+  calculado previamente en la aplicación.
+
+Para que el conjunto funcione, las partes deben interaccionar entre sí. Y en 
+este punto encontramos en la literatura distintas soluciones. La que proponemos
+en este curso es la mostrada en la siguiente figura:
+
+.. figure:: imagenes/mvc.png
+   :alt: Diagrama del modelo MVC
+   
+   Diagrama del modelo MVC
+
+El controlador recibe la orden de entrada y se encarga de procesarla utilizando,
+si es preciso, los servicios del modelo para ello. Una vez que ha realizado el
+cálculo entrega los datos "crudos" a la vista y esta se encarga de decorarlos
+adecuadamente. La característica más importante de esta solución es que la vista
+nunca interacciona con el modelo.
+
+Las aplicaciones web más típicas pueden plantearse según este patrón: el 
+controlador recibe una petición *HTTP* y la procesa, haciendo uso del modelo
+calcula los datos de salida y los entrega a la vista, la cual se encarga de
+construir una respuesta *HTTP* con las cabeceras adecuadas y un **payload** o
+cuerpo de la respuesta que suele ser un contenido *HTML*, *XML* o *JSON*.
+
+Aunque no todas las aplicaciones web se pueden ajustar a este modelo, si es
+cierto que la idea de separar responsabilidades o las distintas areas de un
+problema en sistemas débilmente acoplados, es una estrategia común en las
+metodología que utilizan el paradigma de programación orientado a objetos. Es
+lo que se conoce en la terminología anglosajona como *Separation Of Concerns* [2]_.
+
+En esta unidad vamos a plantear y desarrollar una sencilla aplicación web
+utilizando como guía de diseño este patrón. De esta manera ilustraremos sus
+ventajas y nos servirá como material introductorio a la arquitectura de
+*symfony 1.4*.
+
+Descripción de la aplicación
+----------------------------
+
+Vamos a construir una aplicación web para elaborar y consultar un repositorio
+de alimentos con datos acerca de sus propiedades dietéticas. Utilizaremos una
+base de datos para almacenar dichos datos que consistirá en una sola tabla con
+la siguiente información sobre alimentos:
 
 * El nombre del alimento,
-
 * la energía en kilocalorías ,
-
 * la cantidad de proteínas,
-
 * la cantidad hidratos de carbono  en gramos
-
 * la cantidad de fibra en gramos  y 
-
 * la cantidad de grasa en gramos,
 
 todo ello por cada 100 gramos de alimento.
 
-La aplicación permitirá:
+Aunque se trata de una aplicación muy sencilla,  cuenta con los elementos
+suficientes para trabajar  el aspecto que realmente pretendemos estudiar en esta
+unidad: la organización del código siguiendo las directrices del patrón *MVC*.
+Comprobaremos como esta estrategia nos ayuda a mejorar las posibilidades de 
+crecimiento (escalabilidad) y el mantenimiento de las aplicaciones que 
+desarrollamos.
 
-1. Insertar nuevos alimentos.
+Diseño de la aplicación (I). Organización de los archivos
+---------------------------------------------------------
 
-2. Realizar consultas por el nombre del alimento, por la energía y combinando 
-   campos.
+La "anatomía" de una aplicación web típica consiste en:
 
-Así mismo contará con un menú accesible desde cualquier parte de la aplicación.
+1. El código que será procesado en el servidor (*PHP*, *Java*, *Python*, etcétera)
+   para construir dinámicamente la respuesta.
 
-Aunque se trata de una aplicación muy sencilla, cuenta con los elementos 
-suficientes para trabajar el aspecto que realmente pretendemos estudiar en esta 
-unidad: la organización del código siguiendo las directrices del patrón 
-*Modelo – Vista – Controlador*. Comprobaremos como esta estrategia nos ayuda a 
-mejorar las posibilidades de crecimiento (escalabilidad) y el mantenimiento de
-las aplicaciones que desarrollamos. 
+2. Los *Assets*, que podemos traducir como "activos" de la aplicación, y que lo 
+   constituyen todos aquellos archivos que se sirven directamente sin ningún
+   tipo de proceso. Suelen ser imágenes, *CSS's* y código *Javascript*.
 
-Construiremos el ejemplo procurando en todo momento alcanzar las características
-deseables en toda aplicación *web*, y que fueron explicadas en la primera unidad.
+El servidor web únicamente puede acceder a una parte del sistema de ficheros 
+que se denomina *Document Root*. Es ahí donde se buscan los recursos cuando se 
+realiza una petición a la raíz del servidor a través de la URL 
+``http://el.servidor.que.sea/``. Sin embargo, el código ejecutado para 
+construir dinámicamente la respuesta puede "vivir" en cualquier otra parte, 
+fuera del *Document root* [3]_.
+
+Tode esto sugiere una manera de organizar el código de la aplicación para 
+que no se pueda acceder desde el navegador más que al código estrictamente 
+imprescindible para que esta funcione. Se trata, simplemente, de colocar en el
+**Document root** sólo los activos y los scripts *PHP* de entrada a la aplicación. 
+El resto de archivos, fundamentalmente librerías *PHP's* y ficheros de
+configuración (XML, YAML, JSON, etcétera), se ubicarán fuera del **Document Root**
+y serán incluidos por los scripts de inicio según lo requieran.
+
+Siguiendo estas conclusiones, nuestra aplicación presentará la siguiente 
+estructura de directorio:
+
+.. code-block:: bash
+
+   .
+   ├── app
+   └── web
+       ├── css
+       ├── images
+       └── js
+
+Configuraremos nuestro servidor web para que el directorio ``web`` sea su
+*Document root*, y en ``app`` colocaremos el código *PHP* y la configuración de 
+la aplicación.
+
+Diseño de la aplicación (II). El controlador frontal 
+----------------------------------------------------
+
+La manera más directa y *naïf* de construir una aplicación en *PHP* consiste
+en escribir un script *PHP* para cada página de la aplicación. Sin embargo esta
+práctica presenta algunos problemas, especialmente cuando la aplicación que 
+desarrollamos adquiere cierto tamaño y pretendemos que siga creciendo. Veamos
+algunos de los problemas más significativos de este planteamiento.
+
+Por lo general, todos los scripts de una aplicación realizan una serie de 
+tareas que son comunes. Por ejemplo: interpretar y manipular  la *request*,
+comprobar las credenciales de seguridad y cargar la configuración. Esto 
+significa que una buena parte del código puede ser compartido entre los
+scripts. Para ello podemos utilizar el mecanismo de inclusión de ficheros de *PHP*
+y fin de la historia. Pero, ¿qué ocurre si en un momento dado, cuando ya tengamos
+escrito mucho código, queremos añadir a todas las páginas de la aplicación una
+nueva característica que requiere, por ejemplo, el uso de una nueva librería?.
+Tenemos, entonces, que añadir dicha modificación a todos los scripts *PHP* de la
+aplicación. Lo cual supone una degradación en el mantenimiento y un motivo
+que aumenta la probabilidad de fallos una vez que el cambio se haya realizado.
+
+Otro problema que ocurre con esta estrategia es que si se solicita una página
+que no tiene ningún script *PHP* asociado, el servidor arrojará un error (404 
+Not Found) cuyo aspecto no podemos controlar dentro de la propia aplicación 
+(es decir, sin tocar la configuración del servidor web).
+
+Como se suele decir, ¡a grandes males grandes remedios!; si el problema lo
+genera el hecho de tener muchos scripts, que además comparten bastante código,
+utilicemos uno solo que se encargue de procesar todas las peticiones. A este
+único script de entrada se le conoce como **controlador frontal**.
+
+Entonces, ¿cómo puedo crear muchas páginas distintas con un solo script?. La
+clave está en utilizar la *query string* de la URL como parte de la ruta que
+define la página que se solicita. El controlador frontal, en función
+de los parámetro que lleguen en la *query string* determinará que acciones 
+debe realizar para construir la página solicidada. 
+
+.. note:: 
+   
+   La **query string** es la parte de la URL que contiene los datos que se
+   pasarán a la aplicación web. Por ejemlo, en:
+   ``http://tu.servidor/index.php?accion=hola``, la **query string** es:
+   ``?accion=hola``.
+
+Construcción de la aplicación. Vamos al lío.
+--------------------------------------------
+
+Pues eso, vamos al lío aplicando todo lo que llevamos dicho hasta el momento:
+
+* El patrón de diseño *MVC*,
+
+* La estructura de directorios que expone únicamente los ficheros 
+  indispensables para el servidor web y,
+
+* La idea de que todas la peticiones pasen por un solo script, el controlador
+  frontal
+
+Creación de la estructura de directorios
+----------------------------------------
+
+Comenzamos creando la estructura de directorios propuesta anteriormente. Por
+lo pronto, en nuestro entorno de desarrollo y por cuestiones de comodidad,
+crearemos la estructura en alguna ubicación dentro del **Document root**.
 
 .. note::
-   Aunque los patrones de diseño son pensados en términos de colaboración de 
-   objetos, no utilizaremos las funcionalidades propias de la *POO* que ofrece 
-   *PHP* en el desarrollo del ejemplo de esta unidad. De esa manera no 
-   complicaremos más el ejemplo y podremos centrarnos exclusivamente en los 
-   aspectos relativos a la organización del código.  
+
+   Si estás utilizando como sistema operativo *Ubuntu*, el **Document root** se
+   encuentra en ``/var/www``, es ahí donde debes crear un directorio denominado 
+   ``alimentos`` que alojará la estructura propuesta. Si estás utilizando *XAMP*
+   en *Windows*, se encuentra en ``C:/xampp/htdocs``.
+   
+   Es importante resaltar que esto no debería hacerse en un entorno de
+   producción, ya que dejamos al servidor web acceder directamente al
+   directorio ``app``, y es algo que deseamos evitar. Sin embargo, de esta
+   manera podemos añadir todos los proyectos que queramos sin tener que tocar
+   la configuración del servidor web. Lo cual es algo muy agradecido cuando
+   se está desarrollando.  En un entorno de producción debemos  asegurarnos de
+   que el directorio ``web`` es el  **Document root** del servidor (o del
+   VirtualHost de nuestra aplicación, si es que estamos alojando varias
+   webs en un mismo servidor).
 
 
-**Descripción general**
-_______________________
+Nuestra implementación del patrón *MVC* será muy sencilla; crearemos una clase
+para la parte del controlador que denominaremos ``Controller``, otra para
+el modelo que denominaremos ``Model``, y para los parámetros de configuración
+de la aplicación utilizaremos una clase que llamaremos ``Config``. Los archivos
+donde se definen estas clases los ubicaremos en  el directorio ``app``. Por otro 
+lado las Vistas serán implementadas como plantillas *PHP* en el directorio 
+``app/templates``.
 
-El acceso a una aplicación *web* se hace mediante un software denominado 
-navegador al que se le indica la dirección única del recurso correspondiente al
-punto de entrada de la aplicación. Dicha dirección se denomina *URL* y contiene
-información tanto de la ubicación en la red del servidor como del recurso que se
-desea obtener. 
+Los archivos *CSS*, *Javascript* , las imágenes y el controlador frontal los 
+colocaremos en el directorio web. 
 
-Las aplicaciones *web* que siguen el patrón *MVC* se construyen de manera que el 
-acceso a cualquiera de sus funcionalidades se realiza a través de un único 
-fichero denominado **controlador frontal**, el cual se encarga de controlar el
-flujo básico de la misma según el valor que tome un parámetro denominado 
-**acción**. Como es típico en las aplicaciones *web* construidas en *PHP*, 
-nombraremos a dicho fichero *index.php*. 
-
-Las distintas funcionalidades de la aplicación, como insertar un registro o 
-realizar una consulta, son implementadas en ficheros que denominaremos 
-**acciones** y cuyo código es ejecutado por el *controlador frontal* en función
-de lo que se indique en el parámetro acción que enviamos mediante la una petición
-*HTTP GET*2. Cada acción se encarga de construir, utilizando las funciones de 
-librería (lo que en el contexto del *MVC* se denomina **modelo**) los datos que
-deseamos mostrar al usuario en la denominada **vista**.
-
-Es decir, el patrón *MVC* consiste básicamente en organizar el código de la 
-aplicación en tres componentes débilmente acoplados y que se comunican mediante
-una interfaz bien definida:
-
-* El controlador, que se encargará de dirigir el flujo de la aplicación,
-
-* El modelo, encargado de representar la lógica de negocio de la aplicación y
-
-* La vista, cuya finalidad es representar en algún formato conocido los datos 
-  ofrecidos por el modelo a petición del controlador.
-
-La siguiente figura muestra esquemáticamente este patrón de diseño en la versión
-de *MVC* que utilizamos en este curso, que obviamente es la que utiliza *symfony*.
-Observa como el controlador se comunica en ambos sentidos con el modelo, es decir
-puede pedir y enviar datos, mientras que sólo puede enviar datos a la vista. Es
-decir, la vista actúa exclusivamente como receptor de datos. En efecto la vista 
-tan solo debe ofrecer representaciones de los datos que le son enviados. Así 
-mismo el modelo no se comunica directamente con la vista en ningún sentido, ya
-que es el controlador el componente encargado de coordinar a los otros dos.
-
-Como veremos a lo largo del curso, el desacoplo logrado por este patrón incrementa
-enormemente la flexibilidad y la reutilización. Por ejemplo, sin modificar 
-absolutamente nada del modelo, podemos representarlo de tantas maneras como 
-queramos sin más que modificar la vista. 
-
-Siguiendo el patrón *MVC* en la aplicación que desarrollaremos en esta unidad, 
-incluiremos en el modelo exclusivamente las funciones que manipulen información
-sobre alimentos, es decir, lo que en términos más técnicos se conoce como *lógica
-del negocio*. En el modelo no nos preocupamos por otros aspectos de la aplicación
-tales como la conexión con la base de datos, la interpretación de la *URL*, el
-flujo de navegación, y demás elementos que constituyen el marco común 
-(*framework*) donde se ejecutan las acciones, pero que no inciden sobre el asunto 
-central de la misma, a saber: *“ofrecer y manipular información almacenada en una 
-base de datos de alimentos”*. 
-
-Por otro lado, la vista estará compuesta por ficheros *PHP* denominados 
-**plantillas**, las cuales serán confeccionadas de manera que revelen con 
-claridad la estructura *HTML* del documento que se envía a los clientes. De hecho,
-a pesar de que son archivos *PHP*, están más “cercanos” en su aspecto al *HTML*,
-y podemos decir, abusando del lenguaje, que son “ficheros *HTML* dinámicos”, en 
-el sentido de que hay ciertos datos que se presentan parametrizados (variables 
-*PHP*) y que son calculados durante la ejecución de la acción y sustituidos por 
-su valor durante la ejecución de la plantilla, dando lugar finalmente al documento
-*HTML* (esta vez sí *HTML* de verdad) que el servidor *web* (*apache*) envía al 
-cliente.
-
-Por ultimo, el control de la aplicación se realizará mediante la combinación de 
-un fichero único de entrada a la misma (el controlador frontal) y una serie de 
-ficheros de acciones que, mediante el uso coordinado del modelo y la vista, 
-implementan cada una de las funcionalidades de la aplicación.
-
-
-**Construcción de la aplicación**
-----------------------------------
-
-En primer lugar debemos crear la base de datos donde almacenaremos los datos de
-los alimentos. La denominaremos con el nombre *alimentos* y contendrá una sola 
-tabla que también se llamara *alimentos*. El siguiente código muestra la 
-instrucción *SQL* que genera dicha tabla:
+Cuando terminemos de codificar, la estructura de ficheros de la aplicación 
+presentará el siguiente aspecto:
 
 .. code-block:: bash
 
-	CREATE TABLE `alimentos` (
-	  `id` int(11) NOT NULL AUTO_INCREMENT,
-	  `nombre` varchar(255) NOT NULL,
-	  `energia` decimal(10,0) NOT NULL,
-	  `proteina` decimal(10,0) NOT NULL,
-	  `hidratocarbono` decimal(10,0) NOT NULL,
-	  `fibra` decimal(10,0) NOT NULL,
-	  `grasatotal` decimal(10,0) NOT NULL,
-	  PRIMARY KEY (`id`)
-	) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+      /var/www/alimentos      
+               ├── app
+               |   ├── templates
+               |   ├── Controllers.php
+               |   ├── Model.php
+               |   └── Config.php
+               |
+               └── web
+                   ├── css
+                   ├── images
+                   ├── js
+                   └── index.php
 
-Inserta algunos datos de ejemplo para que puedas comprobar el funcionamiento de
-la aplicación a medida que la desarrollas.
+El controlador frontal y el mapeo de rutas
+------------------------------------------
 
-Pongamos en práctica las directrices marcadas en el apartado anterior. En primer 
-lugar creamos un directorio, denominado *unidad2*, en el directorio raíz 
-(*document root*) del servidor *web*.
+En cualquier aplicación web se deben definir las *URL's* asociadas a cada una de 
+sus páginas. Para la nuestra definiremos las siguientes:
 
-.. code-block:: bash
+===================================================  =======================
+URL                                                  Acción
+===================================================  =======================
+http://tu.servidor/alimentos/index.php?ctl=inicio    mostrar pantalla inicio
+http://tu.servidor/alimentos/index.php?ctl=listar    listar alimentos
+http://tu.servidor/alimentos/index.php?ctl=insertar  insertar un alimento
+http://tu.servidor/alimentos/index.php?ctl=buscar    buscar alimentos
+http://tu.servidor/alimentos/index.php?ctl=ver&id=x  ver el alimento *x*
+===================================================  =======================
 
-    $ mkdir /opt/lamp/htdocs/unidad2
+A cada una de estas *URL's* les vamos a asociar un método público de la clase
+``Controller``. Estos métodos se suelen denominar **acciones**. Cada **acción**
+se encarga de calcular dinámicamente los datos requeridos para construir su 
+página. Podrá utilizar, si le hace falta, lo servicios de la clase ``Model``. Una
+vez calculados los datos, se los pasará a una plantilla donde se realizará, 
+finalmente, la construcción del documento *HTML* que será devuelto al cliente. 
 
-Y será ahí donde despleguemos todos los archivos de nuestra aplicación.
+Todos estos elementos serán "orquestados" por el controlador frontal, el cual
+lo implementaremos en un script llamado ``index.php`` ubicado en el directorio
+``web``. En concreto, la responsabilidad del controlador frontal será: 
 
-A continuación vamos a crear los directorios *modelo*, *vista* y *controlador*,
-que hacen alusión a los tres elementos del patrón *MCV*. De manera que cada 
-fichero que implementemos se almacene en el directorio que le corresponda según
-la función que realice en la aplicación. 
+* cargar la configuración del proyecto y las librerías donde implementaremos
+  la parte del Modelo, del Controlador y de la Vista. 
 
-También crearemos un directorio denominado *web* el cual, al menos en un entorno
-de producción real, debe ser el único al que se pueda acceder a través de una
-petición *HTTP*. Es decir, este directorio será el directorio raíz (*document root*)i
-del *host* que sirva la aplicación. De esta manera protegemos el código 
-fuente de la aplicación, ya que los archivos que no se alojen bajo el directorio
-*web* no son recursos accesibles al servidor *web*.
+* Analizar los parámetros de la petición *HTTP* (**request**) comprobando si
+  la página solicitada en ella tiene asignada alguna acción del Controlador.
+  Si es así la ejecutará, si no dará un error 404 (**page not found**).
+  
+Llegados a este punto es importante aclara que, el **controlador** frontal
+y la clase ``Controller``, son distintas cosas y tienen distintas 
+responsabilidades. El hecho de que ambos se llamen *controladores* puede dar
+lugar a confusiones.
 
-.. code-block:: bash
-
-   $ cd /opt/lamp/htdocs/unidad2
-   $ mkdir modelo vista acciones web
-
-
-**El controlador frontal.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-La responsabilidad del controlador frontal será:
-
-1. Cargar la configuración de la aplicación.
-
-2. Cargar las librerías que utiliza la aplicación.
-
-3. Realizar la conexión con la base de datos.
-
-4. Interpretar la acción que el usuario ha indicado en la *URL* así como los 
-   parámetros requeridos por la misma.
-
-5. Cargar y ejecutar la acción indicada.
-
-6. Mostrar los datos calculados en la acción mediante las plantillas 
-   confeccionadas para tal fin.
-
-Como ya hemos dicho anteriormente, el controlador frontal es el punto de acceso
-único de la aplicación. Por tanto debe ubicarse en un directorio accesible por 
-el servidor *web*. Al archivo que implementa el controlador frontal, como es 
-tradición en el mundo de *PHP*, lo denominaremos *index.php*, y lo ubicaremos 
-colgando directamente del directorio *web*.
+El controlador frontal tiene el siguiente aspecto. Crea el archivo 
+``web/index.php`` y copia el siguiente código.
 
 .. code-block:: php
+   :linenos:
+   
+    <?php
+    // web/index.php
+    
+    // carga del modelo y los controladores
+    require_once __DIR__ . '/../app/Config.php';
+    require_once __DIR__ . '/../app/Model.php';
+    require_once __DIR__ . '/../app/Controller.php';
+    
+    // enrutamiento
+    $map = array(
+        'inicio' => array('controller' =>'Controller', 'action' =>'inicio'),
+        'listar' => array('controller' =>'Controller', 'action' =>'listar'),
+        'insertar' => array('controller' =>'Controller', 'action' =>'insertar'),
+        'buscar' => array('controller' =>'Controller', 'action' =>'buscarPorNombre'),
+        'ver' => array('controller' =>'Controller', 'action' =>'ver')
+    );
+    
+    // Parseo de la ruta
+    if (isset($_GET['ctl'])) {
+        if (isset($map[$_GET['ctl']])) {
+            $ruta = $_GET['ctl'];
+        } else {
+            header('Status: 404 Not Found');
+            echo '<html><body><h1>Error 404: No existe la ruta <i>' . 
+                    $_GET['ctl'] . 
+                    '</p></body></html>';
+            exit;
+        }
+    } else {
+        $ruta = 'inicio';
+    }
+    
+    $controlador = $map[$ruta];
+    // Ejecución del controlador asociado a la ruta
+    
+    if (method_exists($controlador['controller'],$controlador['action'])) {
+        call_user_func(array(new $controlador['controller'], $controlador['action']));
+    } else {
+    
+        header('Status: 404 Not Found');
+        echo '<html><body><h1>Error 404: El controlador <i>' .
+                $controlador['controller'] .
+                '->' .
+                $controlador['action'] .
+                '</i> no existe</h1></body></html>';
+    }
 
-	<?php
+* En las líneas 5-7 se realiza la carga de la configuración del modelo y de los 
+  controladores.
+  
+* En las líneas 10-16 se declara un array asociativo cuya función es definir una
+  tabla para mapear (asociar), rutas en acciones de un controlador. Esta tabla 
+  será utilizada a continuación para saber qué acción se debe disparar.
+  
+* En las líneas 19-31 se lleva a cabo el parseo de la *URL* y la carga de la
+  acción, si la ruta está definida en la tabla de rutas. En caso contrario se 
+  devuelve una página de error. Observa que hemos utilizado la función
+  ``header()`` de *PHP* para indicar en la cabecera *HTTP* el código de error 
+  correcto. Además enviamos un pequeño documento *HTML* que informa del error.
+  También definimos a ``inicio`` como una ruta por defecto, ya que si la 
+  **query string** llega vacía, se opta por cargar esta acción.
+  
+.. note::
 
-	include('../configuracion.php');
+   En honor a la verdad tenemos que decir que lo que estamos llamando parseo de 
+   la *URL*, no es tal. Simplemente estamos extrayendo el valor de la variable
+   ``ctl`` que se ha pasado a través de la petición *HTTP*. Sin embargo, hemos 
+   utilizado este termino porque lo ideal sería que, en lugar de utilizar 
+   parámetros de la petición *HTTP* para resolver la ruta, pudiésemos utilizar
+   rutas *limpias* (es decir, sin caracteres ``?`` ni ``&`` ) del tipo:
+   
+   .. code-block:: bash
+      
+      http://tu.servidor/index.php/inicio
+      http://tu.servidor/index.php/buscar
+      http://tu.servidor/index.php/ver/5
+  
+   En este caso sí es necesario proceder a un parseo de la *URL* para buscar en la
+   tabla de rutas la acción que le corresponde. Esto, obviamente, es más complejo.
+   Pero es lo que hace (y muchas cosas más) el componente *Routing* de *symfony 1.4*.
+   
+Las acciones del Controlador. La clase ``Controller``.
+------------------------------------------------------
 
-	if(file_exists('../modelo/modelo.php'))
-	{
-	include('../modelo/modelo.php');
-	}
-	// Conexion con la base de datos
-
-	$mvc_bd_conexion = mysql_connect($mvc_bd_hostname, $mvc_bd_usuario, $mvc_bd_clave);
-	if (!$mvc_bd_conexion)
-	{
-	die('No ha sido posible realizar la conexión con la base de datos: ' . mysql_error());
-	}
-	mysql_select_db($mvc_bd_nombre, $mvc_bd_conexion);
-
-
-	// Fin conexion con la base de datos
-
-
-	// Seleccion de la accion (parametros get)
-
-	if(!isset($_GET['accion']))
-	{
-	$mvc_ctl_accion = 'inicio';
-	}
-	else
-	{
-	$mvc_ctl_accion = $_GET['accion'];
-	}
-
-	// Procesamiento de la acción
-
-	if(file_exists('../acciones/'.$mvc_ctl_accion.'Accion.php'))
-	{
-	include('../acciones/'.$mvc_ctl_accion.'Accion.php');
-	}
-	else
-	{
-	exit ('No exite la accion "'.$mvc_ctl_accion.'"');
-	}
-
-	// Fin del procesamiento de la acción
-
-	// Presentación de la vista
-
-	if(file_exists('../vista/plantillas/'.$mvc_vis_plantilla.'Plantilla.php'))
-	{
-	include('../vista/layout.php');
-	}
-	else
-	{
-	exit ('No existe la plantilla "'.$mvc_vis_plantilla.'"');
-	}
-	// Fin de la presentación de la vista
-
-	?>
-
-Hemos adoptado el convenio de identificar a las variables que tienen significado
-dentro del *framework MVC* con el prefijo ``mvc_.`` En el código anterior aparecen
-algunas de ellas, y en el siguiente cuadro se muestran todas las que utilizaremos
-en el desarrollo de la aplicación.
-
-+-------------------------+----------------------------------------------------+
-|    Variable             |  Significado                                       |
-+==============================================================================+
-|``$mvc_bd_conexion``     | Recurso PHP de conexión a la base de datos         |
-+-------------------------+----------------------------------------------------+
-|``$mvc_bd_hostname``     |Nombre del servidor donde reside la  base de datos  |
-+-------------------------+----------------------------------------------------+
-|``$mvc_bd_nombre``       |Nombre de la base de datos                          |
-+-------------------------+----------------------------------------------------+
-|``$mvc_bd_usuario``      |Usuario con privilegios suficientes para acceder a  |
-|                         |la base de datos                                    |
-+-------------------------+----------------------------------------------------+
-|``$mvc_bd_clave``        |Clave del usuario anterior                          |
-+-------------------------+----------------------------------------------------+
-|``$mvc_ctl_accion``      |Acción que debe ser ejecutada a petición del cliente|
-+-------------------------+----------------------------------------------------+
-|``$mvc_vis_plantilla``   |Plantilla con la que se deben mostrar los datos     |
-|                         |calculados por la acción y solicitados por el       |
-|                         |cliente.                                            |
-+-------------------------+----------------------------------------------------+
-|``$mvc_vis_css``         |La css que se aplicará para visualizar los          |
-|                         |documentos HTML.                                    |
-+-------------------------+----------------------------------------------------+
-
-
-**Las acciones**
-^^^^^^^^^^^^^^^^
-
-Las acciones, que forman parte del controlador, serán implementadas en ficheros
-*PHP* que serán nombrados según el siguiente patrón:
-
-.. code-block:: bash
-
-	{nombre_accion}Accion.php
-
-De esa manera sabremos por el nombre del fichero, que pertenece al componente 
-controlador del patrón *MVC*. Ubicaremos todas las acciones en el directorio 
-denominado ``acciones``.
-
-Vamos a implementar la acción de inicio, que denominaremos, según lo especificado,
-``inicioAccion.php``: 
+Ahora vamos a implementar las acciones asociadas a las *URL's* en la clase 
+``Controllers``. Crea el archivo ``app/Controller.php`` y copia el siguiente
+código:
 
 .. code-block:: php
+   :linenos:
+   
+    <?php   
+    
+    class Controller
+    {
+    
+        public function inicio()
+        {
+            $params = array(
+                'mensaje' => 'Bienvenido al curso de symfony 1.4',
+                'fecha' => date('d-m-yyy'),
+            );
+            require __DIR__ . '/templates/inicio.php';
+        }
+    
+        public function listar()
+        {
+            $m = new Model(Config::$mvc_bd_nombre, Config::$mvc_bd_usuario,
+                        Config::$mvc_bd_clave, Config::$mvc_bd_hostname);
+    
+            $params = array(
+                'alimentos' => $m->dameAlimentos(),
+            );
+    
+            require __DIR__ . '/templates/mostrarAlimentos.php';
+        }
+    
+        public function insertar()
+        {
+            $params = array(
+                'nombre' => '',
+                'energia' => '',
+                'proteina' => '',
+                'hc' => '',
+                'fibra' => '',
+                'grasa' => '',
+            );
+    
+            $m = new Model(Config::$mvc_bd_nombre, Config::$mvc_bd_usuario,
+                        Config::$mvc_bd_clave, Config::$mvc_bd_hostname);
+    
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
+                // comprobar campos formulario
+                if ($m->validarDatos($_POST['nombre'], $_POST['energia'],
+                         $_POST['proteina'], $_POST['hc'], $_POST['fibra'], 
+                         $_POST['grasa'])) {
+                    $m->insertarAlimento($_POST['nombre'], $_POST['energia'],
+                              $_POST['proteina'], $_POST['hc'], $_POST['fibra'],
+                              $_POST['grasa']);
+                    header('Location: index.php?ctl=listar');
+                    
+                } else {
+                    $params = array(
+                        'nombre' => $_POST['nombre'],
+                        'energia' => $_POST['energia'],
+                        'proteina' => $_POST['proteina'],
+                        'hc' => $_POST['hc'],
+                        'fibra' => $_POST['fibra'],
+                        'grasa' => $_POST['grasa'],
+                    );
+                    $params['mensaje'] = 'No se ha podido insertar el alimento. Revisa el formulario';
+                }
+            }
+    
+            require __DIR__ . '/templates/formInsertar.php';
+        }
+    
+        public function buscarPorNombre()
+        {
+            $params = array(
+                'nombre' => '',
+                'resultado' => array(),
+            );
+    
+            $m = new Model(Config::$mvc_bd_nombre, Config::$mvc_bd_usuario,
+                        Config::$mvc_bd_clave, Config::$mvc_bd_hostname);
+    
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $params['nombre'] = $_POST['nombre'];
+                $params['resultado'] = $m->buscarAlimentosPorNombre($_POST['nombre']);
+            }
+    
+            require __DIR__ . '/templates/buscarPorNombre.php';
+        }
+    
+        public function ver()
+        {
+            if (!isset($_GET['id'])) {
+                throw new Exception('Página no encontrada');
+            }
+    
+            $id = $_GET['id'];
+    
+            $m = new Model(Config::$mvc_bd_nombre, Config::$mvc_bd_usuario,
+                        Config::$mvc_bd_clave, Config::$mvc_bd_hostname);
+    
+            $alimento = $m->dameAlimento($id);
+    
+            $params = $alimento;
+    
+            require __DIR__ . '/templates/verAlimento.php';
+        }
+    
+    }
 
-	<?php
+Esta  clase  implementa una  serie  de  métodos  públicos, que  hemos  denominado
+acciones para  indicar que son métodos  asociados a *URL's*. Fíjate  como en cada
+una de las acciones  se declara un array asociativo ( ``params``  ) con los datos
+que serán pintados en la plantilla. Pero en ningún caso hay información acerca de
+como se pintarán dichos datos. Por otro lado, casi todas las acciones utilizan un
+objeto de la clase ``Models`` para  realizar operaciones relativas a la lógica de
+negocio, en  nuestro caso  a todo lo  relativo con la  gestión de  los alimentos.
 
-	$param_mensaje = 'Bienvenido a la primera aplicación del curso <i>"desarrollo de aplicaciones web con symfony</i>"';
-	$param_fecha = date('d - M - Y');
+Para comprender  el funcionamiento  de las acciones,  comencemos por  Analizar la
+función ``listar()`` .  Comienza declarando un objeto del modelo  (línea 17) para
+pedirle posteriormente el conjunto de alimentos  almacenados en la base de datos.
+Los datos recopilados  son almacenados en el array  asociativo ``params`` (líneas
+20-22). Por último incluye  el archivo ``/templates/mostrarAlimentos.php`` (línea
+24). Tal archivo,  que denominamos **plantilla**, será el  encargado de construir
+el documento  *HTML* con los  datos del array  ``params``. Observa que  todas las
+acciones tienen la misma estructura: realizan operaciones, recojen datos y llaman
+a una plantilla para construir el  documento *HTML* que será devuelto al cliente.
 
-	// definicion de la vista
+Observa también que en las acciones  del controlador no hay ninguna operación que
+tenga que ver con la lógica de negocio, todo lo que se hace es lógica de control.
 
-	$mvc_vis_plantilla = 'inicio';
+Analicemos ahora  la acción  ``insertar()``, cuya  lógica de  control es  algo más
+compleja     debido     a     que      tiene     una     doble     funcionalidad:
 
-	?>
+1. Enviar al cliente un formulario HTML,
 
-En la acción hemos definido unas variables que comienzan con el prefijo 
-``$param_`` que, por convenio, van a representar los parámetros que serán 
-visualizados en la vista. Es responsabilidad de la acción calcular tales 
-parámetros para entregárselos a la vista. En la acción que acabamos de mostrar, 
-el cálculo de estos parámetros es muy sencillo; ``$param_mensaje`` es una cadena
-de texto que definimos directamente, y ``$param_fecha`` se calcula usando la 
-función ``date`` de *PHP*. No obstante, como veremos en otras acciones, el 
-cálculo de los parámetros puede ser más complejo y hacer uso de consultas a la 
-base de datos o utilizar algoritmos más elaborados para ofrecer la información 
-solicitada. Por lo general, los detalles de dicho cálculo son llevados a cabo por 
-los archivos que constituyen el modelo de la aplicación.
+2. Validar los datos sobre un alimento que se reciben desde el cliente para 
+   insertarlos en la base de datos.
 
+La  función comienza  por  declarar un  array asociativo  con  campos vacíos  que
+coinciden con los  de la tabla alimento (líneas 29-36).  A continuación comprueba
+si la petición se ha realizado mediante la operación *POST* (línea 41), si es así
+significa que se han pasado datos a través  de un formulario, si no es así quiere
+decir  que simplemente  se ha  solicitado  la página  para ver  el formulario  de
+inserción.  En  este último  caso,  la  acción  pasa  directamente a  incluir  la
+plantilla que  pinta el formulario (línea  65). Como el array  de parámetros está
+vacío, se enviará al cliente un formulario  con los campos vacíos (cuando veas el
+código de la plantilla lo verás en directo,  por lo pronto basta con saber que es
+así).
 
-**Las plantillas**
-^^^^^^^^^^^^^^^^^^
+Por otro lado,  si la petición a  la acción ``insertar()`` se ha  hecho mediante la
+operación *POST*,  significa que se han  enviado datos de un  formulario desde el
+cliente  (precisamente  del formulario  vacío  que  hemos  descrito un  poco  más
+arriba).  Entonces se  extraen los  datos  de la  petición, se  comprueba si  son
+válidos  (línea 44)  y  en su  caso  se realiza  la inserción  (línea  47) y  una
+redirección al  listado de  alimentos (línea  50). Si los  datos no  son válidos,
+entonces se rellena el  array de parámetros con los datos  de la petición (líneas
+53-60) y se vuelve  a pintar el formulario, esta vez con  los campos rellenos con
+los valores que  se enviaron en la  petición anterior y con un  mensaje de error.
 
-Como en cualquier aplicación *web*, el resultado de todo el proceso debe ser un 
-archivo con algún formato interpretable por el cliente que haya realizado la 
-petición. En el caso que nos ocupa se trata de un archivo *HTML*. No obstante 
-también se podrían generar salidas en formato *XML*, *Json* o cualquier otro. 
-Ello dependerá de para qué haya sido diseñada la aplicación. Así por ejemplo 
-podemos pensar en un cliente lector de *RSS*, que espera un archivo *XML* (*RDF*, 
-*RSS2* o *Atom*) o en un cliente que hace uso de *Web Services*, cuyas salidas 
-suelen ser formateadas en un sublenguaje *XML* que el lector *RSS* comprende.
+Todo el  proceso que acabamos de  contar no tiene nada  que ver con la  lógica de
+negocio;  esto es,  no  decide cómo  deben  validarse los  datos,  ni cómo  deben
+insertarse  en la  base de  datos,  esas tareas  recaen  en el  modelo (el  cual,
+obviamente debemos utilizar). Lo importante aquí  es que debe haber una operación
+de  validación  para  tomar  una  decisión: insertar  los  datos  o  reenviar  el
+formulario relleno con los datos que envió  el usuario y con un mensaje de error.
+Es  decir,   únicamente  hay  código   que  implementa  la  lógica   de  control.
 
-Por tanto el próximo paso es construir el archivo *HTML* que será enviado al 
-navegador con los datos calculados en la acción. Para llevar a cabo la tarea 
-debemos pensar en el requisito que exigía a la aplicación a mostrar un menú de 
-navegación en todas sus vistas, así como en el principio de programación *DRY*
-(Don't Repeat Yourself). El problema será resuelto mediante la descomposición de 
-la vista en dos partes: 
+.. note::
 
-* *layout*, es una plantilla que representa todo el marco común a la aplicación 
-  como es la cabecera con el menú y el pie de página. La ubicaremos en el
-  directorio ``vista`` y se denominará ``layout.php``
+   El esquema de control que se acaba de presentar resulta muy práctico y ordenado
+   para implementar acciones que consisten en recopilar datos del usuario y
+   realizar algún proceso con ellos (almacenarlos en una base de datos, por 
+   ejemplo). A lo largo del curso aparecerá, con más o menos variaciones, en 
+   varias ocasiones.
 
-* *plantilla*, que representa la visualización de la acción que está siendo 
-  ejecutada. Las ubicaremos en un directorio llamado ``plantillas`` que cuelgue 
-  de la carpeta ``vista`` y utilizaremos el siguiente convenio para nombrarlas:  
-  ``{nombre_plantilla}Plantilla.php``
+La implementación de la Vista. 
+------------------------------
 
-La siguiente figura muestra gráficamente esta idea:
-
-
-El siguiente código corresponde al archivo ``layout.php``:
-
-.. code-block:: php 
-
-	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-	<html>
-		<head>
-			<title>Información Alimentos</title>
-			<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-			<link rel="stylesheet" type="text/css" href="<?php echo 'css/'.$mvc_vis_css ?>" />
-	
-		</head>
-		<body>
-			<div id="cabecera">
-				<h1>Información de alimentos</h1>
-			</div>
-	
-			<div id="menu">
-				<hr/>
-				<a href="index.php?accion=inicio">inicio</a> |
-				<a href="index.php?accion=insertarAlimento">insertar alimento</a> |
-				<a href="index.php?accion=buscarAlimentosPorNombre">buscar por nombre</a> |
-				<a href="index.php?accion=buscarAlimentosPorEnergia">buscar por energia</a> |
-				<a href="index.php?accion=buscarAlimentosCombinada">búsqueda combinada</a>
-				<hr/>
-			</div>
-	
-			<div id="contenido">
-				<?php include('plantillas/'.$mvc_vis_plantilla.'Plantilla.php') ?>
-			</div>
-	
-			<div id="pie">
-				<hr/>
-				<div align="center">- pie de página -</div>
-			</div>
-		</body>
-	</html>
-
-Observemos la estructura *HTML* del archivo y la manera de especificar los 
-contenidos dinámicos mediante etiquetas ``<?php ?>``. Esta manera de construir 
-los archivos de la vista permite expresar explícitamente la estructura *HTML* y
-puede ser comprendida por diseñadores *web* con un mínimo de conocimientos de 
-*PHP*. De manera que los trabajo de programación y de maquetación pueden ser 
-realizados por distintas personas con perfiles de programador y de maquetador 
-respectivamente. Ello es posible gracias a que se ha separado completamente la 
-lógica de negocio de la visualización gracias a la aplicación del patrón *MVC*. 
-Realizar futuros cambios en la presentación será inmediato; tan solo hay que 
-identificar la plantilla que es responsable de la parte que deseamos cambiar y 
-modificarla en consecuencia. 
-
-En el código anterior se aprecian dos contenidos dinámicos resaltados en negrita.
-
-El primero de ellos, ``**<?php echo 'css/'.$mvc_vis_css ?>**``, una vez 
-interpretado arrojará la ruta de un archivo ``css``. La variable ``$mvc_vis_css``
-se establece en un fichero de configuración y nos permitirá cambiar de *css* sin
-más que alterar dicha variable en el archivo de configuración correspondiente.
-
-El segundo, ``**<?php include('plantillas/'.$mvc_vis_plantilla.'Plantilla.php') ?>**``,
-incluye un archivo que, una vez interpretado por *PHP*, es la plantilla 
-correspondiente a la acción que ha sido solicitada por el cliente. El valor de la
-variable ``$mvc_vis_plantilla`` es definido en la acción que se está ejecutando.
-En el caso de la acción *inicio* este valor es (consultar el código de la acción) 
-
-.. code-block:: bash
-
-	$mvc_vis_plantilla = 'inicio';
-
-Por lo que la plantilla que mostrará los datos será ``inicioPlantilla.php``. 
-Es decir, es la acción en cuestión quien decide con qué plantilla se representarán
-los datos que ha calculado. Obviamente dicha acción debe proporcionar a la 
-plantilla todos los parámetros que esta necesite para que el resultado se genere 
-sin errores. 
-
-También es importante comprobar como el menú (ubicado en la capa ``menu``) no es
-más que un conjunto de enlaces al controlador frontal con distintas acciones que 
-desarrollaremos a lo largo de la unidad.
-
-Creamos ahora el directorio para las plantillas,
-
-.. code-block:: bash
-
-	mkdir vista/plantillas
-
-Y codificamos la plantilla ``inicioPlantilla.php``:
-
-.. code-block:: bash
-
-	<h3> Fecha: <?php echo $param_fecha ?> </h3>
-	<?php echo $param_mensaje ?>
-
-De nuevo podemos ver la estructura *HTML* explícita del fichero con contenidos 
-dinámicos que provienen de la acción ``inicioAccion.php: $param_fecha`` y 
-``$param_mensaje``.
-
-Por último, como las *CSS's* son recursos que a los que se debe acceder 
-directamente el servidor *web*, hemos determinado ubicar los ficheros *CSS's* en
-un directorio denominado css que cuelga del directorio *web*:
-
-.. code-block:: bash
-
-	mkdir web/css
-
-y en él creamos en él el archivo *estilo.css* que se muestra a continuación:
-
-.. code-block:: bash
-
-	body {
-	  padding-left: 11em;
-	  font-family: Georgia, "Times New Roman",
-			Times, serif;
-	  color: purple;
-	  background-color: #d8da3d }
-	ul.navbar {
-	  list-style-type: none;
-	  padding: 0;
-	  margin: 0;
-	  position: absolute;
-	  top: 2em;
-	  left: 1em;
-	  width: 9em }
-	h1 {
-	  font-family: Helvetica, Geneva, Arial,
-			SunSans-Regular, sans-serif }
-	ul.navbar li {
-	  background: white;
-	  margin: 0.5em 0;
-	  padding: 0.3em;
-	  border-right: 1em solid black }
-	ul.navbar a {
-	  text-decoration: none }
-	a:link {
-	  color: blue }
-	a:visited {
-	  color: purple }
-	address {
-	  margin-top: 1em;
-	  padding-top: 1em;
-	  border-top: thin dotted }
-	#contenido {
-	  display: block;
-	  margin: auto;
-	  width: auto;
-	  min-height:400px;
-	}
-
-
-**La configuración**
+Las plantillas *PHP*
 ^^^^^^^^^^^^^^^^^^^^
 
-Para que la primera acción de nuestra aplicación pueda ejecutarse correctamente 
-tan sólo nos queda definir el fichero de configuración donde especificaremos los
-parámetros de conexión a la base de datos y la *CSS* que decorará la aplicación. 
-Vamos a colocar dicho fichero en el directorio raíz de la aplicación y lo 
-llamaremos *configuracion.php*.
-
-.. code-block:: php
-
-	<?php
-	
-	$mvc_bd_hostname   = "localhost";
-	$mvc_bd_nombre     = "alimentos";
-	$mvc_bd_usuario    = "root";
-	$mvc_bd_clave      = "root";
-	
-	$mvc_vis_css       = "estilo.css";
-	
-	?>
-
-Con esto tenemos todo lo necesario para ejecutar con éxito la primera acción de
-nuestra aplicación. Aún no hemos implementado nada en la parte del modelo, pero 
-es que esta primera acción es lo más simple que se despacha en acciones. Aún así,
-su programación ha mostrado las características fundamentales del patrón *MVC*.
-
-Comprueba su funcionamiento solicitando el siguiente documento en tu navegador:
-
-.. code-block:: bash
-
-	http://localhost/unidad2/web/index.php?accion=inicio,
-
-
-también debe funcionar con esta otra:
-
-.. code-block:: bash
-
-	http://localhost/unidad2/web/index.php
-
-
-O esta otra:
-
-.. code-block:: bash
-
-	http://localhost/unidad2/web/1
-
-
-Ya que el controlador frontal carga la acción *inicio* en caso de que no exista 
-el parámetro *accion*.
-
-Introduciremos el modelo cuando implementemos el resto de las acciones requeridas.
-Pero antes vamos a repasar el funcionamiento conjunto de todas las partes que 
-hemos desarrollado hasta el momento.
-
-Estructura de directorio:
-
-+----------------------------+-------------------------------------------------+
-|**Archivo**                 |**Descripción**                                  |
-+----------------------------+-------------------------------------------------+
-|/                           |Raíz de la aplicación                            |
-+----------------------------+-------------------------------------------------+
-||- aciones                  |Directorio para las acciones del controlador     |
-+----------------------------+-------------------------------------------------+
-||  `- inicioAccion.php      |Plantilla de la acción *inicio*                  |
-+----------------------------+-------------------------------------------------+
-||- modelo                   |Directorio para los archivos del modelo          |
-+----------------------------+-------------------------------------------------+
-||- vista                    |Directorio para los archivos de la vista         |
-+----------------------------+-------------------------------------------------+
-||  |- plantillas            |Directorio para las plantillas de las acciones   |
-+----------------------------+-------------------------------------------------+
-||  |  `- inicioPlantilla.php|Plantilla de la acción *inicio*                  |
-+----------------------------+-------------------------------------------------+
-||  `- layout.php            |Layout de la aplicación (cabecera, menú y pie de |
-|                            |página)                                          |
-+----------------------------+-------------------------------------------------+
-||- web                      |Directorio accesible al servidor web             |
-+----------------------------+-------------------------------------------------+
-||  |- css                   |Directorio donde se colocarán las CSS's          |
-+----------------------------+-------------------------------------------------+
-||  |  `- estilo.css         |Hoja de estilo CSS.                              |
-+----------------------------+-------------------------------------------------+
-||  `- index.php             |Controlador frontal de la aplicación             |
-+----------------------------+-------------------------------------------------+
-|`- configuracion.php        |Archivo de configuración de la aplicación        |
-+----------------------------+-------------------------------------------------+
-
-**Funcionamiento:**
-
-El cliente solicita la ejecución de la acción *inicio* a través de la *URL*:
-
-.. code-block:: bash
-
-	http://localhost/unidad2/web/index.php?accion=inicio
-
-
-Se ejecuta entonces el controlador frontal de la aplicación que 
-
-1. Carga el fichero de configuración.
-
-2. Carga las librerías del modelo (por lo pronto vacías).
-
-3. Realiza la conexión a la base de datos con los parámetros de configuración 
-   ``$mvc_hostame_bd, $mvc_nombre_bd, $mvc_usuario_bd`` y ``$mvc_clave_bd``.
-
-4. Comprueba la acción que se ha solicitado en la petición, si no se ha 
-   solicitado ninguna se ejecutará la acción *inicio*.
-
-5. Incluye la acción *inicio* (archivo ``inicioAccion.php``) en la que se 
-   establecen dos parámetros para ser mostrado por la vista: ``$param_mensaje``
-   y ``$param_fecha``. Además establece ``inicioPlantilla.php`` como plantilla 
-   para mostrar los datos. Esto último se establece definiendo el valor de la 
-   variable ``$mvc_vis_plantilla = 'inicio'``.
-
-6. Incluye el *layout* de la aplicación (archivo ``layout.php``) el cual 
-   dibujará la cabecera, el menú, el pie de página y la plantilla especificada 
-   en la variable ``$mvc_vis_plantilla``.
-
-7. Finalmente se juntan todas las partes y se obtiene el documento *HTML* que
-   se enviará al navegador cliente.
-
-A falta del modelo, ya tenemos el mini-*framework MVC* desarrollado. Para añadir
-funcionalidades a la aplicación siempre debemos proceder de la misma forma:
-
-1. Implementamos un archivo de acción en el directorio acciones que se denomine 
-   ``{nombre_accion}Accion.php.`` En él definimos y calculamos, haciendo uso de 
-   librerías del modelo si es necesario, los parámetros que deseamos mostrar 
-   posteriormente en la vista. Convenimos, por cuestiones de organización, no de 
-   funcionalidad, que estos parámetros sean variables *PHP* que comiencen con el
-   prefijo ``$param_``. Además la acción finalizará definiendo el valor de la 
-   variable ``$mvc_vis_plantilla``, que será el nombre de la plantilla sin el
-   sufijo ``Plantilla``.
-
-2. Implementamos la plantilla ``{nombre_plantilla}Plantilla.php`` donde 
-   definiremos la estructura *HTML* que será insertada en el *layout*. Los datos 
-   dinámicos, que son los parámetros definidos en la acción, se presentarán 
-   mediante las etiquetas ``<?php echo $param_{nombre_parametro} ?>``.
-
-3. Si es necesario, se implementan las  nuevas funciones de librerías en el 
-   modelo para dar servicio a la acción.
-
-4. Ya podemos ejecutar la acción desde el navegador cliente mediante la url: 
-   ``http://localhost/unidad2/web/index.php?accion=nombre_accion[&param1=p1&param2=p2...]``. 
-
-Y siempre procedemos de igual manera. Esta organización del código, derivada de 
-la aplicación del patrón *MVC*, ha definido un procedimiento homogéneo para 
-añadir funcionalidad a la aplicación separando el código en partes con 
-responsabilidades bien definidas. Obviamente hemos ganado en mantenibilidad y 
-escalabilidad de la aplicación.
-
-
-**El modelo**
-^^^^^^^^^^^^^^
-
-Para ilustrar la utilidad del modelo, vamos a implementar una nueva funcionalidad
-a la aplicación. El próximo ejercicio incorporará un formulario de búsqueda de 
-alimentos por nombre. El resultado de la búsqueda será mostrado por orden 
-descendente de kilocalorías por cada 100g de alimento.
-
-La secuencia lógica será: 
-
-1. El cliente pide el formulario de búsqueda.
-
-2. El servidor se lo envía
-
-3. El usuario rellena el formulario y lo envía al servidor.
-
-4. El servidor procesa los datos y envía el resultado al cliente.
-
-Esta funcionalidad se puede implementar fácilmente en nuestro mini-*framework MVC*
-mediante dos acciones; una para enviar el formulario, y otra para procesar los 
-datos devueltos y enviar el resultado.
-
-**Implementación del formulario.**
-
-El formulario de búsqueda será una plantilla que denominaremos 
-*formBusquedaPorNombrePlantilla.php*, y cuyo código es el siguiente:
-
-.. code-block:: bash
-
-	<form name="formBusqueda" action="index.php?accion=procesarFormBusquedaPorNombre" method="POST">
-	
-		<table>
-			<tr>
-				<td>alimento:</td>
-				<td><input type="text" name="nombre"></td>
-				<td><input type="submit" value="buscar"></td>
-			</tr>
-		</table>
-		
-		</table>
-		
-	</form>
-
-
-Se ha destacado en negrita la acción que dispará el formulario cuando es enviado.
-Observa que se trata de la acción correspondiente al punto nº 4 de la secuencia 
-lógica que acabamos de esbozar.
-
-Para que esta platilla pueda “pintarse”, debe ser llamada por una acción que 
-denominaremos *buscarAlimentosPorNombre*, y que de acuerdo a las normas de 
-nuestro framework *MVC* será implementada en un archivo de nombre  
-*buscarAlimentosPorNombreAccion.php.*
-
-.. code-block:: php
-
-	<?php
-	
-	$mvc_vis_plantilla = 'formBusquedaPorNombre';
-	
-	?>
-
-
-Lo único que hace esta acción es definir el nombre de la plantilla que dibujará 
-el formulario de búsqueda.
-
-Estos dos archivos cubren los puntos 1 y 2. Ahora ya puedes probarlo accediendo 
-a la aplicación mediante la siguiente *URL*:
-
-.. code-block:: bash
-
-	http://localhost/unidad2/web/index.php?accion=buscarAlimentosPorNombre
-
-Observa que esta misma acción es la que se especifica en uno de los elementos 
-del menú de la aplicación definido en el *layout*. De hecho la forma correcta de
-acceder es a través de dicho enlace del menú.
-
-Ahora desarrollaremos la parte del proceso del formulario.
-
-Implementamos una acción denominada *procesarFormBusquedaPorNombre*, en un
-archivo cuyo nombre debe ser *procesarFormBusquedaPorNombreAccion.php.* 
-El nombre de la acción debe corresponderse con la que se indica en el formulario
-de búsqueda, y su código será:
-
-.. code-block:: php
-
-	<?php
-	
-	$param_alimentos = array();
-	
-	$param_alimentos = buscarAlimentosPorNombre($_POST['nombre'], $mvc_bd_conexion);
-	
-	$mvc_vis_plantilla = "mostrarAlimentos";
-	
-	?>
-
-Y es aquí donde hacemos uso de una función de librería, *buscarAlimentosPorNombre*,
-que debe ser implementada dentro del archivo *modelo.php*. El código se muestra 
-a continuación:
-
-.. code-block:: bash
-
-	function buscarAlimentosPorNombre($nombre, $conexion)
-	{
-		$sql = "select * from alimentos where nombre like '".$nombre."' order by energia desc";
-	
-		$result = mysql_query($sql, $conexion);
-	
-		$alimentos = array();
-		while ($row = mysql_fetch_assoc($result))
-		{
-			$alimentos[] = $row;
-		}
-	
-		return $alimentos;
-	}
-
-
-Esta función es propia de la lógica de negocio de la aplicación, y realiza una 
-consulta a la base de datos para obtener los alimentos cuyos nombres coincidan 
-con el patrón que se le pasa en su primer argumento, obtenido a su vez del 
-parámetro ``nombre`` enviado por el formulario de búsqueda mediante una petición 
-*HTTP POST*. La función devuelve un *array* con los alimentos encontrados.
-
-El *array* es almacenado en la variable ``$param_alimentos`` de la acción que 
-procesa el formulario, y lo “entregaremos” a la vista correspondiente para que
-los “dibuje”. La variable ``$mvc_vis_plantilla`` definida en la acción especifica
-que el nombre de la plantilla es *mostrarAlimentos*. Luego debemos crear una 
-archivo denominado *mostrarAlimentosPlantilla.php* para que se cierre el ciclo. He aquí el código de este archivo:
-
-.. code-block:: html+jinja
+Ahora vamos a pasar a estudiar la parte de la Vista, representada en nuestra 
+solución por las plantillas. Aunque en el análisis que estamos haciendo ya hemos
+utilizado la palabra "plantilla" en varias ocasiones, aún no la hemos definido con
+precisión. Así que comenzamos por ahí.
+
+Una plantilla es un fichero de texto con la información necesaria para generar
+documentos en cualquier formato de texto (*HTML*, *XML*, *CSV*, *LaTeX*, *JSON*,
+etcétera). Cualquier tipo de plantilla consiste en un documento con el formato que
+se quiere generar, y con variables expresadas en el lenguaje propio de la
+plantilla y que representas a lo valores que son calculados dinámicamente por la
+aplicación.
+
+Cuando desarrollamos aplicaciones web con *PHP*, la forma más sencilla de 
+implementar plantillas es usando el propio *PHP* como lenguaje de plantillas. ¿Qué
+significa esto? Acudimos al refranero popular y decimos aquello de que *una imagen
+vale más que mil palabras*. Con todos vosotros un ejemplo de plantilla *HTML* que
+usa *PHP* como lenguaje de plantillas (dedícale un ratito a observarla y 
+analizarla, ¿qué es lo que te llama la atención en el aspecto del código *PHP*
+que aparece?)
+
+.. code-block:: html+php
+   :linenos:
 
 	<table>
-		<tr>
-			<th>alimento (por 100g)</th>
-			<th>energía (Kcal)</th>
-			<th>grasa (g)</th>
-		</tr>
-		<?php foreach ($param_alimentos as $alimento) :?>
-		<tr>
-			<td><?php echo $alimento['nombre'] ?></td>
-			<td><?php echo $alimento['energia']?></td>
-			<td><?php echo $alimento['grasatotal']?></td>
-		</tr>
-		<?php endforeach; ?>
-	
+	    <tr>
+		<th>alimento (por 100g)</th>
+		<th>energía (Kcal)</th>
+		<th>grasa (g)</th>
+	    </tr>
+	    <?php foreach ($params['alimentos'] as $alimento) :?>
+	    <tr>
+		<td><a href="index.php?ctl=ver&id=<?php echo $alimento['id']?>">
+                       <?php echo $alimento['nombre'] ?>
+                    </a>
+            </td>
+		<td><?php echo $alimento['energia']?></td>
+		<td><?php echo $alimento['grasatotal']?></td>
+	    </tr>
+	    <?php endforeach; ?>
+
 	</table>
 
-Esta plantilla puede ser reutilizada más adelante por cualquier acción que defina
-un *array* denominado ``$param_alimentos`` cuyos elementos sean *arrays* con los 
-campos ``nombre, energia`` y ``grasatotal``. 
+Esencialmente no es más que un trozo de documento *HTML* donde la información 
+dinámica se obtiene procesando código *PHP*. La característica principal de este
+código *PHP* es que debe ser escueto y corto. De manera que no "contamine" la
+estructura del *HTML*. Por ello cada instrucción *PHP* comienza y termina en la
+misma línea. La mayor parte de estas instrucciones son ``echo's`` de variables
+escalares. Pero también son muy usuales la utilización de bucles ``foreach`` - 
+``endforeach`` para recorrer arrays de datos, así como los bloques condicionales
+``if`` - ``endif`` para pintar bloques según determinadas condiciones.
 
-.. note:: 
+En el ejemplo de más arriba se genera el código *HTML* de una tabla que puede tener
+un número variable de filas. Se recoje en la plantilla el parámetro ``alimentos`` ,
+que es un array con datos de alimentos, y se genera una fila por cada elemento del
+array con información de la *URL* de una página sobre el alimento (línea 9), y 
+su nombre, energía y grasa total (líneas 10-14).
 
-   En la plantilla anterior se utiliza un recurso muy frecuente cuando se desea 
-   mostrar un número de datos variables (en este caso un conjunto de alimentos). 
-   Se trata de pasar a la plantilla como dato dinámico un *array* y procesarlo en
-   la misma mediante un bucle *foreach*. Para no perder la estructura *HTML* y c
-   onstruir plantillas limpias que puedan ser fácilmente entendida por todos, 
-   *PHP* admite especificar los bloques *foreach* sin necesidad de utilizar 
-   llaves ({}). Para ello se termina la instrucción *foreach* con dos puntos (:) 
-   y se indica el final mediante una etiqueta ``<?php endforeach ; ?>``. Lo mismo
-   se puede hacer con los bloques *if/endif*. 
+Observa también la forma de construir el bucle ``foreach``, se abre en la línea 7 
+y se cierra en la 16. Lo particular de la sintaxis de este tipo de bucle para 
+plantillas es que la instrucción ``foreach`` que lo abre terminan con el caracter 
+``:``. Y la necesidad de cerrarlo con un ``<?php endforeach; ?>``.
 
-   Es una buena práctica en el desarrollo de aplicaciones *web* con *PHP*
-   implementar plantillas en las que únicamente se utilicen las siguiente 
-   sentencias *PHP*: ``echo, foreach/endforeach`` y ``if/endif``. De esa manera
-   el código de las plantillas será más próximo al *HTML* que al *PHP* y se podrá
-   descubrir fácilmente la estructura *HTML*, que es lo que se pretende con las 
-   plantillas.
+El layout y el proceso de *decoración de plantillas*
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Ya lo tenemos todo, ahora puedes probar a rellenar el formulario y enviarlo. El 
-sistema mostrará un listado con el resultado de la búsqueda.
+En una aplicación web,  muchas de las páginas tienen elementos comunes. Por 
+ejemplo, un caso típico es la cabecera donde se coloca el mensaje de bienvenida, 
+el menú y el pie de página. Este hecho, y la aplicación del conocido principio de
+buenas prácticas de programación *DRY* (*Don't Repeat Yourself*, No Te Repitas),
+lleva a que cualquier sistema de plantillas que se utilice para implementar la 
+vista utilice otro conocido patrón de diseño: El *Decorator*, o Decorador [4]_.
+Aplicado a la generación de vistas la solución que ofrece dicho patrón es la de
+añadir funcionalidad adicional a las plantillas. Por ejemplo, añadir el menú y el
+pie de página a las plantillas que lo requieran, de manera que dichos elementos 
+puedan reutilizarse en distintas plantillas. Literalmente se trata de *decorar* 
+las plantillas con elementos adicionales reutilizables. 
 
+Nuestra implementación del patrón *Decorator* es muy simple y, por tanto limitada,
+pero suficiente para asimilar las bases del concepto y ayudarnos a comprender más
+adelante la filosofía del sistema de plantillas de *symfony 1.4*.
 
-**Completamos la aplicación**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Nuestras plantillas serán ficheros *PHP* del tipo que acabamos de explicar, y las 
+ubicaremos en el directorio ``app/templates``. Como ya has visto en el código del 
+controlador, las acciones finalizan incluyendo alguno de estos archivos. Comencemos
+por estudiar  la plantilla ``app/templates/mostrarAlimentos.php``, que es la 
+que utiliza la acción ``listar()`` para pintar los alimentos que obtiene del
+modelo. Crea el archivo ``app/templates/mostrarAlimentos.php`` con el siguiente
+código:
 
-Para cubrir los requisitos que se especificaron al principio, debemos añadir las
-siguientes funcionalidades:
+``app/templates/mostrarAlimentos.php``
 
-* búsqueda por energía
+.. code-block:: html+php
+   :linenos:
+   
+    <?php ob_start() ?>
+    
+    <table>
+        <tr>
+            <th>alimento (por 100g)</th>
+            <th>energía (Kcal)</th>
+            <th>grasa (g)</th>
+        </tr>
+        <?php foreach ($params['alimentos'] as $alimento) :?>
+        <tr>
+            <td><a href="index.php?ctl=ver&id=<?php echo $alimento['id']?>">
+                    <?php echo $alimento['nombre'] ?></a></td>
+            <td><?php echo $alimento['energia']?></td>
+            <td><?php echo $alimento['grasatotal']?></td>
+        </tr>
+        <?php endforeach; ?>
+    
+    </table>
+    
+    
+    <?php $contenido = ob_get_clean() ?>
+    
+    <?php include 'layout.php' ?>
 
-* búsqueda combinada
+Como ves, las líneas 3-18 son las que se han puesto como ejemplo de plantilla *PHP*
+hace un momento. La novedad son las líneas 1 y 21-23. En ellas está la clave del
+nuestro proceso de decoración. Para comprenderlo del todo es importante echarle
+un vistazo al fichero ``app/templates/layout.php``, incluido al final de la 
+plantilla. Créalo y copia el siguiente código:
 
-* insertar nuevos registros
+``app/templates/layout.php``
 
-En este apartado únicamente vamos a mostrar el código que debemos añadir para 
-conseguirlo. Se deja al estudiante que decida donde debe colocar cada archivo.
+.. code-block:: html+php
+   :linenos:
+   
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+    <html>
+        <head>
+            <title>Información Alimentos</title>
+            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+            <link rel="stylesheet" type="text/css" href="<?php echo 'css/'.Config::$mvc_vis_css ?>" />
+    
+        </head>
+        <body>
+            <div id="cabecera">
+                <h1>Información de alimentos</h1>
+            </div>
+    
+            <div id="menu">
+                <hr/>
+                <a href="index.php?ctl=inicio">inicio</a> |
+                <a href="index.php?ctl=listar">ver alimentos</a> |
+                <a href="index.php?ctl=insertar">insertar alimento</a> |
+                <a href="index.php?ctl=buscar">buscar por nombre</a> |
+                <a href="index.php?ctl=buscarAlimentosPorEnergia">buscar por energia</a> |
+                <a href="index.php?ctl=buscarAlimentosCombinada">búsqueda combinada</a>
+                <hr/>
+            </div>
+    
+            <div id="contenido">
+                <?php echo $contenido ?>
+            </div>
+    
+            <div id="pie">
+                <hr/>
+                <div align="center">- pie de página -</div>
+            </div>
+        </body>
+    </html>
 
-.. note:: 
+El nombre del fichero es bastante ilustrativo, es un *layout* *HTML*, es decir, un
+diseño de un documento *HTML* que incluye como elemento dinámico a la variable 
+``$contenido`` (línea 26), la cual esta definida al final de la plantilla 
+``mostrarAlimentos.php``, y cuyo contenido es precisamente el resultado de 
+interpretar las líneas comprendidas entre el ``ob_start()``  y 
+``$contenido = ob_get_clean()`` . En la documentación de estas funciones
+(http://php.net/manual/es/function.ob-start.php) puedes ver que el 
+efecto de ``ob_start()`` es enviar todos los resultados del script desde la 
+invocación de la función a un buffer interno. Dichos resultados se recojen a
+través de la función ``ob_get_clean()`` . De esa manera conseguimos decorar la 
+plantilla con el layout. Esta técnica es utilizada en todas las plantillas, de 
+manera que todos los elementos comunes a todas las páginas son escritos una
+sóla vez en ``layout.php`` y reutilizados con todas las plantillas generadas con
+los datos de cada acción.
 
-   Cada uno de los siguientes apartados es independiente uno de otro a excepción 
-   del  2.6.4, que contienen el código de las funciones del modelo que son 
-   utilizadas en los apartados 2.6.1, 2.6.2 y 2.6.3. 
+Observa que el *layout* que hemos propuesto incluye:
 
+* los estilos *CSS* (línea 6),
 
-**Búsqueda por energía**
-##########################
+* el menú de la aplicación (líneas 14-23)
 
-* **acción**: *buscarAlimentosPorEnergia*
+* el pie de página (líneas 29-32) 
 
-  **archivo**: *buscarAlimentosPorEnergiaAccion.php*
+A continuación mostramos el código del resto de las plantillas:
 
-.. code-block:: php
+``app/templates/inicio.php``
 
-	<?php
-	
-	$mvc_vis_plantilla = 'formBusquedaPorEnergia';
-	?>
+.. code-block:: html+php
+   :linenos:
+    
+    <?php ob_start() ?>
+    <h1>Inicio</h1>
+    <h3> Fecha: <?php echo $params['fecha'] ?> </h3>
+    <?php echo $params['mensaje'] ?>
+    
+    <?php $contenido = ob_get_clean() ?>
+    
+    <?php include 'layout.php' ?>
 
+``app/templates/formInsertar.php``
 
-* **acción**: *procesarFormBusquedaPorEnergia*,
-
-  **archivo**: *procesarFormBusquedaPorEnergiaAccion.php*
+.. code-block:: html+php
+   :linenos:
+    
+    <?php ob_start() ?>
+    
+    <?php if(isset($params['mensaje'])) :?>
+    <b><span style="color: red;"><?php echo $params['mensaje'] ?></span></b>
+    <?php endif; ?>
+    <br/>
+    <form name="formInsertar" action="index.php?ctl=insertar" method="POST">
+        <table>
+            <tr>
+                <th>Nombre</th>
+                <th>Energía (Kcal)</th>
+                <th>Proteina (g)</th>
+                <th>H. de carbono (g)</th>
+                <th>Fibra (g)</th>
+                <th>Grasa total (g)</th>
+            </tr>
+            <tr>
+                <td><input type="text" name="nombre" value="<?php echo $params['nombre'] ?>" /></td>
+                <td><input type="text" name="energia" value="<?php echo $params['energia'] ?>" /></td>
+                <td><input type="text" name="proteina" value="<?php echo $params['proteina'] ?>" /></td>
+                <td><input type="text" name="hc" value="<?php echo $params['hc'] ?>" /></td>
+                <td><input type="text" name="fibra" value="<?php echo $params['fibra'] ?>" /></td>
+                <td><input type="text" name="grasa" value="<?php echo $params['grasa'] ?>" /></td>
+            </tr>
+    
+        </table>
+        <input type="submit" value="insertar" name="insertar" />
+    </form>
+    * Los valores deben referirse a 100 g del alimento
+    
+    <?php $contenido = ob_get_clean() ?>
+    
+    <?php include 'layout.php' ?>
   
-.. code-block:: php
+``app/templates/buscarPorNombre.php``
 
-	<?php
-	
-	if(is_numeric($_POST['energia_min']) && is_numeric($_POST['energia_max']))
-	{
-		$param_alimentoss = array();
-		
-		$param_alimentoss = buscarAlimentosPorEnergia($_POST['energia_min'], $_POST['energia_max'], $mvc_bd_conexion);
-	
-		//$mvc_vis_plantilla = "mostrarAlimentos";
-		$mvc_vis_plantilla = "mostrarAlimentosHistoEnergia";
-	}
-	else
-	{
-		$mvc_vis_plantilla = "mostrarErrorFormulario";
-	
-	}
-	?>
+.. code-block:: html+php
+   :linenos:
+    
+	<?php ob_start() ?>
 
-* **plantilla**: *formBusquedaPorEnergia*
+	 <form name="formBusqueda" action="index.php?ctl=buscar" method="POST">
 
-  **archivo**: *formBusquedaPorEnergiaPlantilla.php*
-  
-.. code-block:: html+jinja
+	     <table>
+		 <tr>
+		     <td>nombre alimento:</td>
+		     <td><input type="text" name="nombre" value="<?php echo $params['nombre']?>">(puedes utilizar '%' como comodín)</td>
 
-	<form name="formBusqueda" action="index.php?accion=procesarFormBusquedaPorEnergia" method="POST">
-	
-		<table>
-			<tr>
-				<th>propiedad</th>
-				<th>mínimo</th>
-				<th>máximo</th>
-			</tr>
-			<tr>
-				<td>energía (Kcal):</td>
-				<td><input type="text" name="energia_min"></td>
-				<td><input type="text" name="energia_max"></td>
-				<td> <input type="submit" value="buscar"></td>
-			</tr>
-		</table>
-	   
-	</form>
+		     <td><input type="submit" value="buscar"></td>
+		 </tr>
+	     </table>
 
+	     </table>
 
-* **plantilla**: *mostrarAlimentosHistoEnergia*
+	 </form>
 
-  **archivo**: *mostrarAlimentosHistoEnergiaPlantilla.php.*
-  
-.. code-block:: html+jinja
-
-	<table>
+	 <?php if (count($params['resultado'])>0): ?>
+	 <table>
+	    <tr>
+		<th>alimento (por 100g)</th>
+		<th>energía (Kcal)</th>
+		<th>grasa (g)</th>
+	    </tr>
+	    <?php foreach ($params['resultado'] as $alimento) : ?>
 		<tr>
-			<th>alimento (por 100g)</th>
-			<th>energía (Kcal)</th>
+		    <td><a href="index.php?ctl=ver&id=<?php echo $alimento['id'] ?>">
+			    <?php echo $alimento['nombre'] ?></a></td>
+		    <td><?php echo $alimento['energia'] ?></td>
+		    <td><?php echo $alimento['grasatotal'] ?></td>
 		</tr>
-		<?php foreach ($param_alimentoss as $param_alimentos) :?>
-		<tr>
-			<td><?php echo $param_alimentos['nombre'] ?></td>
-			<td><?php echo pintaBarra($param_alimentos['energia'])?></td>
-			
-		</tr>
-		<?php endforeach; ?>
-	
+	    <?php endforeach; ?>
+
 	</table>
+	 <?php endif; ?>
 
+	 <?php $contenido = ob_get_clean() ?>
 
-* **plantilla**: *mostrarErrorFormulario*
+	 <?php include 'layout.php' ?>
 
-  **archivo**: *mostrarErrorFormularioPlantilla.php.*
-  
+``app/templates/verAlimento.php``
+
+.. code-block:: html+php
+   :linenos:
+    
+    <?php ob_start() ?>
+    
+    <h1><?php echo $params['nombre'] ?></h1>
+    <table border="1">
+        
+        <tr>
+            <td>Energía</td>
+            <td><?php echo $alimento['energia'] ?></td>
+            
+        </tr>
+        <tr>
+            <td>Proteina</td>
+            <td><?php echo $alimento['proteina']?></td>
+            
+        </tr>
+        <tr>
+            <td>Hidratos de Carbono</td>
+            <td><?php echo $alimento['hidratocarbono']?></td>
+            
+        </tr>
+        <tr>
+            <td>Fibra</td>
+            <td><?php echo $alimento['fibra']?></td>
+            
+        </tr>
+        <tr>
+            <td>Grasa total</td>
+            <td><?php echo $alimento['grasatotal']?></td>
+            
+        </tr>
+    
+    </table>
+    
+    
+    <?php $contenido = ob_get_clean() ?>
+    
+    <?php include 'layout.php' ?>
+
+Todas las plantillas recurren al uso de las funciones ``ob_start()`` y 
+``ob_get_clean()`` y a la inclusión del *layout* para realizar el proceso de 
+decoración.
+
+El Modelo. Accediendo a la base de datos
+----------------------------------------
+
+Ya sólo nos queda presentar al Modelo. En nuestra aplicación se ha implementado
+en la clase ``Model`` y esta compuesto por una serie de funciones para 
+persistir datos en la base de datos, recuperarlos y realizar su validación.
+
+Dependiendo de la complejidad del negocio con el que tratemos, el modelo puede ser
+más o menos complejo y, además de tratar con la persistencia de los datos puede
+incluir funciones para ofrecer otros servicios relacionados con el negocio en 
+cuestión. Crea el archivo ``app/Model.php`` y copia el siguiente código:
+
+``app/Model.php``
+
+.. code-block:: php
+   :linenos:
+
+    <?php
+    
+    class Model
+    {
+        protected $conexion;
+    
+        public function __construct($dbname,$dbuser,$dbpass,$dbhost)
+        {   
+          $mvc_bd_conexion = mysql_connect($dbhost, $dbuser, $dbpass);
+
+          if (!$mvc_bd_conexion) {
+              die('No ha sido posible realizar la conexión con la base de datos: ' . mysql_error());
+          }
+          mysql_select_db($dbname, $mvc_bd_conexion);
+
+          mysql_set_charset('utf8');
+
+          $this->conexion = $mvc_bd_conexion;
+        }
+
+    
+    
+        public function bd_conexion()
+        {
+            
+        }
+    
+        public function dameAlimentos()
+        {
+            $sql = "select * from alimentos order by energia desc";
+    
+            $result = mysql_query($sql, $this->conexion);
+    
+            $alimentos = array();
+            while ($row = mysql_fetch_assoc($result))
+            {
+                $alimentos[] = $row;
+            }
+    
+            return $alimentos;
+        }
+    
+        public function buscarAlimentosPorNombre($nombre)
+        {
+            $nombre = htmlspecialchars($nombre);
+    
+            $sql = "select * from alimentos where nombre like '" . $nombre . "' order by energia desc";
+    
+            $result = mysql_query($sql, $this->conexion);
+    
+            $alimentos = array();
+            while ($row = mysql_fetch_assoc($result))
+            {
+                $alimentos[] = $row;
+            }
+    
+            return $alimentos;
+        }
+        
+        public function dameAlimento($id)
+        {
+            $id = htmlspecialchars($id);
+            
+            $sql = "select * from alimentos where id=".$id;
+            
+            $result = mysql_query($sql, $this->conexion);
+    
+            $alimentos = array();
+            $row = mysql_fetch_assoc($result);
+            
+            return $row;
+            
+        }
+    
+        public function insertarAlimento($n, $e, $p, $hc, $f, $g)
+        {
+            $n = htmlspecialchars($n);
+            $e = htmlspecialchars($e);
+            $p = htmlspecialchars($p);
+            $hc = htmlspecialchars($hc);
+            $f = htmlspecialchars($f);
+            $g = htmlspecialchars($g);
+    
+            $sql = "insert into alimentos (nombre, energia, proteina, hidratocarbono, fibra, grasatotal) values ('" .
+                    $n . "'," . $e . "," . $p . "," . $hc . "," . $f . "," . $g . ")";
+    
+            $result = mysql_query($sql, $this->conexion);
+    
+            return $result;
+        }
+        
+        public function validarDatos($n, $e, $p, $hc, $f, $g)
+        {
+            return (is_string($n) &
+                    is_numeric($e) &
+                    is_numeric($p) &
+                    is_numeric($hc) &
+                    is_numeric($f) &
+                    is_numeric($g));
+        }
+    
+    }
+
+Cuando el controlador requiere el uso del modelo, creamos un objeto de tipo 
+``$m = new Model()`` . El constructor de esta clase realiza una conexión con
+la base de datos y la pone disponible a todos sus métodos al añadir la conexión
+creada como atributo del objeto. Cada función utiliza esta conexión para 
+realizar su cometido contra la base de datos.
+
+La última función de la clase, ``validarDatos()``, es algo distinta, ya que no
+utiliza para nada la conexión con la base de datos. Simplemente valida datos. 
+Si la aplicación fuera más compleja sería interesante crear una clase dedicada
+a la validación. De manera que atendamos al principio de la *Separation of
+Concerns* .
+
+La configuración de la aplicación
+---------------------------------
+
+A lo largo y ancho de todo el código expuesto, aparece cada tanto una referencia a
+unos atributos estáticos de la clase ``Config`` . Por ejemplo, en la línea 10 del
+archivo ``app/Model.php``, aparece ``Config::$mvc_bd_hostname``, 
+``Config::$mvc_bd_usuario``, etcétera. Se trata de parámetros de configuración que
+hemos definido en una clase denominada ``Config``:
+
+``app/Config.php``
+
+.. code-block:: php
+   :linenos:
+   
+    <?php
+
+    class Config
+    {
+        static public $mvc_bd_hostname = "localhost";
+        static public $mvc_bd_nombre   = "alimentos";
+        static public $mvc_bd_usuario  = "root";
+        static public $mvc_bd_clave    = "root";
+        static public $mvc_vis_css     = "estilo.css";
+    }
+    
+Esta clase está disponible durante todo el script de manera que se pueden utilizar
+sus valores a lo largo del código, y cambiarlos sin más que modificar este
+fichero.
+
+Con esto ya tenemos todo el código de la parte de servidor. Ya sólo nos falta
+darle un toque de estilo a los documentos *HTML* que enviamos al cliente y crear
+la base de datos que almacenará los datos persistentes sobre los alimentos.
+
+Incorporar las CSS's
+--------------------
+
+Crea el directorio ``web/css`` y en él coloca un archivo llamado ``estilo.css`` con
+el siguiente contenido:
+
+``web/css/estilo.css``
+
+.. code-block:: css
+   
+    body {
+      padding-left: 11em;
+      font-family: Georgia, "Times New Roman",
+            Times, serif;
+      color: purple;
+      background-color: #d8da3d }
+    ul.navbar {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      position: absolute;
+      top: 2em;
+      left: 1em;
+      width: 9em }
+    h1 {
+      font-family: Helvetica, Geneva, Arial,
+            SunSans-Regular, sans-serif }
+    ul.navbar li {
+      background: white;
+      margin: 0.5em 0;
+      padding: 0.3em;
+      border-right: 1em solid black }
+    ul.navbar a {
+      text-decoration: none }
+    a:link {
+      color: blue }
+    a:visited {
+      color: purple }
+    address {
+      margin-top: 1em;
+      padding-top: 1em;
+      border-top: thin dotted }
+    #contenido {
+      display: block;
+      margin: auto;
+      width: auto;
+      min-height:400px;
+    }
+
+Fíjate que en el archivo ``app/templates/layout.php`` se incluye (línea 6) 
+este archivo *CSS* que acabamos de crear. Como dicho *layout* decora a todas las 
+plantillas, estos estilos afectarán a todas las páginas.
+
+La base de datos
+----------------
+
+En el Sistema Gestor de Base de Datos *MySQL* que vayas a utilizar, utilizando
+algún cliente *MySQL* crea una base de datos para almacenar los alimentos. 
+Introduce algunos registros para probar la aplicación.
+
+.. code-block:: sql
+ 
+    CREATE TABLE `alimentos` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `nombre` varchar(255) NOT NULL,
+      `energia` decimal(10,0) NOT NULL,
+      `proteina` decimal(10,0) NOT NULL,
+      `hidratocarbono` decimal(10,0) NOT NULL,
+      `fibra` decimal(10,0) NOT NULL,
+      `grasatotal` decimal(10,0) NOT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+Lo importante para que la conexión funcione, es que los parámetros de conexión
+que se establecen en el fichero ``app/Config.php`` coincidan con los de tu 
+base de datos. 
+
+.. hint::
+   
+   Lo más cómodo para desarrollar es tener todo en el mismo computador: tanto el
+   servidor web (*apache*) como el servidor de base de datos (*MySQL*). Además
+   es muy práctico, aunque nada seguro, utilizar en el servidor *MySQL* el usuario
+   ``root`` (superadministrador) como usuario de nuestras aplicaciones. Así no hay
+   que preocuparse por temas de permisos. Repetimos: es lo más cómodo pero, a la
+   vez, lo más inseguro. Esta práctica está justificada ÚNICAMENTE en un entorno
+   de desarrollo en local, donde la seguridad, en principio no es primordial.
+
+Ya puedes juntar todas las piezas y probar la aplicación introduciendo en tu 
+navegador la *URL* correspondiente:
+
 .. code-block:: bash
+   
+   http://tu.servidor/ruta/a/alimentos/web/index.php
+   
+¡Suerte!
 
-	<b>Algún parámetro del formulario no es válido</b>
-	<br/>
-	<a href="javascript:history.back(1)">Volver</a>
+Comentarios
+-----------
 
+Aquí puedes enviar comentarios, dudas y sugerencias. Utiliza la barra de *scroll* para
+recorrer todos los mensajes. El formulario de envío se encuentra al final.
 
-La acción *procesarFormBusquedaPorEnergia* utiliza una plantilla denominada 
-*mostrarAlimentosHistoEnergia* y que muestra el listado de alimento mediante un 
-sencillo histograma compuesto por el carácter '*'. Comprueba que puedes 
-sustituirla por la plantilla *mostrarAlimentos*, y que todo sigue funcionando, 
-aunque la representación es distinta. Este ejemplo muestra lo sencillo que 
-resulta cambiar las cosas cuando están bien organizadas.
+.. raw:: html
 
+   <object type="text/html" width="100%" height="800" data="commentator/index.php?page=unidad2"></object>
 
-**Búsqueda combinada**
-##########################
+------------
 
-Esta funcionalidad permitirá la búsqueda de alimentos cuyas cantidades de energía
-(en Kcal), proteínas (en gramos), hidratos de carbono (en gramos), fibra (en 
-gramos) y grasa en (gramos) se encuentren simultáneamente entre unas cantidades 
-mínimas y máximas definidas por el usuario para cada magnitud. 
+.. [1] "Patrones de Diseño" de los autores Erich Gamma, Richard Helm, Ralph
+       Johnson y John Vlissides (conocidos como *The Gun of Four*) es un clásico
+       en la literatura sobre este tema.
 
-* **acción**: *buscarAlimentosCombinada*
+.. [2] http://en.wikipedia.org/wiki/Separation_of_concerns
+       
+.. [3] En el caso de *Apache* con *PHP*, que es el que nos interesa en este curso,
+       el servidor debe estar configurado adecuadamente para que se puedan incluir
+       archivos *PHP* que están fuera del *Document root**. Esto se hace con 
+       la directiva ``open_basedir``.
 
-  **archivo**: *buscarAlimentosCombinadaAccion.php*
-  
-.. code-block:: php
+.. [4] http://es.wikipedia.org/wiki/Decorator_%28patr%C3%B3n_de_dise%C3%B1o%29
 
-	<?php
-	
-	$mvc_vis_plantilla = 'formBusquedaCombinada';
-	?>
+-------------
 
-* **acción**: *procesarFormBusquedaCombinada,*
+.. raw:: html
 
-  **archivo**: *procesarFormBusquedaCombinadaAccion.php*
-  
-.. code-block:: php
-  
-	<?php
-	
-	$param_alimentos = array();
-	
-	$param_alimentos = buscarAlimentosCombinada($_POST['energia_min'], $_POST['energia_max'],
-		$_POST['proteina_min'], $_POST['proteina_max'],
-		$_POST['hc_min'], $_POST['hc_max'],
-		$_POST['fibra_min'], $_POST['fibra_max'],
-		$_POST['grasa_min'], $_POST['grasa_max'],
-		$mvc_bd_conexion);
-	
-	$mvc_vis_plantilla = "mostrarAlimentos";
-	
-	?>
-
-* **plantilla**: *formBusquedaCombinada*
-
-  **archivo**: *formBusquedaCombinadaPlantilla.php*
-  
-  .. code-block:: html+jinja
-
-	<form name="formBusqueda" action="index.php?accion=procesarFormBusquedaCombinada" method="POST">
-	
-	   
-		<table>
-			<tr>
-				<th>propiedad</th>
-				<th>mínimo</th>
-				<th>máximo</th>
-			</tr>
-			<tr>
-				<td>energía (Kcal):</td>
-				<td><input type="text" name="energia_min"></td>
-				<td><input type="text" name="energia_max"></td>
-			</tr>
-			<tr>
-				<td>proteina (g):</td>
-				<td><input type="text" name="proteina_min"></td>
-				<td><input type="text" name="proteina_max"></td>
-			</tr>
-			<tr>
-				<td>hidratos de carbono (g):</td>
-				<td><input type="text" name="hc_min"></td>
-				<td><input type="text" name="hc_max"></td>
-			</tr>
-			<tr>
-				<td>fibra (g):</td>
-				<td><input type="text" name="fibra_min"></td>
-				<td><input type="text" name="fibra_max"></td>
-			</tr>
-			<tr>
-				<td>grasa (g):</td>
-				<td><input type="text" name="grasa_min"></td>
-				<td><input type="text" name="grasa_max"></td>
-			</tr>
-		</table>
-		<input type="submit" value="buscar">
-	</form>
-
-
-**Inserción de registros**
-##########################
-
-* **acción**: *insertarAlimento,*
-
-  **fichero**: *insertarAlimentoAccion.php*
-
-.. code-block:: php
-
-	<?php
-	
-	
-	if(isset($_POST['insertar']))
-	{
-		
-	// comprobar campos formulario
-		if(!insertarAlimento($_POST['nombre'], $_POST['energia'], $_POST['proteina'],
-		$_POST['hc'], $_POST['fibra'], $_POST['grasa'], $mvc_bd_conexion))
-		{
-			$mvc_vis_plantilla = "mostrarErrorFormulario";
-			return;
-		}
-	
-		$param_alimentos = $_POST['nombre'];
-	
-	}
-	else
-	{
-		if(isset($param_alimentos)) unset ($param_alimentos);
-	}
-	
-	$mvc_vis_plantilla = 'formInsertarAlimento';
-	
-	?>
-
-* **plantilla**: *formInsertarAlimento*
-
-  **archivo**: *formInsertarAlimentoPlantilla.php*
-  
-.. code-block:: php
-  
-	<?php if(isset($param_alimentos)) :?>
-	<b>El alimento "<?php echo $param_alimentos ?>" ha sido insertado correctamente.</b>
-	<?php endif; ?>
-	
-	<form name="formInsertar" action="index.php?accion=insertarAlimento" method="POST">
-		<table>
-			<tr>
-				<th>Nombre</th>
-				<th>Energía (Kcal)</th>
-				<th>Proteina (g)</th>
-				<th>H. de carbono (g)</th>
-				<th>Fibra (g)</th>
-				<th>Grasa total (g)</th>
-			</tr>
-			<tr>
-				<td><input type="text" name="nombre" value="" /></td>
-				<td><input type="text" name="energia" value="" /></td>
-				<td><input type="text" name="proteina" value="" /></td>
-				<td><input type="text" name="hc" value="" /></td>
-				<td><input type="text" name="fibra" value="" /></td>
-				<td><input type="text" name="grasa" value="" /></td>
-			</tr>
-	
-		</table>
-		<input type="submit" value="insertar" name="insertar" />
-	</form>
-	* Los valores deben referirse a 100 g del alimento
-
-Esta funcionalidad ha sido implementada de manera que el propio formulario de 
-entrada de datos sirva para mostrar el mensaje de notificación de la inserción 
-del registro cuando este evento se ha producido.
-
-
-**Ampliación del modelo**
-##########################
-
-Por último facilitamos el resto de las funciones del modelo utilizadas por las
-acciones y que deben ser añadidas al archivo ``*modelo.php*``.
-
-.. code-block:: php
-
-	function buscarAlimentosPorEnergia($min, $max, $conexion)
-	{
-		$min = ($min == '' )? '0' : $min;
-		$max = ($max == '' )? '100000' : $max;
-	
-		$sql = "select * from alimentos where energia > ".$min." and energia < ".$max;
-		$sql .= " order by energia desc";
-	
-		$result = mysql_query($sql, $conexion);
-	
-		$alimentos = array();
-		while ($row = mysql_fetch_assoc($result))
-		{
-			$alimentos[] = $row;
-		}
-	
-		return $alimentos;
-	}
-	
-	function buscarAlimentosCombinada($e_min, $e_max,
-		$p_min, $p_max,
-		$h_min, $h_max,
-		$f_min, $f_max,
-		$g_min, $g_max,$conexion)
-	{
-		$e_min = ($e_min == '')? '0' : $e_min;
-		$e_max = ($e_max == '')? '100000' : $e_max;
-		$p_min = ($p_min == '')? '0' : $p_min;
-		$p_max = ($p_max == '')? '100000' : $p_max;
-		$h_min = ($h_min == '')? '0' : $h_min;
-		$h_max = ($h_max == '')? '100000' : $h_max;
-		$f_min = ($f_min == '')? '0' : $f_min;
-		$f_max = ($f_max == '')? '100000' : $f_max;
-		$g_min = ($g_min == '')? '0' : $g_min;
-		$g_max = ($g_max == '')? '100000' : $g_max;
-	
-	
-		$sql = "select * from alimentos where energia > ".$e_min." and energia < ".$e_max;
-		$sql .= " and proteina > ".$p_min." and proteina < ".$p_max;
-		$sql .= " and hidratocarbono > ".$h_min." and hidratocarbono < ".$h_max;
-		$sql .= " and fibra > ".$f_min." and fibra < ".$f_max;
-		$sql .= " and grasatotal > ".$g_min." and grasatotal < ".$g_max;
-	
-		$result = mysql_query($sql, $conexion);
-	
-		$param_alimentoss = array();
-		while ($row = mysql_fetch_assoc($result))
-		{
-			$param_alimentoss[] = $row;
-		}
-	
-		return $param_alimentoss;
-	}
-	
-	function insertarAlimento($n, $e, $p, $hc, $f, $g, $conexion)
-	{
-	// comprobar parámetros
-	
-		$sql = "insert into alimentos (nombre, energia, proteina, hidratocarbono, fibra, grasatotal) values ('".
-			$n."',".$e.",".$p.",".$hc.",".$f.",".$g.")";
-	
-		$result = mysql_query($sql);
-	
-		return $result;
-	}
-	
-	function pintaBarra($num)
-	{
-		$numCaracteres =  ceil($num/10.0);
-		$barra = str_repeat('*', $numCaracteres);
-		return $barra;
-	}
-
-
-.. note:: 
-
-   La última función; ``*pintaBarra*``, estrictamente no forma parte del modelo, 
-   pues lo que hace es convertir un dato de tipo numérico en un número de 
-   caracteres '*' que lo representa. Esta función es utilizada por la plantilla  
-   ``*mostrarAlimentosHistoEnergia*``. No forma parte del modelo por que no es 
-   algo que tenga que ver con la lógica del negocio, no es algo propio de las 
-   características de los alimentos, es, más bien, una función de visualización, 
-   las cuales suelen ser denominadas *helpers* en el lenguaje de los *frameworks*
-   de construcción de aplicaciones *web*.
-
-   Aún así, hemos decidido incluirla en el modelo por cuestiones de simplificación 
-   del ejemplo. Cuando vayamos profundizando en el estudio del *framework symfony*,
-   veremos la manera correcta de organizar estas funciones.
-
-
-**Conclusión**
---------------
-
-El ejercicio que acabamos de finalizar ha puesto de manifiesto muchas de las 
-ventajas que ofrece diseñar la arquitectura de la aplicación según los principios
-del patrón *Modelo – Vista – Controlador*. La estricta organización del código 
-según su funcionalidad dentro del patrón, la existencia de un controlador frontal
-que supone la columna vertebral que articula la aplicación y el seguimiento más o 
-menos estricto de unas normas para la implementación de nuevos módulos, han 
-permitido confeccionar una aplicación que cumple bastante de las características 
-deseables que estudiamos en la primera unidad.
-
-No obstante, es muy probable que a medida que hayas realizado el ejercicio se te 
-hayan ocurrido muchas posibilidades para mejorar el mini-*framework* que acabamos 
-de construir. La siguiente lista recoge muchas de las mejoras que, de 
-implementarlas, darían lugar a un *framework* de desarrollo de aplicaciones web 
-en *PHP* bastante potente:
-
-* Incorporar un mecanismo para validar los datos que se envían en los formularios
-  para evitar ataques externos, por ejemplo del tipo *XSS*. 
-
-* Posibilitar las redirecciones entre acciones de la aplicación, de manera que
-  los flujos internos de la misma sean más ricos, flexibles y reutilizables.
-
-* Posibilitar el uso distintos *layouts*, plantillas, *CSS's* y etiquetas *meta*
-  en función de la acción que se ejecute.
-
-* Posibilitar el control de la sesión de usuario, lo cual permitiría garantizar 
-  la seguridad a través de la **autentificación** y **autorización**.
-
-* Independizar el código de la aplicación del sistema gestor de base de datos 
-  (*SGBD*) para no tener que reconstruir gran parte del modelo si necesitásemos 
-  migrar los datos a un nuevo *SGBD*. Esto se podría realizar con una capa 
-  intermedia entre la aplicación y el *SGBD*, que se encargase de construir las
-  queries que correspondan al *SGBD* con qué funcione la aplicación.
-
-* Posibilitar el uso de distintos formato de salida para presentar los datos
-  además del *HTML*; por ejemplo *XML*, *Json*, *YML*, *PDF*, lo cual nos 
-  permitirá crear servicios web, informes imprimibles y salidas adaptadas a 
-  dispositivos móviles (*PDA, smartphones*, …)
-
-* Posibilitar el uso de sistemas de plantillas desarrollados por terceros (como 
-  *smarty*).
-
-* Incorporar un mecanismo mediante el cual se puedan utilizar librerías y 
-  *frameworks* de *javascript* (como *prototype* o *jquery*) que serían incluidos
-  a petición de las acciones que lo requiriesen. Integración con *AJAX* para
-  mejorar la interactividad con el usuario.
-
-* Incorporar un sistema automático para incluir los archivos que cada acción
-  necesite para su ejecución (librerías) sin que el programador tenga que
-  preocuparse de ello.
-
-* Posibilidad de definir y acceder a los parámetros de configuración de la 
-  aplicación de una forma inmediata. Además sería deseable que estos parámetros
-  pudiesen clasificarse con facilidad, por ejemplo mediante espacios de nombre,
-  para así saber a que partes de la aplicación afecta dicho parámetro. 
-
-* Incorporación de un sistema de depuración (*debug*) que dé suficiente
-  información de las causas que provocan fallos durante la fase de desarrollo de 
-  la aplicación. Esta información debe ser accesible únicamente al desarrollador,
-  es decir, inhabilitada en los entornos de producción, pues ello abriría un 
-  importante agujero de seguridad. 
-
-* Incorporación de un sistema de caché que evitase volver a procesar partes que
-  no cambian de una acción a otra. Esto redundaría en un mejor aprovechamiento 
-  del ancho de banda disponible y mejoraría la experiencia del usuario.
-
-* Interpretación de las *URL's* para, por un lado hacerlas más limpias al usuario
-  y, por otro evitar dar información sobre la estructura de la aplicación (por 
-  ejemplo el nombre de los parámetros que necesita la acción, el nombre de la
-  acción y el nombre del módulo).
-
-El próximo ejercicio podría ser:
-
-  *“Amplia el mini-framework que acabamos de desarrollar para que incorpore este 
-  listado de mejoras”.*
-
-Afortunadamente lo tendrás más fácil; el resto del curso te presentará un 
-potentísimo *framework* para el desarrollo de aplicaciones *web* con *PHP* que 
-cumple todo eso y mucho más. Comprobarás como a medida que utilizas *symfony* y
-vas  asimilando su filosofía de uso, mejorarás tus prácticas de programación, 
-aprenderás métodos muy eficientes de desarrollo basados en patrones de diseño de
-software bien estudiados, tus aplicaciones ganarán en calidad, estabilidad, 
-extensibilidad,  mantenibilidad y otras características deseables y, sobre todo, 
-te divertirás.
-
-
-
-
-
+   <div style="background-color: rgb(242, 242, 242); text-align: center; margin: 20px; padding: 10px;">
+   <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Licencia Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a>
+   <br />
+   <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Desarrollo de Aplicaciones web con symfony 1.4</span> por <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Juan David Rodríguez García (juandavid.rodriguez@ite.educacion.es)</span>
+   <br/>
+   se encuentra bajo una Licencia <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Reconocimiento-NoComercial-CompartirIgual 3.0 Unported</a>.
+   </style>
+   </div>
