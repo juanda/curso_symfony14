@@ -1,5 +1,5 @@
-**Unidad 3. Desarrollo de una aplicación con Symfony**
-=======================================================
+Unidad 3. Desarrollo de una aplicación con Symfony
+==================================================
 
 El objetivo fundamental de este curso es que aprendas a desarrollar aplicaciones
 *web* de calidad con *symfony*, un potente *framework* de desarrollo en *PHP*. 
@@ -26,8 +26,8 @@ fundamentales.
    ``http://www.librosweb.es/symfony_1_2/capitulo4.html``
 
 
-**Creamos el proyecto.**
-_________________________
+Creamos el proyecto.
+--------------------
 
 El desarrollo de cualquier aplicación *web* desarrollada con *symfony* comienza 
 por la generación del **proyecto** que es la columna vertebral que articula y da
@@ -243,8 +243,8 @@ desarrollamos en la unidad 2. Pero el esfuerzo requerido para asimilarlo
 merecerá la pena. Tranquilos, aún no hemos dado la primera vuelta de la espiral.
 
 
-**Generación del esquema, el modelo y los formularios**
---------------------------------------------------------
+Generación del esquema, el modelo y los formularios
+---------------------------------------------------
 
 En este segundo paso generaremos el resto de la estructura básica que dará 
 soporte a la aplicación que vamos a construir: las clases con las que accederemos 
@@ -423,8 +423,8 @@ a las tablas de la base de datos, y que contienen clases que utilizaremos en el
 desarrollo de la aplicación para manipular los datos de dichas tablas.
 
 
-**Las aplicaciones y los módulos**
------------------------------------
+Las aplicaciones y los módulos
+------------------------------
 
 El *framework* puede ser imaginado como un inmenso puzzle al que le faltan sus 
 piezas centrales para completarlo y poder contemplarlo en su totalidad. 
@@ -751,8 +751,8 @@ En el segundo podremos incluir archivos de configuración propios del módulos, 
 en el tercero la documentación del mismo.
 
 
-**¡Y ahora a programar!**
---------------------------
+¡Y ahora a programar!
+---------------------
 
 Llegó la hora de trabajar un poco. Hasta el momento ha sido *symfony* quien ha
 trabajado por nosotros generando la sólida estructura del edificio que vamos a 
@@ -769,8 +769,8 @@ cual estiliza la *URL* pero requiere que el servidor web esté debidamente
 configurado para un entorno de producción, y este no es nuestro caso.
 
 
-**Acción de inicio (index)**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Acción de inicio (index)
+^^^^^^^^^^^^^^^^^^^^^^^^
 
 Comenzaremos por la implementación de la acción *'inicio'*, la más sencilla de 
 la aplicación. No obstante, para aprovechar las características de *symfony*, 
@@ -1011,8 +1011,8 @@ de la aplicación *view.yml*.
 Ahora si, ya tenemos la primera acción de nuestra aplicación funcionando al 100%.
 
 
-**Búsqueda de alimentos por nombre**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Búsqueda de alimentos por nombre
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Ahora se trata de adaptar el código de la unidad anterior al esquema de
 funcionamiento de *symfony*, tal y como hicimos con la acción *inicio* (*index*).
@@ -1185,8 +1185,8 @@ Ya sólo nos queda probar el funcionamiento de la búsqueda por nombre desde el
 principio, es decir, rellenar el formulario y pulsar en el botón 'buscar'.
 
 
-**Búsqueda de alimentos por energía**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Búsqueda de alimentos por energía
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 En esencia, esta funcionalidad es idéntica a la búsqueda de alimentos por nombre.
 Por ello transcribimos el código de las acciones y plantillas que la implementan
@@ -1280,8 +1280,8 @@ accediendo a ella desde el menú de la aplicación o desde la *URL*:
 ``http://localhost/unidad3/web/index.php/alimentos/buscarAlimentosPorEnergia``
 
 
-**Búsqueda combinada.**
-^^^^^^^^^^^^^^^^^^^^^^^^
+Búsqueda combinada.
+^^^^^^^^^^^^^^^^^^^
 
 Esta funcionalidad permitirá la búsqueda de alimentos cuyas  cantidades de 
 energía (en Kcal), proteínas (en gramos), hidratos de carbono (en gramos), 
@@ -1585,8 +1585,8 @@ asociarlo a los datos de la petición *HTTP* (*bind*) y otra para realizar la
 validación (*isValid*).
 
 
-**Inserción de registros**
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Inserción de registros
+^^^^^^^^^^^^^^^^^^^^^^
 
 Finalizamos la aplicación implementando la funcionalidad de inserción de 
 alimentos en la base de datos. Ahora necesitaremos un formulario con 6 casillas 
@@ -1722,8 +1722,8 @@ dejar alguna/s casilla/s vacía/s para comprobar el funcionamiento de la
 validación de formularios.
 
 
-**Ejercicios de ampliación.**
------------------------------
+Ejercicios de ampliación.
+-------------------------
 
 La plantilla *mostrarAlimentosHistoEnergiaSuccess.php* con la que se muestran 
 los alimentos encontrados mediante un sencillo histograma:
@@ -1773,9 +1773,8 @@ crea un objeto de  la clase ``{nombreModulo}Actions``, y ejecuta el método
 ``execute{NombreAccion}`` de dicho objeto. 
 
 
-**Conclusión**
-______________
-
+Conclusión
+----------
 
 Llegamos al final del capítulo y hemos concluido la primera vuelta alrededor del
 *framework*, la más externa y panorámica. Para ello hemos reescrito la aplicación

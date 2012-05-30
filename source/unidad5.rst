@@ -1,5 +1,5 @@
-**Unidad 5: Profundizando en el modelo.**
-==========================================
+Unidad 5: Profundizando en el modelo.
+=====================================
 
 
 Tras la pausa necesaria para definir la aplicación que vamos a construir, 
@@ -39,8 +39,8 @@ de base de datos (*ORM*) que utiliza *symfony* para acceder a la misma y que ya
 hemos presentado y utilizado en la unidad 3. 
 
 
-**Construcción del proyecto**
--------------------------------------
+Construcción del proyecto
+-------------------------
 
 Esta parte requiere pocas explicaciones; seguimos el procedimiento indicado en 
 la unidad 3:
@@ -247,8 +247,8 @@ con estilos gráficos aplicados.
 	  layout:         layout
 
 
-**La capa de abstracción de base de datos en symfony**
-------------------------------------------------------------
+La capa de abstracción de base de datos en symfony
+--------------------------------------------------
 
 La organización de una aplicación según el patrón *MVC* implica agrupar en el
 modelo aquellos componentes que tengan que ver con la lógica de negocio del
@@ -294,8 +294,8 @@ lo operativo, criterio principal utilizado en el desarrollo de este curso,
 profundiza lo suficiente para que el programador se sienta cómodo con *Propel*.
 
 
-**Generación del ORM de Propel (Modelo)**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Generación del ORM de Propel (Modelo)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Ya sabemos que el modelo de *Propel* se genera automáticamente mediante la tarea
 ``generate:model`` de *symfony*, y que se ubica en el directorio *lib/model* del
@@ -349,8 +349,8 @@ Volvamos al proceso de generación del modelo. Con las conexiones definidas en
 que el programador utilizará para realizar operaciones con las bases de datos.
 
 
-**Jerarquía de clases del modelo con Propel.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Jerarquía de clases del modelo con Propel.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Veamos ahora la pinta que tiene el modelo generado en los directorios que hayamos
 especificado con la directiva *package* de los ficheros *schemas*. Cada tabla da
@@ -422,8 +422,8 @@ registro** a las clases del modelo que representan registros de las tablas, y
 registros encapsulados como objetos.
 
 
-**Métodos de las clases registro**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Métodos de las clases registro
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Antes de nada hay que indicar que la mejor forma de saber qué métodos implementa 
 una determinada clases es viendo su código fuente y la documentación 
@@ -526,8 +526,8 @@ en la base de datos el registro en cuestión. Por tanto, en esta situación, el
 método *save()* se corresponde con una operación de actualización (*UPDATE*) en 
 la base de datos.
 
-**Métodos de las clases peer y  el objeto Criteria.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Métodos de las clases peer y  el objeto Criteria.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Ya te habrás dado cuenta de que nos faltan dos operaciones fundamentales de 
 acceso a base de datos; la recuperación de registros (*SELECT*) y su eliminación
@@ -768,8 +768,8 @@ gestor documental.
 	http://www.cheat-sheets.org/saved-copy/sfmodelsecondpartrefcard.pdf
 
 
-**Implementación del listado documentos**
--------------------------------------------------
+Implementación del listado documentos
+-------------------------------------
 
 Una vez que tenemos montado el marco de nuestro cuadro ya podemos empezar a 
 pintarlo; es la hora de picar el código propio de nuestra aplicación sobre los
@@ -778,8 +778,8 @@ implementaremos será la generación de listados de documentos filtrados mediant
 los campos de un formulario de búsqueda.
 
 
-**Listado de todos los documentos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Listado de todos los documentos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 El listado de documentos forma parte del módulo *gesdoc* de la aplicación 
 *frontend*. Llamaremos *index* a la acción encargada de mostrar dicho listado. 
@@ -1019,8 +1019,8 @@ a las versiones al picar en el nº de versión. Se ha decidido llamar a la acci�
 en cuestión *verVersion*, y se alojará en el propio módulo *gesdoc*.
 
 
-**Implementación del filtro de documentos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementación del filtro de documentos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Ahora, según lo especificado en el análisis que realizamos en la unidad 4, vamos 
 a colocar en la pantalla que acabamos de construir un formulario para filtrar los
 documentos. Lo ideal para realizar esta labor es utilizar los filtros que hemos 
@@ -1171,8 +1171,8 @@ criterio adecuado para que el método *doSelect()* de la clase *DocumentosPeer*
 devuelva únicamente los documentos que satisfacen el criterio de búsqueda. 
 
 
-**Procesamiento de la petición. El objeto SfWebRequest.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Procesamiento de la petición. El objeto SfWebRequest.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 *Symfony* proporciona un objeto especial para la manipulación de las peticiones
 *HTTP*: el objeto *SfWebRequest*, que sirve al programador, fundamentalmente, 
@@ -1273,8 +1273,8 @@ Para completar el requisito D08 tan sólo nos falta presentar el listado con un
 paginado. Eso es lo que haremos en el próximo apartado.
 
 
-**Implementación del páginado.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementación del páginado.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Cuando el número de documentos crezca lo suficiente, será más cómodo presentar 
 el listado subdivido en páginas de una cierta cantidad de registros, con la 
@@ -1457,11 +1457,11 @@ concretamente:
 * Ver metadatos del documento
 
 
-**Implementación de operaciones sobre documentos concretos.**
----------------------------------------------------------------------
+Implementación de operaciones sobre documentos concretos.
+---------------------------------------------------------
 
-**Descarga de las versiones de un documento.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Descarga de las versiones de un documento.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 En el listado que acabamos de construir hemos colocado en la columna *'versiones'*
 enlaces a cada una de las versiones de los documentos. Cuando piquemos en estos 
@@ -1590,8 +1590,8 @@ sin que se produzca un cambio de la interfaz de usuario (página *web*) con el
 listado.
 
 
-**Mostrar los metadatos de un documento.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Mostrar los metadatos de un documento.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 En el listado de documentos no hemos incluido ninguna operación (enlace) con la
 intención de mostrar los metadatos de cada documento. Una posibilidad inmediata 
@@ -1700,8 +1700,8 @@ que realizaste. Se trata del mismos problema que ya hemos comentado con los
 enlaces del paginado. Lo solucionaremos en la próxima unidad.
 
 
-**Conclusión**
---------------------
+Conclusión
+----------
 
 Hemos comenzado el desarrollo de nuestro gestor documental implementando el 
 listado de documentos disponibles. Para ello hemos partido de una serie de datos

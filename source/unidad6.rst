@@ -1,5 +1,5 @@
-**Unidad 6: La sesión de usuario en el servidor. El inicio de sesión.**
-===========================================================================
+Unidad 6: La sesión de usuario en el servidor. El inicio de sesión.
+===================================================================
 
 Terminamos la unidad anterior revelando un problema que se ha presentado cuando 
 pedimos una nueva página del listado después de realizar una búsqueda. O cuando 
@@ -25,8 +25,8 @@ la aplicación hasta que se desconectan de la misma, es decir durante toda la
 **sesión**.
 
 
-**La sesión de usuario en el servidor**
-----------------------------------------------
+La sesión de usuario en el servidor
+-----------------------------------
 
 Las aplicaciones *web* pertenecen a un tipo arquitectura de software conocida 
 como cliente–servidor; la aplicación reside en un servidor que envía la interfaz
@@ -196,8 +196,8 @@ pronto quedémonos con lo dicho hasta el momento y resolvamos el problema del
 filtro perdido.
 
 
-**De vuelta con el filtro perdido.**
--------------------------------------------
+De vuelta con el filtro perdido.
+--------------------------------
 
 Si has entendido todo lo que llevamos dicho en esta unidad ya habrás intuido 
 como resolver el dichoso problema del filtro perdido que dejamos pendiente en la 
@@ -447,8 +447,8 @@ realizado por el usuario en el filtro de búsqueda. Ahora podemos utilizar los
    el método *getRawValue()* sobre ellos.
 
 
-**Aplicaciones seguras. Autentificación y  autorización.**
------------------------------------------------------------------
+Aplicaciones seguras. Autentificación y  autorización.
+------------------------------------------------------
 
 Ahora que conocemos el funcionamiento de la sesión de usuario y como es manejada 
 por *symfony* a través del objeto *sfUser*, vamos a estudiar como utilizarla para
@@ -458,8 +458,8 @@ conceptos de **autentificación** y **autorización** que ofrecen los fundamento
 sobre los que descansa el control de acceso de las aplicaciones *web*. 
 
 
-**Autentificación y Autorización**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Autentificación y Autorización
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 La autentificación es el proceso mediante el cual la aplicación comprueba si el
 usuario que pretende utilizarla es realmente quien dice ser. Es un proceso de 
@@ -503,8 +503,8 @@ nueva petición de un recurso, la aplicación volverá a pedir a este sus parám
 de autentificación (*login, password*), volviendo a crear una nueva sesión.
 
 
-**Seguridad en la acción**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Seguridad en la acción
+^^^^^^^^^^^^^^^^^^^^^^
 
 En las aplicaciones construidas con *symfony* podemos controlar este doble nivel
 de seguridad a nivel de cada acción mediante el uso de la sesión y los **archivos 
@@ -683,8 +683,8 @@ del usuario y de asignarle una sesión de usuario con los parámetros de segurid
 que le correspondan en función de su perfil asociado.
 
 
-**El modelo de seguridad**
-----------------------------------
+El modelo de seguridad
+----------------------
 
 Los requisitos de la aplicación que estamos construyendo especifican lo siguiente 
 respecto de la seguridad:
@@ -902,8 +902,8 @@ seguridad que le correspondan al usuario en función de su perfil, es decir: si
 está o no autentificado, y en caso positivo qué credenciales le corresponden. 
 
 
-**Registro de usuario o inicio de sesión**
----------------------------------------------------
+Registro de usuario o inicio de sesión
+--------------------------------------
 
 Los usuarios registrados en el sistema (lectores, autores y administradores), si
 desean utilizar la aplicación como tales deberán autentificarse en el sistema
@@ -1284,8 +1284,8 @@ enlace para conectarnos como usuario registrado cuando trabajamos en modo
 invitado o un enlace para desconectarnos  si trabajamos en modo registrado.
 
 
-**Conclusiones.**
-------------------------
+Conclusiones.
+-------------
 
 En esta unidad hemos trabajado el concepto de sesión de usuario en el servidor 
 gracias al cual la aplicación puede “conocer” quien la está utilizando y puede 

@@ -1,8 +1,8 @@
-**Unidad 1. Conceptos básicos para el seguimiento del curso.**
-===============================================================
+Unidad 1. Conceptos básicos para el seguimiento del curso.
+==========================================================
 
-**Aplicaciones web**
----------------------
+Aplicaciones web
+----------------
 
 La *World Wide Web* es un sistema de documentos de *hipertexto* o *hipermedios* 
 enlazados y distribuidos a través de *Internet*. En sus comienzos, la 
@@ -128,7 +128,7 @@ como objetivo presentar una de las más exitosas: *el desarrollo de aplicaciones
 web mediante el uso del framework symfony*. 
 
 
-**Desarrollo rápido y de calidad de  aplicaciones web**
+Desarrollo rápido y de calidad de  aplicaciones web
 ---------------------------------------------------------
 
 La experiencia adquirida tras muchos años de construcción de aplicaciones 
@@ -189,11 +189,11 @@ aplicación informática profesional al margen de sus requisitos específicos.
   que sea flexible y modular.
 
 
-**Presentación del curso**
----------------------------
+Presentación del curso
+----------------------
 
-**A quién va dirigido**
-^^^^^^^^^^^^^^^^^^^^^^^^
+A quién va dirigido
+^^^^^^^^^^^^^^^^^^^
 
 Este curso va dirigido a personas que ya cuenten con cierta experiencia en la
 programación de aplicaciones *web*. A pesar de que *symfony* está construido 
@@ -225,8 +225,8 @@ haya desarrollado alguna aplicación *web* mediante el archiconocido entorno
 *LAMP* o *WAMP* (*Linux/Windows – Apache – MySQL – PHP*), debería tener los 
 conocimientos necesarios para seguir con provecho este curso.
 
-**Objetivos del curso**
-^^^^^^^^^^^^^^^^^^^^^^^
+Objetivos del curso
+^^^^^^^^^^^^^^^^^^^
 
 Cuando finalices el curso habrás adquirido suficiente conocimiento para 
 desarrollar aplicaciones *web* mediante el empleo del *framework* de desarrollo 
@@ -282,8 +282,8 @@ no es una excepción, es bastante duro en los inicios. Sin embargo merece la pen
 pues a medida que se van asimilando los conceptos y procedimientos propios del 
 *framework*, la productividad crece de una manera abismal.
 
-**Plan del curso**
-^^^^^^^^^^^^^^^^^^
+Plan del curso
+^^^^^^^^^^^^^^
 
 Para conseguir los objetivos que nos hemos propuesto hemos optado por un 
 planteamiento completamente práctico en el que se está “picando código” funcional
@@ -345,8 +345,8 @@ Por último, la unidad 10 presenta los conceptos de internacionalización y
 enrutamiento y la manera en que *symfony* los trata.
 
 
-**Sobre symfony**
-------------------
+Sobre symfony
+-------------
 
 *Symfony* es uno de los *frameworks* para el desarrollo de aplicaciones *web*
 en *PHP* más conocidos y utilizados. Prueba de ello es la amplia y activa 
@@ -369,8 +369,8 @@ del desarrollo de *software* en general, más allá del *PHP*. De hecho muchas
 ideas provienen del exitoso *framework* de desarrollo de aplicaciones *web Ruby
 On Rails*.
 
-**La documentación de symfony**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+La documentación de symfony
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Posiblemente una de las características más apreciadas de *symfony* es la 
 cantidad y la calidad de documentación oficial que existe. Ello proporciona la 
@@ -431,8 +431,8 @@ También son interesantes las traducciones sobre *symfony* realizadas en
 http://www.librosweb.es/symfony/index.html
 
 
-**Instalación de symfony**
---------------------------
+Instalación de symfony
+----------------------
 
 La instalación de *symfony* está perfectamente explicada en la siguiente dirección
 *web*:
@@ -442,8 +442,8 @@ http://www.symfony-project.org/getting-started/1_4/en/03-Symfony-Installation
 No obstante hemos creado la siguiente guía de instalación por si tuvieses 
 problemas con el inglés.
 
-**Instalación en Windows de XAMPP + symfony**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Instalación en Windows de XAMPP + symfony
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Descargar xampp para Windows (versión autoextraible exe):
 
@@ -475,8 +475,8 @@ problemas con el inglés.
 * Ya puedes usar el comando *symfony* en una terminal desde cualquier directorio.
 
 
-**Instalación de symfony en Ubuntu**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Instalación de symfony en Ubuntu
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Instala mediante *synaptic* el servidor *web apache* con *php* y el servidor 
   *mysql* (paquetes *apache2, mysql-server* y *phpmyadmin*)

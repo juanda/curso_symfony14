@@ -1,5 +1,5 @@
-**Unidad 9: Desarrollo de la parte de administración.**
-================================================================
+Unidad 9: Desarrollo de la parte de administración.
+===================================================
 
 Llegados a este punto sólo nos restan dos unidades para terminar el curso y aún
 tenemos que desarrollar la aplicación de administración (*backend*) completamente.
@@ -40,11 +40,11 @@ Finalmente, realizaremos algunos pequeños ajustes sobre los módulos generados
 automáticamente para adaptarlos a nuestras necesidades.
 
 
-**Transformación del módulo de inicio de sesión en un plugin**
-----------------------------------------------------------------------
+Transformación del módulo de inicio de sesión en un plugin
+----------------------------------------------------------
 
-**Los plugins de symfony**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Los plugins de symfony
+^^^^^^^^^^^^^^^^^^^^^^
 
 Los *plugins* de *symfony* ofrecen una importante vía de expansión para los 
 proyectos *symfony*. En lugar de buscar una definición precisa, lo cual sería 
@@ -176,8 +176,8 @@ añadiendo al fichero *settings.yml* de dicha aplicación la siguiente línea:
    *http://www.symfony-project.org/reference/1_4/en/*
 
 
-**Nuestro plugin de inicio de sesión**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Nuestro plugin de inicio de sesión
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Ahora vamos a aplicar la teoría expuesta en el apartado anterior para crear 
 nuestro *plugin* de inicio de sesión. Comenzamos por crear, dentro del directorio
@@ -402,10 +402,10 @@ sesión tan solo tendrá que habilitar el módulo *inises* y definir en su archi
 *routing.yml* las rutas *@pagina_inicial* y *@logout*.
 
 
-**Desarrollo de la aplicación de administración (backend).**
----------------------------------------------------------------------
+Desarrollo de la aplicación de administración (backend).
+--------------------------------------------------------
 
-**Creación de la aplicación backend**
+Creación de la aplicación backend
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Según lo especificado en la unidad 4, la aplicación de administración debe 
@@ -556,8 +556,8 @@ como aún no hemos desarrollado el módulo *gesusu, symfony* te advertirá de el
 cuando tenga lugar la redirección. 
 
 
-**El generador automático de módulos de administración.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+El generador automático de módulos de administración.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Casi todas las aplicaciones *web* incorporan una sección para la administración
 de la misma. Qué es lo que se vaya a administrar dependerá obviamente de la 
@@ -649,8 +649,8 @@ de administración de *symfony*. En los siguientes apartados mostraremos cómo
 utilizar en la práctica esta potente herramienta.
 
 
-**Generación de los módulos de administración**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Generación de los módulos de administración
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Y ahora la magia. Primero invocamos el abracadabra:
 
@@ -695,8 +695,8 @@ una forma operativa la técnica a seguir para trabajar con los módulos de
 administración generados automáticamente. 
 
 
-**Cambios propuestos para adaptar los módulos de administración a nuestras necesidades.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Cambios propuestos para adaptar los módulos de administración a nuestras necesidades.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Vamos a construir una lista de tareas (*TO-DO*) con los cambios que nos gustaría
 realizar sobre los módulos generados:
@@ -751,8 +751,8 @@ realizar sobre los módulos generados:
 No necesita más cambios que los que se han propuesto comunes a todos los módulos.
 
 
-**Estructura de un módulo de administración generado automáticamente.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Estructura de un módulo de administración generado automáticamente.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Antes de emprender las acciones pertinentes para realizar los cambios que hemos 
 propuesto en el apartado anterior, echaremos un vistazo a la estructura de uno 
@@ -963,8 +963,8 @@ de administración, conocimiento que únicamente con la práctica y mostrando un
 actitud de aprendizaje continuo y autónomo se puede lograr.
 
 
-**El fichero de configuración generator.yml**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+El fichero de configuración generator.yml
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Antes de enfrentarnos a la implementación de las modificaciones propuestas en 
 el apartado 2.4 vamos a realizar una descripción básica del fichero de 
@@ -1034,7 +1034,7 @@ Subsección     Descripción
 *new*          Configuración específica de la pantalla de creación de elementos
 
 
-**Columnas reales y virtuales**
+*Columnas reales y virtuales**
 
 Hay muchas opciones que toman como argumento una lista de campos. Cada campo 
 puede ser el nombre de una columna real o virtual. Una columna real es aquella
@@ -1097,8 +1097,8 @@ cada una de la subsecciones de configuración. Utilizaremos algunas de ellas par
 realizar las modificaciones que hemos propuesto en el apartado 2.4.
 
 
-**Implementación de las modificaciones propuestas**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementación de las modificaciones propuestas
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Llegó el momento de aplicar toda la teoría anterior para realizar las 
 modificaciones que hemos propuesto en el apartado 2.4. Dejaremos la traducción
@@ -1106,8 +1106,8 @@ de la interfaz para la próxima unidad, ya que allí trataremos el tema de la
 internacionalización de aplicaciones con *symfony*. Para las demás modificaciones 
 ya conocemos las herramientas necesarias.
 
-**Ajustes globales**
-#########################
+Ajustes globales
+################
 
 **Títulos**
 
@@ -1196,8 +1196,8 @@ Ahora puedes comprobar como los listados se generan con un paginado y con 10
 elementos como máximo.
 
 
-**Ajustes del módulo usuario**
-######################################
+Ajustes del módulo usuario
+##########################
 
 **Eliminación de los campos *id_usuario* y *password* del listado**
 
@@ -1389,8 +1389,8 @@ Y de nuevo a probar. Cuando se envía el formulario de edición o creación de
 usuarios, el campo *password* se guarda codificado en MD5.
 
 
-**Ajustes del módulo de gestión de categorías.**
-#######################################################
+Ajustes del módulo de gestión de categorías.
+############################################
 
 Queremos eliminar del formulario el campo *documento_categoria_list*. Pues vamos 
 al formulario *CategoriasForm* y lo eliminamos:
@@ -1450,8 +1450,8 @@ lib/filter/CategoriasFormFilter.class.php*
 Ahora ya no es necesaria la opción *display* de la subsección *filter*.
 
 
-**Ajustes del módulo de gestión de tipos de ficheros permitidos**
-##########################################################################
+Ajustes del módulo de gestión de tipos de ficheros permitidos
+#############################################################
 
 Aunque en un principio dijimos que, a excepción de los títulos de las pantallas
 y de la traducción al castellano de la interfaz, no íbamos a realizar 
@@ -1469,8 +1469,8 @@ id_tipo en el fichero: apps/backend/modules/gestip/config/generator.yml*
 	...
 
 
-**Conclusión**
--------------------
+Conclusión
+----------
 
 A lo largo de la unidad hemos desarrollado completamente la aplicación de
 administración, denominada *backend*, del gestor documental. Ya disponemos, por 

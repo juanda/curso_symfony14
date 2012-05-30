@@ -1,5 +1,5 @@
-**Unidad 4: Análisis de la aplicación “Gestor Documental”**
-===========================================================
+Unidad 4: Análisis de la aplicación “Gestor Documental”
+=======================================================
 
 Continuaremos el estudio de *symfony* desarrollando una aplicación *web* con 
 unas funcionalidades que permitan aplicar la mayor parte de las herramientas 
@@ -28,8 +28,8 @@ citar teniendo en cuenta los dictados del análisis de la aplicación.
 En definitiva, en esta unidad desarrollaremos el soporte teórico y los recursos
 prácticos que necesitaremos en el resto del curso.
 
-**Descripción de la aplicación**
----------------------------------------
+Descripción de la aplicación
+----------------------------
 
 Vamos a construir un *gestor documental multiusuario*, es decir una aplicación 
 *web*  mediante la que los usuarios de la misma puedan almacenar y compartir 
@@ -67,8 +67,8 @@ de otras aplicaciones que, en principio, no tienen nada que ver con la gestión
 de documentos; basta con que el programador tenga la suficiente capacidad de 
 abstracción para identificar estructuras análogas en dominios distintos.
 
-**Catálogo de requisitos**
-----------------------------------
+Catálogo de requisitos
+----------------------
 
 Hemos clasificado en 4 grupos los requisitos de la aplicación:
 
@@ -81,8 +81,8 @@ Hemos clasificado en 4 grupos los requisitos de la aplicación:
 * Gestión de puntuaciones
 
 
-**Gestión de usuarios**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Gestión de usuarios
+^^^^^^^^^^^^^^^^^^^
 
 ======= =======================================================================
 U.01    La aplicación contemplará 4 tipos de usuarios:
@@ -126,8 +126,8 @@ U.06    La aplicación presentará en la cabecera de cada pantalla el nombre y
 ======= =======================================================================
 
 
-**Gestión de documentos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Gestión de documentos
+^^^^^^^^^^^^^^^^^^^^^
 
 ======= =======================================================================
 D.01    Por cuestiones de seguridad, la aplicación permitirá al administrador 
@@ -184,8 +184,8 @@ D.09	Los resultados de las búsquedas se presentarán como listados paginados.
 ======= =======================================================================
 
 
-**Comentarios**
-^^^^^^^^^^^^^^^^^^^^^^
+Comentarios
+^^^^^^^^^^^
 
 ======= =======================================================================
 C.01	Los usuarios registrados podrán enviar comentarios a los documentos.
@@ -205,8 +205,8 @@ C.04	Los comentarios solo podrán ser borrados por el administrador y nunca
 ======= =======================================================================
 
 
-**Puntuación**
-^^^^^^^^^^^^^^^^^^^^^^
+Puntuación
+^^^^^^^^^^
 
 ======= =======================================================================
 P.01	Los usuarios registrados podrán votar sólo una vez cada documento 
@@ -221,8 +221,8 @@ P.04	Los listados de las búsquedas podrán ordenarse por puntuación.
 ======= =======================================================================
 
 
-**Modelo de datos.**
---------------------------
+Modelo de datos.
+----------------
 
 La figura 1 representa mediante un diagrama de clases *UML* el modelo de datos 
 que utilizaremos en el desarrollo de la aplicación y que satisface los requisitos
@@ -257,8 +257,8 @@ tabla *usuarios*, y las votaciones como un campo de la tabla *versiones*.
 
 
 
-**Descripción del proceso de subida de archivos**
-------------------------------------------------------------
+Descripción del proceso de subida de archivos
+---------------------------------------------
 
 Es importante que no haya colisión en los nombres de los ficheros cuando sean
 alojados en las carpetas asociadas a cada autor. Por ello hemos diseñado un
@@ -282,15 +282,32 @@ La figura 3 muestra un diagrama de actividad modela dicho proceso.
 
 
 
-**Escenarios**
---------------------
+Escenarios
+----------
 
 En este apartado mostraremos mediante bocetos de pantallas, los distintos 
 escenarios que presentará la aplicación.
 
 
-**Búsqueda y listado de documentos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Búsqueda y listado de documentos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+Subida de documentos
+^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+Subida de nuevas versiones de los documentos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 
@@ -299,17 +316,8 @@ escenarios que presentará la aplicación.
 
 
 
-**Subida de documentos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-
-
-
-
-**Subida de nuevas versiones de los documentos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Modificación de los metadatos de un documento
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
 
@@ -318,8 +326,17 @@ escenarios que presentará la aplicación.
 
 
 
-**Modificación de los metadatos de un documento**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Añadir un comentario a una versión
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+
+
+
+
+
+Valorar una versión.
+^^^^^^^^^^^^^^^^^^^^
 
 
 
@@ -328,42 +345,23 @@ escenarios que presentará la aplicación.
 
 
 
-**Añadir un comentario a una versión**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Gestión de Usuarios
+^^^^^^^^^^^^^^^^^^^
+
+Listado
+
+
+
+
+Edición/Creación
 
 
 
 
 
 
-
-**Valorar una versión.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-
-
-
-
-
-
-**Gestión de Usuarios**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-**Listado**
-
-
-
-
-**Edición/Creación**
-
-
-
-
-
-
-**Gestión de Categorías y Gestión de Tipos de Archivos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Gestión de Categorías y Gestión de Tipos de Archivos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 La gestión de categorías y de tipos de archivos tendrá un aspecto análogo a la
 gestión de usuarios, diferenciándose simplemente en que los datos que se 
@@ -371,7 +369,7 @@ manipulan son los de la tabla que corresponda.
 
 
 
-**Diseño arquitectónico.**
+Diseño arquitectónico.
 ----------------------------------
 
 El diseño arquitectónico de la aplicación está determinado por la arquitectura 
@@ -401,8 +399,8 @@ anterior, cada aplicación tiene su controlador frontal, su configuración, su
 misma base de datos que representa el nexo entre ambas.
 
 
-**Frontend: el gestor documental**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Frontend: el gestor documental
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Esta aplicación constará de un sólo módulo que vamos a llamar *gesdoc* donde se
 implementarán las acciones siguientes:
@@ -415,7 +413,7 @@ implementarán las acciones siguientes:
 * valorar documento
 
 
-**Backend: administración del gestor documental**
+Backend: administración del gestor documental
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Esta aplicación albergará los módulos dedicados a la administración o gestión de
@@ -458,8 +456,8 @@ operaciones:
 * añadir un nuevo registro.
 
 
-**Inicio de sesión. Los plugins de symfony**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Inicio de sesión. Los plugins de symfony
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Tanto para acceder a una y a otra aplicación; *frontend* y *backend*, es
 preciso autentificarse facilitando el nombre de usuario y contraseña, a 
@@ -505,8 +503,8 @@ De esta manera hemos evitado duplicar el código. Denominaremos al *plugin
 IniSesPlugin*, y al módulo *inises*.
 
 
-**Resumen del diseño arquitectónico**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Resumen del diseño arquitectónico
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 En la tabla siguiente realizamos un resumen del diseño arquitectónico de nuestro
 gestor documental, es decir, la manera en que hemos organizado las acciones del
@@ -576,8 +574,8 @@ sesionPlugin (plugin) Es un plugin con un módulo inises   Comprobar
 
 
 
-**Recursos para la construcción de la aplicación**
--------------------------------------------------------
+Recursos para la construcción de la aplicación
+----------------------------------------------
 
 En ¿DÓNDE? tienes disponible los siguientes recursos que necesitarás para seguir
 el resto del curso:
@@ -594,8 +592,8 @@ el resto del curso:
   aplicación.
 
 
-**Conclusión**
-----------------------
+Conclusión
+----------
 
 En esta unidad hemos realizado un análisis de la aplicación cuya construcción
 nos servirá durante el resto del curso para aprender cómo utilizar *symfony* para

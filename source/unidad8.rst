@@ -1,5 +1,5 @@
-**Unidad 8: El framework de formularios de Symfony**
-==========================================================
+Unidad 8: El framework de formularios de Symfony
+================================================
 
 En esta unidad estudiaremos uno de los componentes más potentes y útiles de 
 *symfony*; el sistema de formularios, el cual constituye por sí solo un *framework
@@ -31,16 +31,16 @@ Con este objetivo bien definido nos disponemos a seguir rodeando, cada vez más
 de cerca, las posibilidades de *symfony*.
 
 
-**Formularios HTML**
------------------------------
+Formularios HTML
+----------------
 
 Antes de comenzar el estudio de los formularios de *symfony*, creemos necesario
 presentar algunos conceptos relativos a la producción y procesamiento de
 formularios *HTML* en las aplicaciones *web*.
 
 
-**Componentes de la interfaz gráfica**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Componentes de la interfaz gráfica
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Los documentos *HTML*, a través de los formularios, pueden incorporar elementos
 de control que el usuario utiliza para insertar datos que son enviados 
@@ -120,8 +120,8 @@ encapsular en objetos reutilizables componentes de control combinando elementos
 *HTML, CSS's* y *javascript*.
 
 
-**Procesamiento de los datos introducidos en el formulario.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Procesamiento de los datos introducidos en el formulario.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 La función de los formularios *HTML* es recoger datos del usuario cliente y
 enviarlos al servidor para hacer algo con ellos (almacenarlos en una base de
@@ -213,8 +213,8 @@ del *framework* de formularios, ofrecen una elegante y obligatoria solución a
 este problema.
 
 
-**Estructura de los formularios de Symfony**
---------------------------------------------------
+Estructura de los formularios de Symfony
+----------------------------------------
 
 Los formularios de *symfony* están compuestos por dos tipos de objectos: los 
 *widgets* y los validadores. Los primeros sirven para realizar la presentación
@@ -241,8 +241,8 @@ definen los formularios asociándoles *widgets* y validadores y cómo se utiliza
 en las aplicaciones *web* construidas con *symfony*.
 
 
-**Los widgets**
-^^^^^^^^^^^^^^^^^^^^^^^
+Los widgets
+^^^^^^^^^^^
 
 Los *widgets* de *symfony* son objetos que derivan de la clase *sfWidgetForm*
 Esta clase define una interfaz común mediante la que se pueden realizar las
@@ -401,8 +401,8 @@ la caja de los meses *fecha1[month]* y para la de los años *fecha1[year]*.
    ``http://librosweb.es/symfony_formularios/capitulo12.html``
 
 
-**Los validadores**
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Los validadores
+^^^^^^^^^^^^^^^
 
 Los validadores de *symfony* son objetos que derivan de la clase *sfValidatorBase*.
 Esta clase define una interfaz común mediante la que se pueden realizar las 
@@ -536,8 +536,8 @@ validador de manera transparente.
    ``http://librosweb.es/symfony_formularios/capitulo13.html``
 
 
-**Los formularios**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Los formularios
+^^^^^^^^^^^^^^^
 
 Y por fin los formularios. Como ya hemos indicado anteriormente un formulario de 
 *symfony* se compone de *widgets* y validadores. Una vez declarado y definido, el
@@ -849,8 +849,8 @@ apartado. A pesar de que la cantidad de código será obviamente mayor, debido a
 las complicaciones propias del proceso de datos. 
 
 
-**Creación y modificación de documentos.**
-----------------------------------------------------
+Creación y modificación de documentos.
+--------------------------------------
 
 
 Los requisitos del gestor documental enunciaban que los usuarios con perfil autor 
@@ -874,8 +874,8 @@ Lo primero que haremos es definir los formularios que necesitamos; uno para
 introducir los datos de los documentos y otro para las versiones.
 
 
-**El formulario DocumentosForm**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+El formulario DocumentosForm
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 El usuario autor, cuando vaya a crear un nuevo documento tendrá que introducir 
 los metadatos y, opcionalmente, el archivo que se corresponde con la primera 
@@ -1077,8 +1077,8 @@ Por último observa que hemos utilizado como formato de nombres para los campos
 del formulario el patrón *documentos[%s]*.
 
 
-**Implementación de la creación de nuevos documentos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementación de la creación de nuevos documentos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Ya disponemos del formulario para crear nuevos documentos. Ahora hay que 
 construir la lógica para presentarlo al usuario a través de su navegador y para
@@ -1384,8 +1384,8 @@ tabla *versiones* asociado a ese mismo registro, y un archivo físico en la
 carpeta del usuario que está manejando la aplicación.
 
 
-**Implementación de la modificación de documentos existentes**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementación de la modificación de documentos existentes
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 La modificación de los metadatos de cada documento se realiza a través del *link
 modificar* que aparece en la columna de acciones del listado de documentos. Dicho
@@ -1708,8 +1708,8 @@ correcta se vuelve a enviar el  formulario (*setTemplate('modificar')*) con los
 mensajes de error que han provocado el rechazo de la validación.
 
 
-**Subida de versiones**
------------------------------
+Subida de versiones
+-------------------
 
 Para finalizar la aplicación *frontend* de nuestro proyecto tan sólo nos queda
 desarrollar la subida de nuevas versiones. Cuando un usuario desee subir al 
@@ -1724,8 +1724,8 @@ apropiado para llevar a cabo la operación de subida de ficheros para,
 posteriormente, implementar dicha operación.
 
 
-**El formulario VersionesForm**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+El formulario VersionesForm
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Como acabamos de indicar, para subir nuevas versiones, el autor necesita 
 introducir los siguientes datos:
@@ -1768,8 +1768,8 @@ de versiones:
 	}
 
 
-**Implementación de la subida de nuevas versiones**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementación de la subida de nuevas versiones
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Construimos ahora la acción que enviará al cliente el formulario *HTML* para la 
 subida de nuevas versiones. Denominaremos a tal acción *executeSubirVersion()*:
@@ -1940,8 +1940,8 @@ Y ya puedes probar a subir nuevas versiones. Terminamos con esto la aplicación
 *frontend* del gestor documental.
 
 
-**Conclusión**
-------------------
+Conclusión
+----------
 
 Hemos finalizado la primera de las aplicaciones del gestor documental, la que
 hemos llamado *frontend* que constituye la parte esencial del gestor. La 

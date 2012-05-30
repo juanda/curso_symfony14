@@ -1,5 +1,5 @@
-**Unidad 7: Profundizando en la arquitectura MVC de Symfony**
-==================================================================
+Unidad 7: Profundizando en la arquitectura MVC de Symfony
+=========================================================
 
 Aún quedan bastantes requisitos por cumplir pero la aplicación va tomando cuerpo.
 Para llegar hasta aquí hemos estudiado gran parte de los conceptos básicos de
@@ -36,8 +36,8 @@ siguientes características:
 Y sin más preámbulos ¡vamos al lío!
 
 
-**El patrón MVC en symfony**
----------------------------------------
+El patrón MVC en symfony
+------------------------
 
 A lo largo de muchos años de programación de aplicaciones en general y de
 programación orientada a objetos en particular, los diseñadores y programadores 
@@ -128,11 +128,11 @@ Modelo                 El *ORM*, los formularios, las extensiones propias que
 En esta unidad volveremos a la carga con las dos primeras.
 
 
-**La parte del controlador.**
-------------------------------------
+La parte del controlador.
+-------------------------
 
-**El controlador frontal**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+El controlador frontal
+^^^^^^^^^^^^^^^^^^^^^^
 
 El punto único de entrada de una aplicación *symfony* es un archivo *PHP* ubicado 
 en el directorio *web*, que se conoce como el controlador frontal y que tiene el
@@ -243,8 +243,8 @@ construcción de aplicaciones *web* le resultará un seductor y desafiante
 ejercicio estudiar los aspectos internos del núcleo.
 
 
-**Los filtros y las acciones**
-----------------------------------------
+Los filtros y las acciones
+--------------------------
 
 Aunque ya hemos implementado unas cuantas acciones a lo largo del curso y podemos 
 pensar que  tenemos un conocimiento empírico suficiente, en esta sección
@@ -341,8 +341,8 @@ declarar se llama *postExecute()*:
 	}
 
 
-**Asociación de la plantilla a la acción**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Asociación de la plantilla a la acción
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Finalizaremos el estudio de las acciones aclarando como se produce la asociación
 de la plantilla a la acción. Hasta ahora hemos visto que a una acción denominada 
@@ -411,8 +411,8 @@ hora de construir nuestras aplicaciones sigue poniéndose de manifiesto a medida
 que avanzamos en el curso.
 
 
-**Implementación de un filtro para la selección de CSS en función del perfil del usuario.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Implementación de un filtro para la selección de CSS en función del perfil del usuario.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Para ilustrar el uso de los filtros de *symfony*, vamos a incorporar a nuestro
 gestor documental una nueva funcionalidad que no contemplamos en el análisis de
@@ -551,8 +551,8 @@ usuario que tengan asociados distintos perfiles y verás como cambia el color de
 fondo de la aplicación.
 
 
-**La parte de la vista**
----------------------------------
+La parte de la vista
+--------------------
 
 Desde el principio del curso hemos trabajado los conceptos de *layout* de la
 aplicación y plantillas (o *templates*) de los módulos, introduciendo nuevos 
@@ -592,11 +592,11 @@ en cualquier tipo de formato que podamos imaginar, siendo los más usuales el
 *JSON* (para enviar objetos software al cliente). 
 
 
-**La vistas HTML**
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+La vistas HTML
+^^^^^^^^^^^^^^
 
-**El proceso de decoración. Los layouts.**
-#################################################
+El proceso de decoración. Los layouts.
+######################################
 
 La generación de vistas en *symfony* se realiza según lo establecido por otro 
 patrón de diseño denominado *decorator*. Este patrón, de nombre bastante 
@@ -637,8 +637,8 @@ definir en el directorio reservado para los *layouts* de la aplicación
 definición del mismo. 
 
 
-**Uso de javascripts y CSS's. Los ficheros de configuración view.yml**
-##############################################################################
+Uso de javascripts y CSS's. Los ficheros de configuración view.yml
+##################################################################
 
 Los documentos *HTML* están estructurados en dos partes principales: la cabecera
 entre las etiquetas *<head></head>* y el cuerpo entre las etiquetas *<body></body>*.
@@ -744,8 +744,8 @@ Por último, el parámetro ``has_layout`` indica al *framework* si debe decorar
 las acciones (*true*) o no (*false*).
 
 
-**Asociación de la vista a la acción.**
-##################################################
+Asociación de la vista a la acción.
+###################################
 
 El mecanismo de asociación entre la acción y las vista ha sido explicado en el
 apartado 2.3 de esta misma unidad, correspondiente a la parte controladora. Hemos
@@ -756,8 +756,8 @@ repetir la explicación y remitimos al estudiante al apartado 2.3 de esta misma
 unidad.
 
 
-**Los helpers**
-######################
+Los helpers
+###########
 
 Ya hemos utilizado algunos *helpers* a lo largo del curso. Ahora los definiremos
 con precisión, presentaremos los más usuales y explicaremos como puedes producir 
@@ -853,8 +853,8 @@ ello utilizas la función *use_helper()*, igual que si se tratase de un *helper*
 de “serie”. Y punto y final.
 
 
-**Partials y componentes.**
-#################################
+Partials y componentes.
+#######################
 
 ¿Recuerdas el principio *DRY: Don't Repeat Yourself*, del que hemos hablado varías
 veces a lo largo del curso? Los *partials* y componentes son recursos mediante 
@@ -1111,8 +1111,8 @@ pertenecen a ningún módulo se referencian como si perteneciesen a un módulo
 denominado *global*.
 
 
-**Las vistas no HTML**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Las vistas no HTML
+^^^^^^^^^^^^^^^^^^
 
 Como ya hemos advertido, no solo de *HTML* vive la *web*, especialmente cuando 
 entran en la escena los servicios *web*. Hemos de tener en cuenta que *HTTP* es
@@ -1143,8 +1143,8 @@ noticias *RSS* para mostrar las últimas versiones de los documentos públicos
 subidos al repositorio.
 
 
-**Canales de noticias RSS.**
-#################################
+Canales de noticias RSS.
+########################
 
 No vamos a entrar en una descripción detallada de lo que son los canales de 
 noticias *RSS* y la redifusión de contenidos. Contamos con que el estudiante ya 
@@ -1172,8 +1172,8 @@ especificación *RSS* en el que cada *item* será una versión de un documento
 público almacenado en nuestro gestor documental.
 
 
-**Especificando el formato de la petición.**
-###################################################
+Especificando el formato de la petición.
+########################################
 
 Como hemos visto hasta el momento, por defecto las acciones se renderizan con
 plantillas con estructura *HTML* que son decoradas con un *layout* determinado.
@@ -1311,8 +1311,8 @@ simplemente de construir un archivo *XML* con unas determinadas etiquetas y
 devolverlo como respuesta al cliente.
 
 
-**Conclusión**
----------------------
+Conclusión
+----------
 
 En esta unidad hemos profundizado bastante en la parte controladora y en la vista
 de *symfony*. Y ello nos ha permitido agregar a la aplicación una serie de 

@@ -1,5 +1,5 @@
-**Unidad 10: Internacionalización y enrutamiento**
-=========================================================
+Unidad 10: Internacionalización y enrutamiento
+==============================================
 
 Comenzamos la última unidad del curso con el gestor de contenidos finalizado y
 completamente funcional. Su desarrollo nos ha servido como hilo conductor para 
@@ -23,8 +23,8 @@ otras aplicaciones. Concretamente trataremos el tema de la internacionalización
 y localización de aplicaciones *web* y del enrutamiento de *symfony*.
 
 
-**Internacionalización y Localización**
------------------------------------------------
+Internacionalización y Localización
+-----------------------------------
 
 Internacionalizar una aplicación informática significa diseñarla de tal manera
 que  pueda ser adaptada a distintos idiomas sin necesidad de realizar cambios en
@@ -44,8 +44,8 @@ Adivina por qué.
 En este apartado explicaremos cómo tratar estos aspectos con *symfony*. 
 
 
-**La cultura del usuario.**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+La cultura del usuario.
+^^^^^^^^^^^^^^^^^^^^^^^
 
 La necesidad de internacionalizar y localizar una aplicación del tipo que sea
 surge del hecho de que dicha aplicación será utilizada por usuarios de distintas
@@ -268,7 +268,7 @@ nosotros debemos facilitarle, en los distintos idiomas que soporte la aplicació
 En el siguiente apartado veremos como se lleva a cabo la traducción de la interfaz.
 
 
-**Traducción de la interfaz de las aplicaciones internacionalizadas**
+Traducción de la interfaz de las aplicaciones internacionalizadas*
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Si queremos presentar los textos de la interfaz de usuario en distintos idiomas, 
@@ -339,8 +339,8 @@ apps/nombre_aplicacion/i18n/en/messages.xml*
 	</xliff>
 
 
-**Traducción de campos de tablas de la base de datos**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Traducción de campos de tablas de la base de datos
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 En ocasiones también será necesario traducir algunos de los campos de ciertas 
 tablas de la base de datos. *Symfony* también proporciona un procedimiento para 
@@ -425,8 +425,8 @@ idioma de la cultura que tenga el usuario. Por supuesto para que esto ocurra deb
 existir las traducciones en los idiomas que se manejen.
 
 
-**Enrutamiento**
-----------------------
+Enrutamiento
+------------
 
 La *URL (Uniform Resource Locator)* es una pieza clave del protocolo *HTTP*.
 Mediante ellas se especifican de manera unívoca los recursos *HTTP* disponibles 
@@ -772,8 +772,8 @@ descrito. Ello se debe a que utilizan el concepto de colecciones de rutas.
    *http://www.symfony-project.org/gentle-introduction/1_4/en/09-Links-and-the-Routing-System*
    
 
-**Conclusión**
----------------------
+Conclusión
+----------
 
 En esta unidad hemos tratado dos nuevos aspectos que enriquecerán nuestras 
 aplicaciones *web*: la internacionalización y el *routing*. Aspectos para los
