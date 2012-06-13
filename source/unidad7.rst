@@ -463,7 +463,7 @@ ficheros *default_{nombre_perfil}.css*.
 Ahora creamos el filtro como una clase denominada *FiltroCSS* y la ubicamos en
 el directorio *lib* de la aplicación:
 
-*Contenido del archivo: /apps/lib/FiltroCSS.class.php*
+*Contenido del archivo: /apps/frontend/lib/FiltroCSS.class.php*
 
 .. code-block:: php
 
