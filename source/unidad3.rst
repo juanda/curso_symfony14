@@ -179,12 +179,12 @@ Vamos a describir la función de cada directorio del proyecto:
 |                   |compleja. Si, por ejemplo tenemos dos aplicaciones        |
 |                   |denominadas *aplicacion1* y *aplicacion2*                 |
 |                   |respectivamente, a la primera le corresponderán los       |
-|                   |controladores frontales                                   |
-|                   |* *index.php* y                                           |
-|                   |* *aplicacion1_dev.php*                                   |
+|                   |controladores frontales:                                  |
+|                   | *index.php* y                                            |
+|                   | *apllicacion1_dev.php*                                   |
 |                   |Mientras que a la segunda:                                |
-|                   |* *aplicacion2.php* y                                     |
-|                   |* *aplicacion2_dev.php*                                   |
+|                   | *aplicacion2.php* y                                      |
+|                   | *aplicacion2_dev.php*                                    |
 |                   |Estos archivos son el único punto de entrada a cada       |
 |                   |aplicación y ejecutarán la acción del módulo que se le    |
 |                   |indique mediante parámetros *GET* en la *URL*. El archivo |
@@ -197,7 +197,7 @@ Vamos a describir la función de cada directorio del proyecto:
 |                   |programador muchísima información sobre la ejecución de   |
 |                   |las acciones (variables de sesión, *request*, respuesta,  |
 |                   |tiempo de ejecución, *queries SQL* lanzadas, y muchas más |
-|                   |cosas). Es por ello ** muy importante que en el servidor  |
+|                   |cosas). Es por ello **muy importante que en el servidor   |
 |                   |de producción no se pueda acceder a la aplicación a través|
 |                   |del controlador frontal de desarrollo.**                  |
 |                   |También tenemos un directorio para el almacenamiento de   |
@@ -400,7 +400,7 @@ filtros se basan en él.
    
    .. code-block:: bash
 
-      ``$ symfony propel:build-sql``
+      $ symfony propel:build-sql
 
    En este caso se puede prescindir del archivo de configuración *propel.ini*.
    Sin embargo, pensamos que es más cómodo comenzar por una base de datos ya 
@@ -588,7 +588,7 @@ aplicación.
 		
 		sfContext::createInstance($configuration)->dispatch();
 
-	**dietetica_dev.php**
+   **dietetica_dev.php**
 	
 	.. code-block:: php
 	
@@ -642,7 +642,7 @@ aplicación.
 
 	.. code-block:: bash
 
-	   http://www.symfony-project.org/book/1_2/05-Configuring-Symfony
+	   http://www.symfony-project.org/gentle-introduction/1_4/en/05-Configuring-Symfony
 
 	o en castellano:
 	
@@ -892,7 +892,9 @@ problemas.
    si quieres ver la barra de depuración con iconos debes copiar el siguiente
    directorio de la distribución de *symfony* al directorio *web* del proyecto:
 
-   ``cp -R /ruta/a/symfony/data/web/sf web/``
+   .. code-block:: bash
+      
+      cp -R /ruta/a/symfony/data/web/sf web/
 
 
 Ya tenemos el resultado de la acción inicial de presentación, pero echamos de 
@@ -953,7 +955,7 @@ unidad anterior:
 
 .. code-block:: php
 
-	**<?php include('plantillas/'.$mvc_vis_plantilla.'Plantilla.php') ?>**
+   <?php include('plantillas/'.$mvc_vis_plantilla.'Plantilla.php') ?>
 
 
 Otra diferencia del *layout* de *symfony* respecto al de nuestro mini-*framework*
@@ -981,7 +983,7 @@ incluir las *CSS's* y los *javascript*. Abre el fichero
 *apps/dietetica/config/view.yml* y dile que deseas utilizar la hoja de estilos
 *estilo.css*.
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  http_metas:
