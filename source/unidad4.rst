@@ -242,9 +242,9 @@ Cada versión tendrá asociada una votación que se calculará como se indica en
 requisitos. Además se les puede asignar cualquier número de comentarios que, a su
 vez, proceden de los usuarios.
 
-
-
-
+.. figure:: imagenes/figura1_unidad4.jpg
+  
+   Figura 1. Modelo de datos
 
 
 Implementaremos este modelo en una base de datos según lo especificado en el 
@@ -253,7 +253,10 @@ motivos pedagógicos, hemos sacrificado cierta flexibilidad y capacidad de
 crecimiento de la aplicación al considerar los perfiles como un campo de la
 tabla *usuarios*, y las votaciones como un campo de la tabla *versiones*.
 
-
+.. figure:: imagenes/figura2_unidad4.jpg
+   :width: 800px
+  
+   Figura 2. Diagrama Entidad-Relación
 
 
 
@@ -277,7 +280,9 @@ para la subida de documentos.
 
 La figura 3 muestra un diagrama de actividad modela dicho proceso.
 
-
+.. figure:: imagenes/figura3_unidad4.jpg
+  
+   Figura 3. Diagrama de actividad del proceso de subida de archivos
 
 
 
@@ -292,71 +297,47 @@ escenarios que presentará la aplicación.
 Búsqueda y listado de documentos
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
-
-
+.. image:: imagenes/BusquedaYListado.png
 
 Subida de documentos
 ^^^^^^^^^^^^^^^^^^^^
 
-
-
-
-
+.. image:: imagenes/NuevoDocumento.png
 
 
 Subida de nuevas versiones de los documentos
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
-
-
-
-
+.. image:: imagenes/NuevaVersion.png
 
 Modificación de los metadatos de un documento
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
-
-
-
+.. image:: imagenes/ModificarMetadatosDocumentos.png
 
 
 Añadir un comentario a una versión
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-
-
-
-
+.. image:: imagenes/AnadirComentario.png
 
 
 Valorar una versión.
 ^^^^^^^^^^^^^^^^^^^^
 
-
-
-
-
-
+.. image:: imagenes/Valorar.png
 
 
 Gestión de Usuarios
 ^^^^^^^^^^^^^^^^^^^
 
-Listado
+**Listado**
 
+.. image:: imagenes/ListarUsuarios.png
 
+**Edición/Creación**
 
-
-Edición/Creación
-
-
-
+.. image:: imagenes/EditarUsuario.png
 
 
 
@@ -512,72 +493,56 @@ proyecto en módulos, aplicaciones y *plugins*, que es básicamente lo que *symf
 nos permite decidir.
 
 
-===================== ========================== ======== ========================
-aplicación/plugin     Descripción                Módulos  Acciones
-===================== ========================== ======== ========================
 
-frontend (aplicación) Es el gestor documental en gesdoc   búscar documentos
-                      sí, tal y como lo ven sus 
-                      usuarios.                           listar documentos
-                   
-                                                          añadir nuevos 
-                                                          documentos
-                                                         
-                                                          añadir nuevas 
-                                                          versiones de 
-                                                          documentos
-                                                         
-                                                          comentar documento
-                                                         
-                                                          Valorar documento
-
-backend (aplicación)  Es la aplicación que       gesusu   Listar y buscar 
-                	  utiliza el administrador            usuarios
-				      para configurar el gestor 
-				      documental. Concretamente           Modificar usuario
-				      para administrar los 
-				      usuarios, las categorías y          Eliminar usuario
-				      los tipos de documentos 
-				      que se pueden subir al              Añadir nuevo usuario
-				      sitio.
-											     gescat   Listar y buscar 
-											  			  categorías
-											  			 
-											  			  Modificar categorías
-											  			  
-											  			  Eliminar categorías
-											  			  
-											  			  Añadir nueva categoría
-
-												 gestip   Listar y buscar tipos
-												 		  de archivos
-												 		  
-												 		  Modificar tipos de 
-												 		  archivos
-												 		  
-												 		  Eliminar tipos de 
-												 		  archivos
-												 		  
-												 		  Añadir nuevo tipo de 
-												 		  archivo
-											  			 
-sesionPlugin (plugin) Es un plugin con un módulo inises   Comprobar
-					  para realizar el inicio de          autentificación del
-					  sesión y que será                   usuario
-					  utilizado por las dos 
-					  aplicaciones anteriores.            Construir la sesión de
-					  									  usuario
-					  									  
-					  									  Desconectar: Destruir 
-					  									  la sesión de usuario
-					  									  
-
++--------------------+--------------------------+--------+------------------------+
+|aplicación/plugin   | Descripción              |Módulos | Acciones               |
++--------------------+--------------------------+--------+------------------------+
+|frontend(aplicación)|Es el gestor documental en| gesdoc |  búscar documentos     |
+|                    |sí, tal y como lo ven sus |        +------------------------+
+|                    |usuarios.                 |        |  listar documentos     |
+|                    |                          |        +------------------------+           
+|                    |                          |        |añadir nuevos documentos|
+|                    |                          |        +------------------------+
+|                    |                          |        |añadir nuevas           | 
+|                    |                          |        |versiones de            |
+|                    |                          |        |documentos              |
+|                    |                          |        +------------------------+   
+|                    |                          |        | comentar documento     |
+|                    |                          |        +------------------------+                     
+|                    |                          |        | Valorar documento      |
++--------------------+--------------------------+--------+------------------------+
+|backend (aplicación)|Es la aplicación que      | gesusu | Listar y buscar        | 
+|                    |utiliza el administrador  |        | usuarios               |
+|   		     |para configurar el gestor |        +------------------------+
+|	             |documental. Concretamente |        | Modificar usuario      |
+|                    |para administrar los      |        +------------------------+
+|                    |usuarios, las categorías y|        |  Eliminar usuario      |
+|		     |los tipos de documentos   |        +------------------------+
+|                    |que se pueden subir al    |        | Añadir nuevo usuario   |
+|                    |sitio.                    |        |                        |
+|                    |                          +--------+------------------------+
+|                    |                          | gescat |Listar,buscar,modificar,| 
+|                    |                          |        |eliminar,añadir         |
+|                    |                          |        |categorias              |                    
+|                    |                          |        +------------------------+
+|                    |                          |        |Añadir nuevo tipo de    |         
++--------------------+--------------------------+--------+------------------------+
+|sesionPlugin(plugin)|Es un plugin con un módulo| inises | Comprobar              |
+|                    |para realizar el inicio de|        | autentificación del    |
+|                    |sesión y que será         |        | usuario                |
+|                    |utilizado por las dos     |        +------------------------+
+|                    |aplicaciones anteriores.  |        | Construir la sesión de |
+|                    |                          |        | usuario                |
+|                    |                          |        +------------------------+
+|                    |                          |        |Cerrar la sesión        |
++--------------------+--------------------------+--------+------------------------+
+					  									
 
 
 Recursos para la construcción de la aplicación
 ----------------------------------------------
 
-En ¿DÓNDE? tienes disponible los siguientes recursos que necesitarás para seguir
+`Aquí <http://recursos>`_ tienes disponible los siguientes recursos que necesitarás para seguir
 el resto del curso:
 
 * Un volcado de la base de datos con la estructura y algunos datos de ejemplo.

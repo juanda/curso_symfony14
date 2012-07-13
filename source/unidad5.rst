@@ -226,7 +226,7 @@ Ya sólo nos queda indicar en el ficheros *apps/frontend/config/view.yml* las ho
 de estilo que deseamos utilizar para ver el resultado de lo que vamos construyendo
 con estilos gráficos aplicados.
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  http_metas:
@@ -435,7 +435,7 @@ con las referencias sugeridas.
 Como cualquier objeto en *PHP*, los objetos de las clases registro se instancian
 de la siguiente manera:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$usuario = new Usuarios();
 
@@ -457,7 +457,7 @@ Los métodos que sirven para definir valores se denominan *setters*, y los que s
 utilizan para recuperar valores *getters*. Así pues podemos dotar de contenido al
 objeto que hemos construido de la siguiente manera:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$usuario → setNombre('Anselmo');
 	$usuario → setApellidos('González García');
@@ -478,7 +478,7 @@ Sin embargo **aún no existe como registro** en la base de datos.
 
 Ahora podemos obtener los valores de los campos mediante los métodos *getters*:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$nombre    = $usuario → getNombre();
 	$apellidos = $usuario → getApellidos();
@@ -495,7 +495,7 @@ El nombre de los métodos *getters* se construye de la misma manera que el de lo
 Cuando queramos grabar en la base de datos la información que contiene el objeto 
 utilizamos el método *save()*:
 
-.. code-block:: bash
+.. code-block:: php
 
    $usuario → save();
 
@@ -509,7 +509,7 @@ una inserción en la base de datos (*INSERT*).
 
 Ahora si hacemos:
 
-.. code-block:: bash
+.. code-block:: php
 
    id_usuario = $usuario → getIdUsuario();
 
@@ -556,7 +556,7 @@ registros en forma de objetos de *Propel*.
 El método *retrieveByPK()* nos permite recuperar un registro cuya clave principal 
 se conoce:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$usuario = UsuariosPeer::retrieveByPK(21);
 
@@ -572,7 +572,7 @@ de datos según hemos visto en el apartado anterior.
 El objeto *Criteria* modela la parte *WHERE* de una consulta *SQL*. La siguiente 
 línea declara un objeto *Criteria* vacío:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$c = new Criteria();
 
@@ -581,7 +581,7 @@ Dicho objeto se utiliza como argumento de la función *doSelect()* de las clases
 *peer* para recuperar los objetos que satisfacen un criterio determinado. Si 
 utilizamos un criterio vacío como el anterior obtendremos todos los registros de la tabla:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$usuarios = UsuariosPeer::doSelect($c);
 
@@ -591,7 +591,7 @@ de la tabla *usuarios*. Como es un *array*, puede ser iterado mediante las
 instrucciones que *PHP* ofrece para la iteración, siendo *foreach* la más usada 
 con diferencia:
 
-.. code-block:: bash
+.. code-block:: php
 
 	foreach($usuarios as $u)
 	{
@@ -614,7 +614,7 @@ continuación describiremos.
 El método *add()* del objeto *Criteria* se utiliza para añadir condiciones de 
 búsqueda sobre la tabla especificada en su primer argumento:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$c = new Criteria();
 	$c → add(UsuariosPeer::NOMBRE, 'Anselmo');
@@ -635,7 +635,7 @@ las condiciones de la clausula *WHERE* de una consulta *SQL*. Las más usuales s
 Así por ejemplo, si en el código anterior sustituimos la segunda línea por la 
 siguiente:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$c → add(UsuariosPeer:NOMBRE, 'An%', Criteria::LIKE);
 
@@ -646,7 +646,7 @@ mismo significado que en las consultas *SQL*.
 Si utilizamos varias veces el método *add()*, el criterio final será el producto
 lógico (*AND*) de cada uno de las comparaciones:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$c = new Criteria();
 	
@@ -666,7 +666,7 @@ También podemos añadir uniones (*Joins*) con otras tablas para recuperar
 registros. Esto se hace añadiendo al criterio condiciones de unión mediante el
 método *addJoin()*:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$c = new Criteria();
 	
@@ -682,7 +682,7 @@ búsqueda *'An%'*.
 De la misma manera que podemos recuperar registros mediante el método *doSelect()*
 de las clases peer, podemos borrarlos con el método *doDelete()*:
 
-.. code-block:: bash
+.. code-block:: php
 	
 	$c = new Criteria();
 	
@@ -711,7 +711,7 @@ objeto de la clase *Documentos* tiene asociado un objeto de la clase *Usuarios*.
 Podemos obtener el objeto *Usuarios* asociado a un objeto *Documentos* dado de la
 siguiente manera:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$documento = DocumentosPeer::retrieveByPk(2);
 	
@@ -727,7 +727,7 @@ objetos relacionados; se trata de la relación contraria 1 – N. Por ejemplo un
 objeto *Usuarios* puede tener asociados muchos objetos *Documentos*. La forma de
 obtenerlos sería la siguiente:
 
-.. code-block:: bash
+.. code-block:: php
 
 	$usuario = UsuariosPeer::retrieveByPK(5);
 	
@@ -801,7 +801,7 @@ Esto es, añadimos al fichero de acciones del módulo el siguiente código:
 
 *Trozo del archivo: apps/frontend/modules/gesdoc/actions/action.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
 	public function executeIndex(sfWebRequest $request)
 	{
@@ -851,9 +851,11 @@ Y verás una tabla (aún por completar) con el título de todos los documentos, 
 
 Para completar la tabla debemos acceder a los autores y versiones de cada documento. Según nuestro modelo de datos, Usuarios (que pueden ser autores) y Versiones son objetos (registros) relacionados con los documentos de forma que un documento sólo puede tener un autor, y puede tener asociadas varias versiones. Se trata por tanto de aplicar los métodos de acceso explicados en el apartado 2.5, para realizar dicha tarea. 
 
-Si $d representa un objeto Documentos, entonces:
+Si ``$d`` representa un objeto Documentos, entonces:
 
-$autor = $d → getUsuarios();
+.. code-block:: php
+   
+   $autor = $d → getUsuarios();
 
 $autor es un objeto Usuarios asociado al documento y
 $versiones = $d → getVersioness();
@@ -917,7 +919,7 @@ Aprovecharemos este momento para ilustrar como, extendiendo el modelo, podemos
 simplificar el código y hacerlos más legible y reutilizable. Fíjate que el acceso
 al nombre y apellido del usuario se realiza mendiante el siguiente código:
 
-.. code-block:: bash
+.. code-block:: php
 
 	<?php echo $d -> getUsuarios() -> getNombre().' '. $d -> getUsuarios() -> getApellidos()?> 
 
@@ -933,7 +935,7 @@ y que realice dicha labor:
 
 *Función añadida al  archivo: lib/model/Usuarios.php*
 
-.. code-block:: bash
+.. code-block:: php
 
 	public function dameNombreYApellidos()
 	 {
@@ -943,7 +945,7 @@ y que realice dicha labor:
 Ahora podemos sustituir en la plantilla la farragosa línea anterior por la
 siguiente que es mucho más legible:
 
-.. code-block:: bash
+.. code-block:: php
 
 	<?php echo $d -> getUsuarios() -> dameNombreYApellidos()?> 
 	
@@ -956,9 +958,9 @@ cambiamos de nombre al método *dameNombreYApellidos()* y lo llamamos *__toStrin
 la línea de la plantilla donde se pinta el nombre y el apellido del usuario 
 quedaría reducida a:
 
-.. code-block:: bash
+.. code-block:: php
 
-	<?php echo $d -> getUsuarios() ?> 
+   <?php echo $d -> getUsuarios() ?> 
 
 
 Como veremos más adelante cuando estudiemos los formularios y la generación 
@@ -1038,7 +1040,7 @@ desplegable para el campo *tipo*, y una caja de selección múltiple para las
 
 *Formulario de búsqueda añadido al archivo: apps/frontend/modules/gesdoc/templates/indexSuccess.php*
 
-.. code-block:: bash
+.. code-block:: html+jinja
 
 	...
 	<form name="filtro" method="post" action="<?php echo url_for('gesdoc/index') ?>" >
@@ -1081,7 +1083,7 @@ como sigue:
 
 *Trozo de código del archivo:  apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
 	public function executeIndex(sfWebRequest $request)
 	{
@@ -1179,16 +1181,16 @@ Procesamiento de la petición. El objeto SfWebRequest.
 para recoger los parámetros que el cliente (*browser*) envía al servidor *web*
 y para comprobar la existencia de dichos parámetros. Los métodos más usados son:
 
-================================= ================================================
-hasParameter('nombre_parametro'); Devuelve ``true`` si la petición contiene un
-				  parámetro llamado ``nombre_parametro`` y 
-				  false en caso contrario.
-
-getParameter('nombre_parametro',  Devuelve el valor del parámetro 
-'valor_defecto);		  ``nombre_parametro`` de la petición si este
-				  existe o el valor indicado en ``valor_defecto``
-				  si no existe.
-================================= ================================================
++---------------------------------+------------------------------------------------+
+|hasParameter('nombre_parametro');| Devuelve ``true`` si la petición contiene un   |
+|				  | parámetro llamado ``nombre_parametro`` y       |
+|				  | false en caso contrario.                       |
++---------------------------------+------------------------------------------------+
+|getParameter('nombre_parametro', | Devuelve el valor del parámetro                |
+|'valor_defecto);		  | ``nombre_parametro`` de la petición si este    |
+|				  | existe o el valor indicado en ``valor_defecto``|
+|				  | si no existe.                                  |
++---------------------------------+------------------------------------------------+
 
 Este objeto es uno de los más utilizados en la implementación de las acciones, 
 ya que la interacción con el usuario se lleva a cabo, fundamentalmente, a través
@@ -1213,7 +1215,7 @@ Aplicando este procedimiento la acción *executeIndex()* nos queda como sigue:
 *Código de la acción index del archivo:
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
 	public function executeIndex(sfWebRequest $request)
 	{
@@ -1288,13 +1290,13 @@ de registros que provienen de la base de datos.
 Veamos como utilizarlo. En primer lugar sustituimos la última línea de la acción
 *executeIndex()*
 
-.. code-block:: bash
+.. code-block:: php
 
 	$this -> documentos = DocumentosPeer::doSelect($c);
 
 Por el siguiente fragmento de código:
 
-.. code-block:: bash
+.. code-block:: php
 
 	 $pager = new sfPropelPager('Documentos', 4);
 	 $pager->setCriteria($c);
@@ -1380,7 +1382,7 @@ en nuestro caso) devuelto por ``$pager → getResults()``. De esta manera
 mostraremos únicamente los 4 registros de la página que se haya indicado a la
 acción *index* mediante el párametro *page* de la petición *HTTP*.
 
-.. code-block:: bash
+.. code-block:: php
 
 	...
 	<?php foreach ($pager -> getResults()as $d): ?>
@@ -1474,7 +1476,7 @@ petición *HTTP* la clave principal de la versión a descargar. Fíjate en el c�
 *HTML* del *link* correspondiente a las versiones de los documentos. Tienen este 
 aspecto:
 
-.. code-block:: bash
+.. code-block:: php
 
 	<a href="/gestordocumental/web/frontend_dev.php/gesdoc/verVersion/id_version/4">2</a>
 
@@ -1502,7 +1504,7 @@ según el siguiente código:
 *Código de la acción verVersion del archivo:
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
 	public function executeVerVersion(sfWebRequest $request)
 	 {
@@ -1552,7 +1554,6 @@ Para enviar el fichero mediante esta función necesitamos las siguientes variabl
 =================== =============================================================
 Variable            Significado
 =================== =============================================================
-
 ``$fichero``        Es la ruta absoluta del fichero que se va a descargar. Sirve 
                     para leer el contenido del fichero en cuestión y enviarlo 
                     mediante la instrucción ``echo readfile($fichero)``
@@ -1575,12 +1576,12 @@ Variable            Significado
                     descriptivo y que hemos compuesto uniendo el título que le 
                     dimos al documento en la base de datos junto con el nº de 
                     versión que se descarga.
-
+=================== =============================================================
 
 Por último debemos indicar a *symfony* que la acción no debe ser renderizada por
 ninguna plantilla. Este es el significado de la última línea:
 
-.. code-block:: bash
+.. code-block:: php
 
 	return sfView::NONE;
 
@@ -1604,13 +1605,13 @@ para cambiar los elementos de la columna 'Titulo' por enlaces a dicha acción.
 
 Cambiamos en la plantilla *indexSuccess.php* la línea:
 
-.. code-block:: bash
+.. code-block:: html+jinja
 
 	 <td><?php echo $d -> getTitulo() ?></td>
 
 Por esta otra:
 
-.. code-block:: bash
+.. code-block:: html+jinja
 
  	<td><?php echo link_to($d -> getTitulo(),'gesdoc/verMetadatos?id_documento='. $d -> getIdDocumento()) ?></td>
 
@@ -1619,7 +1620,7 @@ Y ahora escribimos la acción *executeVerMetadatos()*:
 *Acción verMetadatos del archivo: 
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 	
 	public function executeVerMetadatos(sfWebRequest $request)
 	{
