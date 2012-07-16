@@ -90,15 +90,19 @@ almacenar una variable durante la sesión basta que la incluyamos como miembro
 de *$_SESSION*. Por ejemplo, si necesitamos almacenar el nombre y los apellidos 
 del usuario podemos hacer los siguiente:
 
-.. code-block:: bash
-
+.. code-block:: php
+      
+        <?php
+        
 	$_SESSION['nombre']    = 'Alberto';
 	$_SESSION['apellidos'] = 'González García'
 
 Sin embargo, por cuestiones de organización, sería más correcto hacer lo 
 siguiente:
 
-.. code-block:: bash
+.. code-block:: php
+
+        <?php
 
 	$_SESSION['usuario']['nombre']    = 'Alberto';
 	$_SESSION['usuario']['apellidos'] = 'González García'
@@ -106,7 +110,9 @@ siguiente:
 De esta manera podremos seguir añadiendo datos referidos al usuario y 
 recuperarlos de una vez:
 
-.. code-block:: bash
+.. code-block:: php
+
+        <?php
 
 	$usuario = $_SESSION['usuario'];
 	
@@ -137,17 +143,20 @@ Desde las acciones, se puede acceder a dicho objeto utilizando el método
 
 Desde una acción:
 
-.. code-block:: bash
+.. code-block:: php
+   
+        <?php
 
 	//Porción de código dentro de una acción
 	...
-	$usuario = $this → getUser();
+	$usuario = $this -> getUser();
 	...
 
 y desde las plantillas utilizando la variable *$sf_user*.
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	//Porción de código dentro de una plantilla.
 	...
 	$usuario = $sf_user;
@@ -159,25 +168,27 @@ Una vez que disponemos del objeto de sesión podemos definir nuevos atributos
 para comprobar la existencia de una variable de sesión. A continuación mostramos
 la manera de utilizarlos en ejemplos de código dentro de una acción:
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	// Definir una variable de sesión
-	$this → getUser() → setAttribute('nombre','Alberto');
+	$this -> getUser() -> setAttribute('nombre','Alberto');
 	
 	// Recuperar la variable de sesión 'nombre', 
-	$nombre = $this → getUser() → getAttribute('nombre');
+	$nombre = $this -> getUser() -> getAttribute('nombre');
 	
 	// Definir un atributo que es un array
 	$usuario['nombre']    = 'Alberto';
 	$usuario['apellidos'] = 'González García';
 	
-	$this → setAttribute('usuario',$usuario);
+	$this -> setAttribute('usuario',$usuario);
 	
 	// Recuperar el atributo 'usuario'
-	$usuario = $this → getUser() → getAttribute('usuario');
+	$usuario = $this -> getUser() -> getAttribute('usuario');
 	
 	//Comprobar si existe el atributo 'usuario'
-	if($this → getUser() → hasAttribute('usuario')
+	if($this -> getUser() -> hasAttribute('usuario')
 	{
 		//hacer algo
 	}
@@ -226,8 +237,10 @@ Este procedimiento modifica el código de la acción *index* de la siguiente man
 *Código de la acción del fichero:
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
-
+.. code-block:: php
+        
+        <?php
+        ...
 	public function executeIndex(sfWebRequest $request)
 	{
 		$this -> tipos = TiposPeer::doSelect(new Criteria());
@@ -313,7 +326,7 @@ petición anterior:
 
 *Código de la plantila apps/frontend/modules/gesdoc/templates/indexSuccess.php*
 
-.. code-block:: html+jinja
+.. code-block:: html+php
 
 	<div id="sf_admin_header">
 		<h2>Listado de documentos</h2>
@@ -529,7 +542,7 @@ y define el parámetro *is_secure* como *true*:
 *Contenido del archivo de seguridad de la aplicación:
 apps/frontend/config/security.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  is_secure: true	
@@ -556,14 +569,16 @@ Este objeto proporciona los método *isAuthenticated()* y *setAuthenticated()*
 para manipular la autentificación. De esta manera, desde una acción cualquiera,
 podemos autentificar al usuario mediante la siguiente instrucción:
 
-.. code-block:: bash
+.. code-block:: php
 	
-	…
-	$this → getUser() → setAutenticated(true);
-	…
+        <?php
+        ...
+	$this -> getUser() -> setAutenticated(true);
+	...
 	
-	O comprobar si está autentificado mediante esta otra:
-	if($this → getUser() → isAuthenticated()
+	//O comprobar si está autentificado mediante esta otra:
+
+	if($this -> getUser() -> isAuthenticated()
 	{
 		// haz algo
 	}
@@ -580,56 +595,62 @@ perfiles, etcétera).
 Las credenciales no son más que valores que podemos asignar a la sesión de 
 usuario mediante el métodos *addCredential()* del objeto *sfBasicSecurityUser*:
 
-.. code-block:: bash
-
+.. code-block:: php
+  
+        <?php
 	...
-	$this → getUser() → addCredential('administrador');
+	$this -> getUser() -> addCredential('administrador');
 	...
 
 También se pueden añadir varias credenciales de una vez mediante el método 
 *addCredentials()*:
 
-.. code-block:: bash
+.. code-block:: php
 
-	...
-	$this → getUser() → addCredentials('lectura', 'escritura');
+        <?php
+	... 
+	$this -> getUser() -> addCredentials('lectura', 'escritura');
 	...
 
 También se pueden eliminar una credencial con *removeCredential()*:
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	...
-	$this → getUser() → removeCredential('lectura');
+	$this -> getUser() -> removeCredential('lectura');
 	...
 
 O todas de una vez con *clearCredentials()*:
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	...
-	$this → getUser() → clearCredentials();
+	$this -> getUser() -> clearCredentials();
 	...
 
 Por último con *hasCredential()* podemos comprobar si el usuario posee ciertas 
 credenciales.
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	// Comprueba si tiene la credencial lectura
-	if($this → getUser() → hasCredential('lectura'))
+	if($this -> getUser() -> hasCredential('lectura'))
 	{
 		//haz algo
 	}
 	
 	// Comprueba si tiene la credencial lectura Y la credencial escritura
-	if($this → getUser() → hasCredential(array('lectura','escritura'))
+	if($this -> getUser() -> hasCredential(array('lectura','escritura'))
 	{
 		//haz algo
 	}
 	
 	// Comprueba si tiene la credencial lectura O la credencial escritura
-	if($this → getUser() → hasCredential(array('lectura','escritura'), false))
+	if($this -> getUser() -> hasCredential(array('lectura','escritura'), false))
 	{
 		//haz algo
 	}
@@ -654,7 +675,7 @@ ejemplo, si un usuario debe poseer las credenciales *'lectura'* **Y** *'escritur
 para ejecutar la acción *index* de un módulo determinado, se especificaría en el
 fichero *security.yml* de dicho módulo de la siguiente manera:
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	index:
@@ -664,7 +685,7 @@ fichero *security.yml* de dicho módulo de la siguiente manera:
 
 Si la condición fuese 'lectura' **O** 'escritura':
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	index:
@@ -691,7 +712,6 @@ respecto de la seguridad:
 
 
 ======= =======================================================================
-
 U.01    La aplicación contemplará 4 tipos de usuarios:
 
         * **invitado**, que podrá realizar búsquedas y descargas de documentos 
@@ -706,22 +726,13 @@ U.02    La aplicación presentará una parte pública (perfil invitado) en la qu
         cualquier persona podrá realizar búsquedas y descargas de documentos 
         públicos. Para todas las demás acciones el usuario debe estar 
         registrado.
-======= =======================================================================
-
-
-======= =======================================================================
 
 C.01    Los usuarios registrados podrán enviar comentarios a los documentos.
 
 C.02    Los usuarios registrados podrán ver los comentarios de los documentos.
-======= =======================================================================
-
-
-======= =======================================================================
 
 P.01    Los usuarios registrados podrán votar sólo una vez cada documento 
         consultado
-
 ======= =======================================================================
 
 
@@ -741,15 +752,11 @@ Y las asignaremos a los perfiles de la siguiente manera:
 ============== ================================================================
 Perfil         Credenciales asociadas
 ============== ================================================================
-
 Invitado       No se le asocian credenciales
-
 Lector         *lectura*
-
 Autor          *lectura, escritura*
-
 Administrador  *lectura, escritura, administración*
-
+============== ================================================================
 
 
 Por otro lado todas las acciones serán seguras (requieren autentificación), salvo
@@ -764,7 +771,7 @@ defecto. Es decir, el fichero *apps/frontend/config/security.yml* quedaría así
 *Contenido del archivo de seguridad de la aplicación:
 apps/frontend/config/security.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  is_secure: true
@@ -782,7 +789,7 @@ siguiente contenido:
 
 *Contenido del fichero: apps/frontend/modules/gesdoc/config/security.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	index:
 	  is_secure: false
@@ -811,9 +818,10 @@ de la acción *index* quedaría:
 *Comprobación de la autentificación en la acción index para mostrar o no 
 documentos privados*
 
-.. code-block:: bash
+.. code-block:: php
 
-	…
+        <?php
+	...
 	// Si el usuario no está autenticado (es invitado)
 	// muestra sólo los documentos públicos.
 	if(!$this -> getUser() -> isAuthenticated())
@@ -844,15 +852,15 @@ de comprobar en la plantilla *indexSuccess.php* si el usuario no está
 autentificado y, en ese caso, no mostrar los enlaces *modificar* y *subir versión*.
 El código siguiente muestra como incluir dicho control a la plantillas.
 
-.. code-block:: html+jinja
+.. code-block:: html+php
 
-	…
+	...
 	 
 	<?php if($sf_user -> isAuthenticated()) : ?>
 	<th>Acciones</th>
 	<?php endif; ?>
 	
-	…
+	...
 	
 	<?php if($sf_user -> isAuthenticated()) : ?>
 	 <td>
@@ -865,9 +873,11 @@ Prueba ahora. Mucho mejor ¿no?. Si quieres volver a ver la pantalla como usuari
 autenticado, para hacer pruebas, puedes añadir al comienzo de la acción *index*
 la siguiente linea:
 
-.. code-block:: bash
+.. code-block:: php
 
-	$this → getUser → setAuthenticated(true);
+        <?php
+
+	$this -> getUser -> setAuthenticated(true);
 
 Ahora podrás comprobar que si intentas acceder a la acción modificar y subir 
 versión a través de los correspondientes enlaces, la aplicación impide la 
@@ -891,7 +901,7 @@ definir al usuario como no autentificado puedes hacer una de estas tres cosas:
 * Destruir la sesión de usuario cerrando completamente el navegador.
 
 * Mediante programación, volver a definir  al usuario como no autentificado 
-  mediante la siguiente instrucción: ``$this → getUser() → setAuthenticated(false)``,
+  mediante la siguiente instrucción: ``$this -> getUser() -> setAuthenticated(false)``,
   y volver a ejecutar la acción.
 
 Una vez que hemos blindado las acciones del módulo *gesdoc* mediante la 
@@ -1019,7 +1029,7 @@ y añadirle el fichero *security.yml* con el siguiente código:
 
 *Contenido del fichero: apps/frontend/modules/inises/config/security.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	signIn:
 	  is_secure: false
@@ -1031,6 +1041,8 @@ Ahora creamos la acción *signIn*, es decir añadimos el método público
 *Contenido del fichero: apps/frontend/modules/inises/actions/actions.class.php*
 
 .. code-block:: php
+
+        <?php
 
 	class inisesActions extends sfActions
 	{
@@ -1069,7 +1081,7 @@ plantilla correspondiente, *signInSuccess.php*:
 
 *Contenido del fichero: apps/frontend/modules/inises/templates/signInSuccess.php*
 
-.. code-block:: php
+.. code-block:: html+php
 
 	<form name="loginForm" action="<?php echo url_for('inises/signIn') ?>" method="post">
 		<?php echo $form -> renderGlobalErrors() ?>
@@ -1106,7 +1118,7 @@ declaración de los validadores del formulario.
 La validación del formulario se solicita en la acción *signIn* cuando se ha 
 comprobado que la petición es del tipo *POST*. Entonces se “enlazan” (método 
 *bind()*) los datos de la petición con el objeto formulario y se realiza la
-validación (``$this → form → isValid()``). La comprobación de la identidad del
+validación (``$this -> form -> isValid()``). La comprobación de la identidad del
 usuario se realiza una vez que la validación del formulario es correcta. Entonces
 se accede a la base de datos para comprobar si existe un usuario con el nombre 
 de usuario y contraseña enviado. Para ello nos apoyamos en la función 
@@ -1114,7 +1126,9 @@ de usuario y contraseña enviado. Para ello nos apoyamos en la función
 
 *Código añadido al archivo: apps/frontend/modules/inises/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
+
+        <?php
 
 	protected function compruebaUsuario($datos)
 	{
@@ -1139,6 +1153,8 @@ correspondiente en función del perfil. Esto último lo realiza la función
 *Código añadido al archivo: apps/frontend/modules/inises/actions/actions.class.php*
 
 .. code-block:: php
+
+        <?php
 
 	protected function asociaCredenciales($usuario)
 		{
@@ -1171,6 +1187,8 @@ Ya sólo nos queda añadir la acción *signOut()* para la desconexión del usuar
 
 .. code-block:: php
 
+        <?php
+        ...
 	public function executeSignOut(sfRequest $request)
 	{
 		 session_destroy();

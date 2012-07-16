@@ -38,10 +38,10 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'unidad5'
+master_doc = 'unidad6'
 
 # General information about the project.
-project = u'unidad5'
+project = u'unidad6'
 copyright = '2012, admin'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -261,7 +261,7 @@ texinfo_documents = [
 
 
 pdf_documents= [ 
-    ('unidad5', u'unidad5', u'unidad5', u'admin'),
+    ('unidad6', u'unidad6', u'unidad6', u'admin'),
 ]
 
 # A comma-separated list of custom stylesheets. Example:
