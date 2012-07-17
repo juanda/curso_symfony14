@@ -87,8 +87,7 @@ representación del modelo a través de la vista. El siguiente gráfico ilustra 
 cooperación entre estos tres objetos:
 
 
-
-
+.. image:: mvc.png
 
 
 Esta separación en capas con responsabilidades bien definidas permite, además de
@@ -107,11 +106,8 @@ En *Symfony* cada parte del patrón *MVC* constituye un sistema de varios
 componentes:
 
 ====================== =========================================================
-
 Parte del patrón         Componentes
-
 ====================== =========================================================
-
 Controlador            El Controlador frontal, los filtros, las acciones y los
                        objetos *request, response* y *session*
 
@@ -123,7 +119,7 @@ Modelo                 El *ORM*, los formularios, las extensiones propias que
                        el programador realice de las clases del *ORM* y las 
                        clases y funciones propias que el programador construya
                        para implementar la lógica de negocio.
-
+====================== =========================================================
 
 En esta unidad volveremos a la carga con las dos primeras.
 
@@ -141,8 +137,7 @@ siguiente aspecto:
 .. code-block:: php
 
 	<?php
-	
-	
+		
 	require_once(dirname(__FILE__).'/../config/ProjectConfiguration.class.php');
 	
 	$configuration = ProjectConfiguration::getApplicationConfiguration('frontend', 'prod', false);
@@ -262,9 +257,7 @@ Cada uno de los objetos en la cadena realiza su propio proceso siendo la salida
 de uno la entrada del siguiente. Un diagrama de secuencia describe con precisión 
 el fundamento de este sencillo pero eficaz patrón de diseño:
 
-
-
-
+.. image:: secuencia.png
 
 
 Como vemos cada filtro realiza algunas operaciones durante un tiempo y pasa la 
@@ -288,11 +281,7 @@ decide qué debe hacer con estas entradas. El siguiente gráfico ilustra este
 modelo de caja negra del funcionamiento de *symfony*.
 
 
-
-
-
-
-
+.. image:: caja_negra.png
 
 
 La secuencia de filtros se establece en el fichero de configuración de la 
@@ -321,8 +310,9 @@ módulo. Lo mismo se haría si en el caso de que el código común tuviese que
 ejecutarse al final de cada acción, solo que en este caso la función que debemos
 declarar se llama *postExecute()*: 
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	class moduloActions extends sfActions
 	{
 		public function preExecute()
@@ -356,13 +346,9 @@ el *framework* utilizará otra plantilla distinta para mostrar los datos. La
 siguiente tabla muestra los valores devueltos que se permiten en una acción y
 la plantilla asociada:
 
-============================= =================================================
-
-Valor devuelto en la acción   Nombre de la plantilla utilizada para renderizar
-                      		  los datos
-
-============================= =================================================
-
+============================= ==========================================================
+Valor devuelto en la acción   Nombre de la plantilla utilizada para renderizar los datos
+============================= ==========================================================
 *return sfView::SUCCESS*      *{nombre_accion}Success.php*
 
 *return sfView::ERROR*        *{nombre_accion}Error.php*
@@ -376,6 +362,7 @@ Valor devuelto en la acción   Nombre de la plantilla utilizada para renderizar
 *return sfView::NONE*         *No se utiliza ninguna vista.*
 
 *return sfView::HEADER_ONLY*  *Envía al cliente únicamente las caberas HTTP*
+============================= ==========================================================
 
 
 Finalmente, si queremos que la acción sea dibujada por una plantilla específica
@@ -384,22 +371,24 @@ que no se corresponda con el nombre de la acción, debemos utilizar el método
 
 Así pues el siguientes código al final de una acción:
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	//Código  de una acción
 	...
 	
-	$this → setTemplate('otraPlantilla');
+	$this -> setTemplate('otraPlantilla');
 
 Produciría la renderización con la plantilla *otraPlantillaSuccess.php*, mientra 
 que el siguiente código:
 
-.. code-block:: bash
-
+.. code-block:: php
+        
+        <?php
 	//Código  de una acción
 	...
 	
-	$this → setTemplate('otraPlantilla');
+	$this -> setTemplate('otraPlantilla');
 	return sfView::ERROR;
 
 Produciría la renderización con la plantilla *otraPlantillaError.php.*
@@ -442,11 +431,8 @@ cambiaremos el color del fondo del elemento *body*, asignando los siguiente
 colores a cada perfil:
 
 =========================== ===================================================
-
 Perfil                      Color
-
 =========================== ===================================================
-
 Invitado                    #1F8CB5
 
 Lector                      #E3A114
@@ -454,7 +440,7 @@ Lector                      #E3A114
 Autor                       #B4F2A2
 
 Administrador               #E890AD
-
+=========================== ===================================================
 
 
 Se trata de modificar el atributo *background-color* en la línea 117 de los
@@ -494,9 +480,11 @@ En este filtro se utiliza la función *isFirstCall()* para garantizar que
 desde otra acción. Además, todos los filtros deben terminar con una llamada al 
 siguiente filtro, lo cual se hace en la línea:
 
-.. code-block:: bash
+.. code-block:: php
+        
+        <?php
 
-	$filterChain → execute();
+	$filterChain -> execute();
 
 El filtro detecta el tipo de perfil que tiene el usuario consultando la sesión,
 y en función del resultado obtenido añade a la respuesta la hoja de estilos 
@@ -508,7 +496,7 @@ en su cadena de filtros. Para ello modificamos el archivo
 
 *Contenido del archivo: apps/frontend/config/filters.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	rendering: ~
 	security:  ~
@@ -526,7 +514,7 @@ cosa, eliminar del fichero de configuración de la vista la hoja de estilos
 
 *Contenido del archivo: apps/frontend/config/view.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  http_metas:
@@ -611,8 +599,7 @@ Recordemos el gráfico que utilizamos en la unidad 2 para explicar el concepto d
 generación de la vista como combinación de una plantilla y un *layout*, pues
 ilustra bastante bien el concepto de decoración.
 
-
-
+.. image:: layoutplantilla.png
 
 
 Hasta el momento únicamente hemos hablado de un solo fichero donde se define el
@@ -622,12 +609,14 @@ Sin embargo podemos cambiar este comportamiento en las acciones e indicar otras
 plantillas para **decorarlas**. Para ello utilizamos el método *setLayout()* en
 la acción en cuestión :
 
-.. code-block:: bash
+.. code-block:: php
+        
+        <?php
 
 	// Código dentro de una acción
 	...
 	
-	$this → setLayout('otroLayout');
+	$this -> setLayout('otroLayout');
 	
 	...
 
@@ -679,15 +668,17 @@ explicaremos a continuación.
    cliente al final del proceso. Desde las acciones podemos acceder directamente
    a dicho objeto mediante el método *getResponse()*:
 
-.. code-block:: bash
+.. code-block:: php
+        
+        <?php
 
 	// Trozo de código en una acción
 	
 	...
-	$respuesta = $this → getResponse();
+	$respuesta = $this -> getResponse();
 	
-	$respuesta → addStylesheet('mi_hoja_de_estilo.css');
-	$respuesta → addJavascript('mi_javascript.js');
+	$respuesta -> addStylesheet('mi_hoja_de_estilo.css');
+	$respuesta -> addJavascript('mi_javascript.js');
 	...
 
 Como puedes imaginar, la hojas de estilo referenciada en el código anterior debe
@@ -696,7 +687,9 @@ directorio *web/js*.
 
 Desde los filtro debemos acceder a través del contexto general de la aplicación:
 
-.. code-block:: bash
+.. code-block:: php
+        
+        <?php
 
 	// Trozo de código en un filtro
 	
@@ -720,7 +713,7 @@ y los parámetros de la respuesta *HTTP* como el *content-type*:
 
 *Contenido del archivo: /apps/nombre_aplicacion/config/view.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  http_metas:
@@ -837,7 +830,7 @@ la inclusión de una imagen:
 
 Daría lugar a algo así:
 
-.. code-block:: bash
+.. code-block:: html
 
 	<img src="/images/miimagen.png" alt="imagen" width="200" height="100"/>
 
@@ -907,7 +900,7 @@ como hemos dicho anteriormente, la función *include_partial()*.
 
 *Contenido del archivo: apps/frontend/templates/layout.php*
 
-.. code-block:: php
+.. code-block:: html+php
 
 	<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -1051,7 +1044,7 @@ enlace para el registro que hemos desarrollado más atrás:
 
 *Porción del archivo: apps/frontend/templates/layout.php*
 
-.. code-block:: bash
+.. code-block:: html+php
 
 	<div id="perfil"><?php echo include_component('inises', 'mostrarPerfil') ?><?php include_partial('inises/signInOut') ?></div>
 
@@ -1065,18 +1058,15 @@ un menú cuyos enlaces dependerán de las credenciales asociadas al perfil, de l
 manera que se especifica en esta tabla:
 
 =================== ===========================================================
-
 Credencial          Menú
-
 =================== ===========================================================
-
 Cualquiera          Enlace a la ayuda
 
 Escritura           Se le añade un enlace para crear un nuevo documento.
 
 Administración      Se le añade un enlace para enlazar con la aplicación de 
                     administración.
-
+=================== ===========================================================
 
 Lo haremos a través del *partial* siguiente, cuya explicación se deja como
 ejercicio al alumno:
@@ -1099,7 +1089,7 @@ Que se incorpora al *layout* de la aplicación en la capa reservada para el men�
 
 *Porción del archivo: apps/frontend/templates/layout.php*
 
-.. code-block:: bash
+.. code-block:: html+php
 
 	 <div id="menuprincipal">
 		<?php include_partial('global/menu') ?>                   
@@ -1202,11 +1192,13 @@ del mecanismo de enrutamiento ya que tiene que ver con este. Se trata de
 especificar  explícitamente en la acción el tipo de petición mediante el método 
 *setRequestFormat()* del objeto *sfRequest*:
 
-.. code-block:: bash
+.. code-block:: php
+        
+        <?php
 
 	// trozo de código de una acción
 	...
-	$request → setRequestFormat('xml');
+	$request -> setRequestFormat('xml');
 	...
 
 Si la acción que vamos a implementar va a ser renderizada siempre con un mismo
@@ -1228,7 +1220,9 @@ Añadimos la acción *rss* al módulo *gesdoc*:
 
 *Trozo de código del archivo: apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
+        
+        <?php
 
 	public function executeRss(sfWebRequest $request)
 	{
@@ -1248,7 +1242,7 @@ formato *XML*. Creamos el archivo *rssSuccess.xml.php* con el siguiente contenid
 
 *Contenido del archivo: apps/frontend/modules/gesdoc/templates/rssSuccess.xml.php*
 
-.. code-block:: php
+.. code-block:: html+php
 
 	<?php echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" ?>
 	<rss version="2.0">
