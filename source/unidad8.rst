@@ -48,11 +48,8 @@ posteriormente al servidor para su procesamiento. En la siguiente tabla mostramo
 el nombre de dichos elementos de control y un resumen de sus funcionalidades:
 
 ============== =================================================================
-
 Nombre         Descripción
-
 ============== =================================================================
-
 *input*        Es el elemento más utilizado ya que puede tomar varias formas en 
                función de su atributo *type*, el cual puede ser:
 
@@ -93,7 +90,7 @@ Nombre         Descripción
                servidor que procesará los datos introducidos por el usuario, y el
                atributo *method* el método *HTTP* que se usará para su envío:
                *GET* o *POST*.
-
+============== =================================================================
 
 Así pues un formulario *HTML* está constituido por un elemento *form* que
 encierra a varios elementos de control. Alguno de estos elementos debe ser un 
@@ -137,9 +134,8 @@ POST, PUT* y *DELETE*, la cuales pueden ser comparadas semánticamente con las
 operaciones de una base de datos:
 
 ============= ============================ =====================================
-
 Método HTTP   Operación en base de datos   Descripción
-
+============= ============================ =====================================
 GET           Retrieve                     Recupera un recurso/registro. No hay 
                                            modificación del mismo
                                            
@@ -148,7 +144,6 @@ POST          Update                       Modifica un recurso/registro.
 PUT           Create                       Crear un recurso/registro
 
 DELETE        Delete                       Elimina un recurso/registro
-
 ============= ============================ =====================================
 
 Los navegadores *web* actuales tan sólo soportan las dos primeras operaciones 
@@ -224,9 +219,7 @@ peticiones *HTTP* al servidor. El siguiente diagrama de clases *UML* representa
 la estructura de un formulario *symfony*.
 
 
-
-
-
+.. image:: unidad8-1.png
 
 
 El programador utiliza los métodos del formulario tanto para la presentación del 
@@ -252,11 +245,8 @@ La siguiente tabla muestra algunos de los *widget* más utilizados. Todos ellos
 derivan de la clase base *sfWidgetForm*.
 
 ============================ ====================================================
-
 Nombre del widget            Funcionalidad 
-
 ============================ ====================================================
-
 *sfWidgetFormInput*          Es una caja de texto de una sola línea. Representa
                              un elemento *HTML input* del tipo *text*
                              
@@ -295,7 +285,7 @@ Nombre del widget            Funcionalidad
                              como se haya configurado. Representa tres elementos
                              *HTML* de tipo *select*, uno para cada elemento de 
                              la fecha: día, mes y año.
-
+============================ ====================================================
 
 Todos los tipos de *widget* tienes dos propiedades importantes; las opciones 
 (*options*) y los atributos (*attributes*). Las primeras se utilizan para 
@@ -323,9 +313,10 @@ Comenzamos declarando en la acción los objetos *sfWidgetFormInput* y
 
 *Trozo del archivo: apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
-
-	...
+.. code-block:: php
+         
+         <?php
+         ...
 	 public function executePruebaWidget(sfWebRequest $request)
 	 {
 		$this -> wInput = new sfWidgetFormInput();
@@ -360,7 +351,7 @@ con el siguiente contenido:
 *Contenido del archivo: 
 apps/frontend/modules/gesdoc/templates/pruebaWidgetSuccess.php*
 
-.. code-block:: php
+.. code-block:: html+php
 
 	<div id="sf_admin_header">
 		<h2>Prueba de widgets</h2>
@@ -414,11 +405,8 @@ La siguiente tabla muestra algunos de los validadores más utilizados. Todos ell
 derivan de la clase base *sfValidatorBase*.
 
 ======================== =======================================================
-
 Nombre del validador     Funcionalidad 
-
 ======================== =======================================================
-
 *sfValidatorString*      Comprueba que el dato enviado es una cadena de 
                          caracteres
                          
@@ -440,7 +428,7 @@ Nombre del validador     Funcionalidad
                          exige, devuelve un objeto del tipo *sfValidatedFile*
                          que encapsula al fichero y proporciona una gestión
                          sencilla del mismo.
-                         
+======================== =======================================================                         
 
 Todos los tipos de validadores tienes dos propiedades importantes; las opciones 
 (*options*) y los mensajes (*messages*). Las opciones se utilizan para especificar
@@ -471,6 +459,8 @@ apps/frontend/modules/gesdoc/actions/actions.class.php*
 
 .. code-block:: php
 	
+        <?php
+        ...
 	public function executePruebaValidadores(sfWebRequest $request)
 	{
 		$strValidator = new sfValidatorString();
@@ -485,7 +475,7 @@ apps/frontend/modules/gesdoc/actions/actions.class.php*
 *Contenido del archivo: 
 apps/frontend/modules/gesdoc/templates/pruebaValidadoresSuccess.php*
 
-.. code-block:: php
+.. code-block:: html+php
 
 	<div id="sf_admin_header">
 		<h2>Prueba de validadores</h2>
@@ -505,7 +495,9 @@ cuando la validación no sea satisfactoria. Para ello hemos utilizado los métod
 *widgets*, podríamos haber realizado la declaración del validador y su 
 configuración al mismo tiempo:
 
-.. code-block:: bash
+.. code-block:: php
+  
+          <?php
 	
 	  $strValidator = new sfValidatorString(
 					array('required' => true, 'max_length' => '6', 'trim' => true),
@@ -647,8 +639,9 @@ formato de nombres. Esto se hace en el código anterior en la línea siguiente:
 
 *Contenido del archivo: apps/frontend/lib/FormularioEjemplo.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	...
 	$this -> widgetSchema -> setNameFormat('contacto[%s]');
 	...
@@ -667,8 +660,10 @@ llamaremos *executePruebaFormulario*:
 *Trozo de código del archivo: 
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	public function executePruebaFormulario(sfWebRequest $request)
 	{
 		$this -> formulario = new FormularioEjemplo();
@@ -679,7 +674,7 @@ Y lo dibujamos en la plantilla correspondiente:
 *Contenido del archivo: 
 apps/frontend/modules/gesdoc/templates/pruebaFormularioSuccess.php*
 
-.. code-block:: bash
+.. code-block:: html+php
 
 	<div id="sf_admin_header">
 		<h2>Prueba de formulario</h2>
@@ -714,7 +709,7 @@ La plantilla anterior quedaría de la siguiente manera:
 *Contenido del archivo: 
 apps/frontend/modules/gesdoc/templates/pruebaFormularioSuccess.php*
 
-.. code-block:: bash
+.. code-block:: html+php
 
 	<div id="sf_admin_container">
 		<h1>Formulario</h1>
@@ -783,8 +778,10 @@ datos devueltos por el cl¡ente. El código siguiente muestra dichos cambios:
 *Trozo de código del archivo: 
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	public function executePruebaFormulario(sfWebRequest $request)
 	{
 		$this -> formulario = new FormularioEjemplo();
@@ -829,7 +826,7 @@ necesaria para finalizar nuestro ejemplo.
 *Código de la plantilla: 
 apps/frontend/modules/gesdoc/templates/muestraDatosSuccess.php*
 
-.. code-block:: bash
+.. code-block:: html+php
 
 	<div id="sf_sf_admin_container">
 		<h1>Datos</h1>
@@ -1036,11 +1033,12 @@ método *isValid()* del formulario, se puede acceder a los valores limpios usand
 el método *getValue()* del formulario pasándole como argumento el campo cuyo 
 valor limpio deseamos obtener:
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	...
 	// más atrás el formulario ha sido validado
-	$valor_limpio = $formulario → getValue('nombre_campo');
+	$valor_limpio = $formulario -> getValue('nombre_campo');
 	...
 
 En el desarrollo de las funcionalidades que aún quedan por implementar haremos
@@ -1055,11 +1053,8 @@ gestión del mismo. La tabla siguiente muestra los métodos del objeto
 remitimos de nuevo a la *API* de *symfony*.
 
 =================================== ============================================
-
 Métodos del objeto sfValidatedFile  Descripción
-
 =================================== ============================================
-
 *generateFileName()*                Genera un nombre aleatorio para el fichero 
                                     actual
 
@@ -1067,7 +1062,7 @@ Métodos del objeto sfValidatedFile  Descripción
 
 *isSaved()*                         Devuelve *true* si el fichero ya ha sido 
                                     guardado y *false* en caso contrario
-
+=================================== ============================================
 
 También dispone de otros métodos para conocer otros aspectos del fichero como 
 el tamaño, la extensión, el nombre original, y otros más. Ya sabes, consulta la
@@ -1091,8 +1086,10 @@ correspondiente es el que sigue:
 *Trozo de código del archivo: 
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+         <?php 
+         ...
 	 public function executeNuevo($request)
 	 {
 		 $this -> formulario = new FormularioDocumentos();
@@ -1117,7 +1114,7 @@ Y este es el código de la plantilla correspondiente *nuevoSuccess.php*:
 *Contenido del archivo: 
 apps/frontend/modules/gesdoc/templates/nuevoDocumentoSuccess.php*
 
-.. code-block:: html+jinja
+.. code-block:: html+php
 	
 	<div id="sf_admin_container">
 		<h1>Formulario</h1>
@@ -1211,7 +1208,9 @@ Por otro lado, en la plantilla, hemos declarado el elemento *HTML form* como
 ficheros que se envían en la petición *HTTP*, se asocian al formulario mediante 
 el segundo argumento del método *bind()*: 
 
-.. code-block:: bash
+.. code-block:: php
+
+       <?php
 
 	$this -> formulario -> bind($request -> getParameter('documentos'), $request -> getFiles('documentos'));
 
@@ -1238,6 +1237,8 @@ apps/frontend/modules/gesdoc/actions/actions.class.php*
 
 .. code-block:: php
 
+        <?php
+        ...
 	protected function procesaNuevoDocumento($formulario)
 	{
 		// Antes de nada colocamos en su sitio el fichero (si se ha subido alguno)
@@ -1353,13 +1354,15 @@ tipos. Este es el código:
 
 *Trozo del archivo: lib/model/Tipos.php*
 
-.. code-block:: bash
-
+.. code-block:: php
+ 
+         <?php
+         ...
 	 public function dameTiposMimePermitidos()
 	 {
 	   $tipos_mime = explode(',', $this -> getTipoMime());
 	   return $tipos_mime;
-	}
+	 }
 
 
 Sería mucho más elegante construir un procedimiento que asociase a través del
@@ -1446,8 +1449,10 @@ la cual se encargará de enviar el formulario al cliente para que este lo rellen
 
 *Trozo del archivo: apps/frontend/modules/gesdoc/action/action.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	public function executeModificar(sfWebrequest $request)
 	 {
 		$this -> forward404Unless($request -> hasParameter('id_documento'));
@@ -1487,7 +1492,7 @@ plantilla asociada *modificarSuccess.php*:
 *Contenido del archivo: 
 apps/frontend/modules/gesdoc/templates/modificarSuccess.php*
 
-.. code-block:: bash
+.. code-block:: html+php
 
 	<div id="sf_admin_container">
 		<h1>Modificación del Documento</h1>
@@ -1631,8 +1636,10 @@ Ahora rehacemos la acción *executeModificar()* para que utilice este formulario
 
 *Trozo del archivo: apps/frontend/modules/gesdoc/action/action.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	public function executeModificar(sfWebRequest $request)
 	{
 		$this -> forward404Unless($request -> hasParameter('id_documento'));
@@ -1666,8 +1673,10 @@ al servidor a través del formulario *HTML*. Hemos llamado a esta acción
 *Trozo de código del archivo: 
 apps/frontend/modules/gesdoc/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	public function executeGuardarModificacion(sfWebRequest $request)
 	{
 		$this -> forward404Unless($request -> hasParameter('documentos'));
@@ -1778,6 +1787,8 @@ subida de nuevas versiones. Denominaremos a tal acción *executeSubirVersion()*:
 
 .. code-block:: php
 
+        <?php
+        ...
 	public function executeSubirVersion(sfWebRequest $request)
 	{
 		$this -> forward404Unless($request -> hasParameter('id_documento'));
@@ -1839,7 +1850,7 @@ código de la vista correspondiente es el que sigue:
 *Contenido del archivo: 
 apps/frontend/modules/gesdoc/templates/subirVersionSuccess.php*
 
-.. code-block:: html+jinja
+.. code-block:: html+php
 
 	<div id="sf_admin_container">
 		<h1>Nueva Versión</h1>

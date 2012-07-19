@@ -38,10 +38,10 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'unidad7'
+master_doc = 'index'
 
 # General information about the project.
-project = u'unidad7'
+project = u'index'
 copyright = '2012, admin'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -93,7 +93,7 @@ pygments_style = 'colorful'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'intef'
+html_theme = 'redcloud'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -261,7 +261,7 @@ texinfo_documents = [
 
 
 pdf_documents= [ 
-    ('unidad7', u'unidad7', u'unidad7', u'admin'),
+    ('index', u'index', u'index', u'admin'),
 ]
 
 # A comma-separated list of custom stylesheets. Example:
