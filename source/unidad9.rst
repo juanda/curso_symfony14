@@ -589,15 +589,15 @@ de interfaz a través de los métodos que se muestran en la tabla siguiente:
 ================ ====================== ========================================
 Operación        Método                 Ejemplo
 ================ ====================== ========================================
-*Create*         *new()*                *Usuarios → new()*
+*Create*         *new()*                *Usuarios -> new()*
 
-*Retrieve*       *retrieveByPk()*       *UsuariosPeer → retrieveByPK(5)*
+*Retrieve*       *retrieveByPk()*       *UsuariosPeer -> retrieveByPK(5)*
                  *doSelect()*
                  *doSelectOne()*
                  
-*Update*         *save()*               *Usuarios → save()*
+*Update*         *save()*               *Usuarios -> save()*
 
-*Delete*         *delete()*             *Usuarios → delete();*
+*Delete*         *delete()*             *Usuarios -> delete();*
 ================ ====================== ========================================
 
 
@@ -1057,7 +1057,7 @@ Otras opciones toman como argumentos los denominador *placeholders* que son
 cadenas de la forma *%%NAME%%*, donde la cadena *NAME* puede ser cualquier cosa 
 que pueda ser convertida a un *getter* existente. Por ejemplo, si estamos
 trabajando en el módulo de administración del modelo *Usuarios*, el *placeholder
-%%nombre%%* será reemplazado por el resultado de ejecutar *$usuario → getNombre()*.
+%%nombre%%* será reemplazado por el resultado de ejecutar *$usuario -> getNombre()*.
 Los *placeholders* son dinámicamente reemplazados en tiempo de ejecución según 
 el objeto asociado con el contexto actual.
 
@@ -1132,8 +1132,8 @@ apps/backend/modules/gesusu/config/generator.yml*
 Observa el uso de los *placeholders %%nombre%%* y *%%apellidos%%* en el título
 para la pantalla de edición. Cuando se edita un usuario, tenemos disponible un
 objeto usuario determinado. Cuando se genera “al vuelo” el código del módulo, 
-*symfony* interpreta los *placeholders* anteriores como *$usuario → getNombre()*
-y *$usuario → getApellidos()* respectivamente.
+*symfony* interpreta los *placeholders* anteriores como *$usuario -> getNombre()*
+y *$usuario -> getApellidos()* respectivamente.
 
 Hacemos lo mismo con los módulos *gestip* y *gesusu*:
 

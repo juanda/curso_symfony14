@@ -62,7 +62,6 @@ usuales para un desarrollador europeo:
 ========================== =================================
 Lenguaje                   Código ISO-639-2
 ========================== =================================
-
 Español                    es
 
 Inglés                     en
@@ -74,7 +73,7 @@ Alemán                     de
 Italiano                   it
 
 Portugués                  pt
-
+========================== =================================
 
 Los códigos de localización se definen por dos letras mayúsculas según el 
 estándar ISO-3166. La siguiente tabla muestra alguno de los código correspondiente
@@ -83,7 +82,6 @@ distintas  regiones en las que se puede hablar el mismo idioma:
 ================== ======================
 Región             Código ISO-3166
 ================== ======================
-
 España             ES
 
 Argentina          AR
@@ -95,7 +93,7 @@ Estados Unidos     US
 Francia            FR
 
 Bélgica            BE
-
+================== ======================
  
 La combinación de ambos código separados por un carácter “_” conforman el 
 atributo cultura:
@@ -103,7 +101,6 @@ atributo cultura:
 ===================== ========================================
 Cultura               Significado
 ===================== ========================================
-
 es_ES                 Español con localización de España
 
 es_AR                 Español con localización de Argentina
@@ -115,7 +112,7 @@ en_US                 Inglés con localización de EEUU
 fr_FR                 Francés con localización de Francia
 
 fr_BE                 Francés con localización de Bélgica
-
+===================== ========================================
 
 Pues muy bien, la cuestión que importa realmente, al margen de todas estas 
 convenciones, es saber como definir y recuperar el atributo *culture* de la sesión.
@@ -124,24 +121,27 @@ Y ello se hace mediante los métodos *setCulture()* y *getCulture()* del objeto
 
 *Definición de la cultura*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php       
 	// En una plantilla
-	$sf_user → setCulture('es_ES');
+	$sf_user -> setCulture('es_ES');
 	
 	// En una acción
-	$this → getUser() → setCulture('es_ES');
+	$this -> getUser() -> setCulture('es_ES');
 
 
 *Recuperación de la cultura:*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php 
+    
 	// En una plantilla 
-	$culture = $sf_user → getCulture();
+	$culture = $sf_user -> getCulture();
 	
 	// En una acción
-	$culture = $this → getUser() → getCulture();
+	$culture = $this -> getUser() -> getCulture();
 
 
 Es obvio que trabajar con el parámetro *culture* tiene sentido si pretendemos 
@@ -152,7 +152,7 @@ configuración *settings.yml* de la aplicación mediante el parámetro *i18n*:
 
 *Uso del parámetro i18n en el fichero apps/nombre_aplicacion/config/settings.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	all
@@ -169,7 +169,7 @@ aplicación.
 *Uso del parámetro default_culture en el fichero
 apps/nombre_aplicacion/config/settings.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	all
@@ -187,8 +187,10 @@ coloque la cultura *'es_ES'*:
 *Modificación de la acción executeSignin() del módulo inises para que tenga en
 cuenta la cultura*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	public function executeSignIn(sfWebRequest $request)
 		{
 			$this -> form = new LoginForm();
@@ -277,17 +279,17 @@ el parámetro *i18n* del archivo *settings.yml* a *true*.
 
 Posteriormente, en las plantillas que vayamos a traducir, utilizamos el *helper
 I18NHelper* ya que en él se encuentra la función clave del proceso de traducción 
-de la interface de usuario. Esta función se llama __(). Un nombre un poco raro,
+de la interface de usuario. Esta función se llama ``__()``. Un nombre un poco raro,
 ya que estrictamente no es un nombre, se trata dos veces el carácter “_”, lo cual
 es válido como nombre de función *PHP*. El misterio de la traducción es que todos
-los textos que pasemos como argumento a la función __() serán sustituidos, si
+los textos que pasemos como argumento a la función ``__()`` serán sustituidos, si
 existe, por el valor indicado en un fichero *XML* donde se encuentran las
 traducciones al idioma en cuestión. En caso de no existir traducción, la función
 devuelve el mismo texto que se le pasó como argumento.  Veámoslo con un ejemplo:
 
 *Ejemplo de una plantilla traducible*
 
-.. code-block:: php
+.. code-block:: html+php
 
 	<?php echo use_helper('I18N') ?>
 	
@@ -310,7 +312,7 @@ traducción al inglés de los términos anteriores  tendría el siguiente aspect
 *Archivo XLIFF de traducción español-inglés: 
 apps/nombre_aplicacion/i18n/en/messages.xml*
 
-.. code-block:: html+jinja
+.. code-block:: xml
 
 	<?xml version="1.0" encoding="UTF-8"?>
 	<!DOCTYPE xliff PUBLIC "-//XLIFF//DTD XLIFF//EN" "http://www.oasis-open.org/committees/xliff/documents/xliff.dtd">
@@ -385,7 +387,7 @@ traducciones:
 *Contenido del archivo config/schema.yml para definir la internacionalizacion de
 los campos de una tabla*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	mi_conexion:
 	  frutas:
@@ -416,7 +418,7 @@ los métodos *getters* y *setter* correspondientes a los campos traducibles
 especificada en la sesión, para mostrar o definir el valor que le corresponda 
 al campo en función de tal cultura.
 
-Por ejemplo, si la cultura de usuario es *'es_ES'*, el método *$fruta → getNombre()*
+Por ejemplo, si la cultura de usuario es *'es_ES'*, el método *$fruta -> getNombre()*
 devolverá el valor del registro de la tabla *frutas_i18n* con valor del campo 
 *cultura 'es_ES'*, y si la cultura es *'en_UK'* pues el valor devuelto será el 
 del registro de la tabla *frutas_i18n* con valor del campo cultura *'en_UK'*. 
@@ -444,7 +446,6 @@ La siguiente tabla muestra la *URL* diseccionada:
 =========================== =====================================================
 Parte                       Descripción
 =========================== =====================================================
-
 ``http``                    Esquema o protocolo (obligatorio)
 
 ``usuario``                 Nombre de usuario (opcional)
@@ -467,7 +468,7 @@ Parte                       Descripción
                             los datos (opcional)
                             
 ``ancla``                   Fragmento del recurso que se desea mostrar (opcional)
-
+=========================== =====================================================
 
 A lo largo del curso hemos comprobado que las *URL's* que utiliza *symfony*
 prescinden de los caracteres “?”, “&” y “=” propios de la *query string* dando 
@@ -511,7 +512,7 @@ fichero *settings.yml* de la aplicación:
 *Activación del ocultamiento del nombre del controlador frontal de las URL's
 externas de la aplicación.*
 
-.. code-block:: bash
+.. code-block:: yaml
 	
 	prod:
 	  .settings:
@@ -552,7 +553,7 @@ la misma muestra el siguiente contenido:
 
 Archivo de rutas (routing.yml) de una aplicación recién generada
 
-.. code-block:: bash
+.. code-block:: yaml
 	
 	# default rules
 	homepage:
@@ -636,8 +637,9 @@ ellas es la que venimos utilizando durante todo el curso:
 En el ejemplo que venimos mostrando en este apartado, la transformación desde 
 una plantilla de una *URL* interna en externa se haría así:
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	url_for('gesdoc/verVersion?id_version=4');
 
 
@@ -645,15 +647,16 @@ Para lo cual estamos usando la regla denominada *default*. Pero también podemos
 indicar la misma *URL* interna haciendo uso del nombre de la regla. En ese caso 
 se especificaría de la siguiente forma:
 
-.. code-block:: bash
-
+.. code-block:: php
+      
+        <?php
 	url_for('@default?module=gesdoc&action=verVersion&id_version=4');
 
 
 Aún existe una tercera forma de especificar las url internas, más estructurada 
 si cabe:
 
-.. code-block:: bash
+.. code-block:: php
 	
 	url_for(array(
 	  'module'    => 'gesdoc',
@@ -674,7 +677,6 @@ para las *URL* externas deseadas:
 ============================================= ==================================
 URL interna                                   URL externa deseada
 ============================================= ==================================
-
 *inises/signIn*                               *conectar*
 
 *inises/signOut*                              *desconectar*
@@ -690,7 +692,7 @@ URL interna                                   URL externa deseada
 *gesdoc/modificar?id_documento=n*             *modificar/n*
 
 *gesdoc/subirVersion?id_documento=n*          *nueva_version/n*
-
+============================================= ==================================
 
 
 Según lo que hemos explicado a lo largo de este apartado, el mapeo de rutas  
@@ -700,7 +702,7 @@ fichero *routing.yml* de la aplicación *frontend*.
 *Rutas añadidas al archivo apps/frontend/config/routing.yml para estilizar todas
 las acciones de la aplicación frontend.*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	conectar:
@@ -739,7 +741,7 @@ controlador frontal *index.php*:
 *Activación del ocultamiento del nombre del controlador frontal de las URL's 
 externas de la aplicación.*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	prod:
 	  .settings:
