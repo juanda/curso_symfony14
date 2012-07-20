@@ -151,7 +151,7 @@ añadiendo al fichero *settings.yml* de dicha aplicación la siguiente línea:
 
 *Línea añadida al archivo: apps/nombre_aplicacion/config/settings.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	 all:
@@ -233,7 +233,7 @@ Y habilitar el módulo *inises* del *plugin* en la aplicación *frontend*:
 
 *Línea añadida al archivo: apps/frontend/config/settings.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	 all:
@@ -263,6 +263,8 @@ plugins/IniSesPlugin/modules/inises/actions/actions.class.php*
 
 .. code-block:: php
 
+        <?php 
+        ...
 	public function executeSignIn(sfWebRequest $request)
 		{
 			$this -> form = new LoginForm();
@@ -319,8 +321,9 @@ nombre lo hemos decidido nosotros).
 *Parametrización de la redirección a la acción @pagina_inicial en el archivo
 plugins/IniSesPlugin/modules/inises/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	...
 	$this -> redirect('@pagina_inicial');
 	...
@@ -332,7 +335,7 @@ Y en el archivo *apps/frontend/config/routing.yml* añadimos la ruta denominada
 *Trozo del archivo  apps/frontend/config/routing.yml donde se define la ruta 
 @ pagina_inicial*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	pagina_inicial:
@@ -348,8 +351,10 @@ nueva ruta *'@logout'*. Dicha acción quedaría:
 *Código de la acción executeSignOut del archivo 
 plugins/IniSesPlugin/modules/inises/actions/actions.class.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	public function executeSignOut(sfRequest $request)
 	{
 		session_destroy();
@@ -362,7 +367,7 @@ Y tenemos que añadir dicha ruta a la aplicación *frontend*:
 *Trozo del archivo  apps/frontend/config/routing.yml donde se define la ruta @ 
 logout*
 
-.. code-block:: bash
+.. code-block:: yaml
 	
 	...
 	logout:
@@ -445,7 +450,7 @@ Y cambiamos el código del menú por el siguiente:
 
 *Código del partial: apps/backend/templates/_menu.php*
 
-.. code-block:: php
+.. code-block:: html+php
 
 	<?php if($sf_user -> hasCredential('administracion')): ?>
 		<?php echo link_to('Usuarios','gesusu/index') ?> |
@@ -461,7 +466,7 @@ Esto se indica en el archivo *view.yml* de la aplicación:
 
 Contenido del archivo: apps/backend/config/view.yml
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  http_metas:
@@ -493,7 +498,7 @@ aplicación:
 
 Contendido del archivo: apps/backend/config/security.yml
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	default:
 	  is_secure: true
@@ -507,7 +512,7 @@ la aplicación *backend*:
 
 *Línea añadida al archivo: apps/backend/config/settings.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	 all:
@@ -524,7 +529,7 @@ rutas se añaden al archivo *routing.yml* de la aplicación:
 
 Rutas añadidas al archivo: apps/backend/config/routing.yml
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	pagina_inicial:
@@ -582,11 +587,8 @@ Estos objetos, como ya hemos aprendido a lo largo del curso, presentan este tipo
 de interfaz a través de los métodos que se muestran en la tabla siguiente: 	
 
 ================ ====================== ========================================
-
 Operación        Método                 Ejemplo
-
 ================ ====================== ========================================
-
 *Create*         *new()*                *Usuarios → new()*
 
 *Retrieve*       *retrieveByPk()*       *UsuariosPeer → retrieveByPK(5)*
@@ -596,7 +598,7 @@ Operación        Método                 Ejemplo
 *Update*         *save()*               *Usuarios → save()*
 
 *Delete*         *delete()*             *Usuarios → delete();*
-
+================ ====================== ========================================
 
 
 Gracias a esta interfaz uniforme que presentan los objetos de *Propel* es posible
@@ -811,7 +813,6 @@ se generan en los módulos de administración:
 ======================= ========================================================
 **Acción**              **Descripción**
 ======================= ========================================================
-
 *executeIndex()*        Elabora un listado paginado de elementos. 
 
 *executeFilter()*       Ejecuta el filtrado con los datos que les llega desde el
@@ -865,7 +866,7 @@ se generan en los módulos de administración:
                         actualmente el listado
                         
 *setSort()*             Define la columna por la que debe ordenarse el listado
-
+======================= ========================================================
 
 Todas estas funciones pueden ser redefinidas en el archivo de acciones del módulo
 *apps/nombre_aplicacion/modules/nombre_modulo/actions/actions.class.php*, el 
@@ -883,7 +884,6 @@ módulos de administración:
 =================== ============================================================
 Plantilla           Descripción
 =================== ============================================================
-
 *_assets.php*       Arroja las *CSS's* y *Javascript* que utilizará la plantilla
 
 *_filters.php*      Pinta el filtro de búsqueda
@@ -931,7 +931,7 @@ Plantilla           Descripción
 *indexSuccess.php*  Plantilla que pinta vista con el listado de elementos
 
 *newSuccess.php*    Plantilla que pinta la vista de creación
-
+=================== ============================================================
 
 
 Como puedes observar las tres plantillas principales están fragmentadas en
@@ -985,7 +985,7 @@ original, antes de realizar ningún cambio:
 *Contenido del fichero:
 apps/nombre_aplicacion/modules/nombre_modulo/config/generator.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	generator:
 	  class: sfPropelGenerator
@@ -1017,7 +1017,6 @@ archivo anterior. Cada subsección define una parte del módulo de administraci�
 ============== =================================================================
 Subsección     Descripción
 ============== =================================================================
-
 *actions*      Define las acciones por defecto tanto del listado de elementos 
                como del formulario de edición/creación
                
@@ -1032,9 +1031,9 @@ Subsección     Descripción
 *edit*         Configuración específica de la pantalla de edición de elementos
 
 *new*          Configuración específica de la pantalla de creación de elementos
+============== =================================================================
 
-
-*Columnas reales y virtuales**
+**Columnas reales y virtuales**
 
 Hay muchas opciones que toman como argumento una lista de campos. Cada campo 
 puede ser el nombre de una columna real o virtual. Una columna real es aquella
@@ -1118,7 +1117,7 @@ subsecciones *list, edit* y *new*.
 *Uso de la opción title al fichero de configuración:
 apps/backend/modules/gesusu/config/generator.yml*
  
-.. code-block:: bash
+.. code-block:: yaml
 
 	... 
 	list:
@@ -1141,7 +1140,7 @@ Hacemos lo mismo con los módulos *gestip* y *gesusu*:
 Uso de la opción *title* al fichero de configuración:
 apps/backend/modules/gestip/config/generator.yml
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	... 
 	list:
@@ -1156,7 +1155,7 @@ apps/backend/modules/gestip/config/generator.yml
 Uso de la opción *title* al fichero de configuración:
 apps/backend/modules/gescat/config/generator.yml
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	... 
 	list:
@@ -1184,7 +1183,7 @@ módulos de administración. La opción *max_per_page*, disponible en la subsecc
 Uso de la opción max_per_page en los ficheros de configuración: 
 apps/backend/modules/ges{usu,tip,cat}/config/generator.yml
 
-.. code-block:: bash
+.. code-block:: yaml
 	
 	...
 	list:
@@ -1211,8 +1210,9 @@ La columna virtual se crea sin más que añadir un nuevo *getter* al modelo
 
 *Getter añadido a la clase Usuarios (archivo: lib/Usuarios.php)*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	... 
 	public function getIniciales()
 	{
@@ -1229,7 +1229,7 @@ filter, edit* y *new*. Como queremos actuar sobre el listado definimos la opció
 *Uso de la opción display sobre la subsección list en el fichero de configuración:
 apps/backend/modules/gesusu/config/generator.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	... 
 	list:
@@ -1252,7 +1252,7 @@ De nuevo se trata de usar la opción *display*, pero esta vez en la subsección
 *Uso de la opción display sobre la subsección filter en el fichero de 
 configuración: apps/backend/modules/gesusu/config/generator.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	filter:
@@ -1326,6 +1326,7 @@ lib/model/om/BaseUsuarios.php*
 
 .. code-block:: php
 
+        <?php
 	public function setPassword($v)
 	{
 		if ($v !== null) {
@@ -1347,8 +1348,9 @@ simplemente garantiza que en adelante la función utilice una variable de tipo
 *Línea donde se realiza la asignación del atributo password del objeto Usuarios 
 en el archivo: lib/model/om/BaseUsuarios.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
 	...
 	$this->password = $v;
 	…
@@ -1357,8 +1359,10 @@ en el archivo: lib/model/om/BaseUsuarios.php*
 Lo que haremos será copiar el código de esta función en la clase hija Usuario 
 y modificar la línea anterior por la siguiente:
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php
+        ...
 	$this->password = md5($v);
 
 
@@ -1368,8 +1372,10 @@ del argumento pasado a la función. Nos quedará lo siguiente:
 *Código  modificado de la función setPassword() de la clase Usuarios en el
 archivo lib/model/Usuarios.php*
 
-.. code-block:: bash
+.. code-block:: php
 
+        <?php 
+        ...
 	public function setPassword($v)
 	{
 		if ($v !== null) {
@@ -1418,7 +1424,7 @@ Ahora debemos quitar el campo *documento_categoria_list*  del filtro de búsqued
 de la pantalla donde se listan las categorías. Una posible solución sería
 indicarlo a través de la opción *display* de la subsección *filter*:
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	filter:
@@ -1436,7 +1442,7 @@ lib/filter/CategoriasFormFilter.class.php*
 .. code-block:: php
 
 	<?php
-	
+	...
 	class CategoriasFormFilter extends BaseCategoriasFormFilter
 	{
 		public function configure()
@@ -1461,7 +1467,7 @@ anteriores eliminaremos el campo *id_tipo* del listado de elementos:
 *Uso de la opción display sobre la subsección filter para eliminar el campo
 id_tipo en el fichero: apps/backend/modules/gestip/config/generator.yml*
 
-.. code-block:: bash
+.. code-block:: yaml
 
 	...
 	filter 
