@@ -1324,6 +1324,16 @@ usuario en la aplicación, conceptos que también han sido estudiado en la unida
 junto con la estrategia propia de *symfony* para su tratamiento.
 
 
+.. raw:: html
+
+   <div style="background-color: rgb(242, 242, 242); text-align: center; margin: 20px; padding: 10px;">
+   <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img alt="Licencia Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png" /></a>
+   <br />
+   <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text" property="dct:title" rel="dct:type">Desarrollo de Aplicaciones web con symfony 1.4</span> por <span xmlns:cc="http://creativecommons.org/ns#" property="cc:attributionName">Juan David Rodríguez García (juandavid.rodriguez@ite.educacion.es)</span>
+   <br/>
+   se encuentra bajo una Licencia <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">Creative Commons Reconocimiento-NoComercial-CompartirIgual 3.0 Unported</a>.
+   </style>
+   </div>
 
 
 

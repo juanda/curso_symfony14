@@ -38,11 +38,11 @@ source_suffix = '.rst'
 #source_encoding = 'utf-8-sig'
 
 # The master toctree document.
-master_doc = 'unidad10'
+master_doc = 'index'
 
 # General information about the project.
-project = u'unidad10'
-copyright = '2012, admin'
+project = u'index'
+copyright = '2012, '
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -149,7 +149,7 @@ html_static_path = ['_static']
 #html_split_index = False
 
 # If true, links to the reST sources are added to the pages.
-#html_show_sourcelink = True
+html_show_sourcelink = False
 
 # If true, "Created using Sphinx" is shown in the HTML footer. Default is True.
 #html_show_sphinx = True
@@ -261,7 +261,7 @@ texinfo_documents = [
 
 
 pdf_documents= [ 
-    ('unidad10', u'unidad10', u'unidad10', u'admin'),
+    ('index', u'index', u'index', u''),
 ]
 
 # A comma-separated list of custom stylesheets. Example:

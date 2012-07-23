@@ -1152,16 +1152,6 @@ navegador la *URL* correspondiente:
    
 ¡Suerte!
 
-Comentarios
------------
-
-Aquí puedes enviar comentarios, dudas y sugerencias. Utiliza la barra de *scroll* para
-recorrer todos los mensajes. El formulario de envío se encuentra al final.
-
-.. raw:: html
-
-   <object type="text/html" width="100%" height="800" data="commentator/index.php?page=unidad2"></object>
-
 ------------
 
 .. [1] "Patrones de Diseño" de los autores Erich Gamma, Richard Helm, Ralph

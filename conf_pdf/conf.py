@@ -91,7 +91,7 @@ pygments_style = 'sphinx'
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
-html_theme = 'cloud'
+html_theme = 'basic'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
@@ -266,14 +266,15 @@ html_logo="../recursos/logo.png"
 # regardless of the global pdf_compressed setting.
 
 pdf_documents = [ 
-('index', u'CursoSymfony14', u'Curso de Symfony14', u'Juan David Rodríguez García'),
+('index', u'CursoSymfony14', u'Desarrollo de aplicaciones web con symfony 1.4', u'Juan David Rodríguez García', 'juandavid.rodriguez@ite.educacion.es' ),
 ]
 
 # A comma-separated list of custom stylesheets. Example:
-pdf_stylesheets = ['sphinx','kerning','a4']
+#pdf_stylesheets = ['sphinx','kerning','a4']
+pdf_stylesheets = ['autumn','colorful','kerning','a4']
 
 # A list of folders to search for stylesheets. Example:
-#pdf_style_path = ['.', '_styles']
+#pdf_style_path = ['.','~/sites/cursosf14_texto/_static', '_styles']
 
 # Create a compressed PDF
 # Use True/False or 1/0
