@@ -1,0 +1,42 @@
+.. role:: normal
+
+.. image:: symfony-cover.png
+
+<?py if title: ?>
+
+.. cssclass:: title
+
+#{title}
+
+<?py #end ?>
+
+<?py if subtitle: ?>
+
+.. cssclass:: subtitle
+
+#{subtitle}
+
+<?py #end ?>
+
+.. raw:: pdf
+
+   Spacer 0 3cm
+
+<?py for author in authors: ?>
+.. cssclass:: author
+
+#{author}
+
+<?py #end ?>
+
+.. raw:: pdf
+
+   Spacer 0 3cm
+
+.. cssclass:: author
+
+23 de Julio de 2012
+
+.. raw:: pdf
+
+   OddPageBreak

@@ -810,9 +810,9 @@ elegante y bien refactorizado.
 La siguiente tabla muestra el nombre y un pequeño resumen de las acciones que 
 se generan en los módulos de administración:
 
-======================= ========================================================
+======================= =========================================================
 **Acción**              **Descripción**
-======================= ========================================================
+======================= =========================================================
 *executeIndex()*        Elabora un listado paginado de elementos. 
 
 *executeFilter()*       Ejecuta el filtrado con los datos que les llega desde el
@@ -866,7 +866,7 @@ se generan en los módulos de administración:
                         actualmente el listado
                         
 *setSort()*             Define la columna por la que debe ordenarse el listado
-======================= ========================================================
+======================= =========================================================
 
 Todas estas funciones pueden ser redefinidas en el archivo de acciones del módulo
 *apps/nombre_aplicacion/modules/nombre_modulo/actions/actions.class.php*, el 
@@ -881,57 +881,57 @@ de acciones del módulo y modificarlo a nuestro antojo.
 La siguiente tabla muestra las plantillas y *partials* que se generan el los 
 módulos de administración:
 
-=================== ============================================================
-Plantilla           Descripción
-=================== ============================================================
-*_assets.php*       Arroja las *CSS's* y *Javascript* que utilizará la plantilla
+=========================== ============================================================
+Plantilla                    Descripción
+=========================== ============================================================
+*_assets.php*                Arroja las *CSS's* y *Javascript* que utilizará la plantilla
 
-*_filters.php*      Pinta el filtro de búsqueda
+*_filters.php*               Pinta el filtro de búsqueda
 
-*_filters_field.php*Pinta un campo del filtro de búsqueda
+*_filters_field.php*         Pinta un campo del filtro de búsqueda
 
-*_flashes.php*      Pinta los mensajes *flash*
+*_flashes.php*               Pinta los mensajes *flash*
 
-*_form.php*         Pinta el formulario de edición o creación
+*_form.php*                  Pinta el formulario de edición o creación
 
-*_form_actions.php* Pinta las acciones del formulario de edición o creación
+*_form_actions.php*          Pinta las acciones del formulario de edición o creación
 
-*_form_field.php*   Pinta un campo del formulario de edición o creación
+*_form_field.php*            Pinta un campo del formulario de edición o creación
 
-*_form_fieldset.php*Pinta un conjunto de campos del formulario de edición o
-                    creación
+*_form_fieldset.php*         Pinta un conjunto de campos del formulario de edición o
+                             creación
                     
-*_form_footer.php*  Pinta el pie de formulario de edición o creación
+*_form_footer.php*           Pinta el pie de formulario de edición o creación
 
-*_form_header.php*  Pinta la cabecera del formulario de edición o creación
+*_form_header.php*           Pinta la cabecera del formulario de edición o creación
 
-*_list.php*         Pinta el listado de elementos
+*_list.php*                  Pinta el listado de elementos
 
-*_list_actions.php* Pinta las acciones del listado de elementos
+*_list_actions.php*          Pinta las acciones del listado de elementos
 
-*_list_batch_actions.php* Pinta la lista de acciones por lotes del listado 
-                          de elementos
+*_list_batch_actions.php*    Pinta la lista de acciones por lotes del listado 
+                             de elementos
                           
-*_list_field_boolean.php* Pinta un campo booleano en la lista de elementos
+*_list_field_boolean.php*    Pinta un campo booleano en la lista de elementos
 
-*_list_footer.php*  Pinta el pie de la lista de elementos
+*_list_footer.php*           Pinta el pie de la lista de elementos
 
-*_list_header.php*  Pinta la cabecera del listado de la lista de elementos
+*_list_header.php*           Pinta la cabecera del listado de la lista de elementos
 
-*_list_td_actions.php* Pinta las acciones sobre un elemento de la lista de
-                       elementos
+*_list_td_actions.php*       Pinta las acciones sobre un elemento de la lista de
+                             elementos
                        
 *_list_td_batch_actions.php* Pinta las casillas de verificación en cada fila
                              de la lista de elementos
                              
-*_pagination.php*   Pinta el paginado de la lista de elementos
+*_pagination.php*            Pinta el paginado de la lista de elementos
 
-*editSuccess.php*   Plantilla que pinta la vista de edición
+*editSuccess.php*            Plantilla que pinta la vista de edición
 
-*indexSuccess.php*  Plantilla que pinta vista con el listado de elementos
+*indexSuccess.php*           Plantilla que pinta vista con el listado de elementos
 
-*newSuccess.php*    Plantilla que pinta la vista de creación
-=================== ============================================================
+*newSuccess.php*             Plantilla que pinta la vista de creación
+============================ ============================================================
 
 
 Como puedes observar las tres plantillas principales están fragmentadas en

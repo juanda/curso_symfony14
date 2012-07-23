@@ -1,0 +1,2 @@
+sphinx-build -b pdf  -c ./conf_pdf source .
+
