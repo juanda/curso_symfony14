@@ -571,6 +571,10 @@ la aplicación en sí, el *backend*, que es la parte de administración, y un *p
 que implementará un procedimiento de inicio de sesión que será compartido por 
 ambas aplicaciones.
 
+.. note::
+
+    Esta unidad no tiene ejercicios
+
 
 .. raw:: html
 

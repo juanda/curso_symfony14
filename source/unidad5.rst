@@ -1727,6 +1727,62 @@ Como siempre te aconsejamos que una vez finalizado el tema lo vuelvas a estudiar
 con más profundidad “toqueteando” el código desarrollado y reflexionando sobre
 los resultados obtenidos. 
 
+Ejercicios
+----------
+
+Ejercicio 1
+^^^^^^^^^^^
+Creación de un ORM que ataca a dos bases de datos diferentes. Para realizar este ejercicio sigue los siguientes pasos:
+
+1. Crea un proyecto de symfony, con ORM Propel, denominado ejercicio5-1.
+
+2. Basándote en la sintaxis del fichero schema.yml del proyecto que hemos comenzado en esta unidad, crea un esquema que represente un modelo que represente a usuarios. Puede ser tan simple como una tabla usuarios con atributos típicos de usuarios o tan complejo como un conjunto de tablas relacionadas con datos relativos a usuarios. Denomínalo usuarios.schema.yml, asócialo a una conexión llamada usuarios. Por último indica que se genere el modelo en el directorio lib/model/usuarios. (Ayuda: en las páginas 6 y 7 encontrarás ayuda para completar este punto)
+
+3. Crea un nuevo esquema que represente un modelo para imágenes. Al igual que con el modelo de usuarios, puedes utilizar una o varias tablas para ello. Denomínalo imagenes.schema.yml, asócialo a una conexión denominada imagenes, e indica que se genere en la ubicación lib/model/imagenes.
+
+4. Ahora genera el modelo y observa el resultado inspeccionando la carpeta lib de tu proyecto.
+
+5. Genera los formularios y los filtros. Observa el resultado en la carpeta lib de tu proyecto.
+
+6. Ahora vamos a generar las bases de datos a partir del modelo. Para ello utilizaremos los comandos de symfony propel:build-sql y propel:insert-sql. Pero antes de nada recuerda que hay que definir en el fichero databases.yml las conexiones usuarios e imagenes. (Ayuda: página 8 de la unidad 3 y página 7 de la unidad 5). La tarea propel:insert-sql crea las tablas correspondiente al modelo, pero ten en cuenta que las bases de datos a las que se hace referencia en el archivo databases.yml, es decir, usuario e imagenes, deben estar previamente creadas (aunque estén vacías) en el sistema gestor de base de datos. 
+
+7. Inspecciona el directorio data/sql del proyecto, así como las bases de datos usuarios e imagenes en MySQL.
+
+8. Tomate un momento de reflexión acerca del ejercicio y explica las ventajas e inconvenientes de organizar el modelo en paquetes independientes tal y como lo hemos hecho en este ejercicio.
+Nota: Observa como en este ejercicio, lo último que hemos hecho es construir las bases de datos. El punto inicial es el esquema, a partir del cual se genera el modelo y, a partir de ahí todo lo demás. Esta es la forma de proceder que recomiendan los creadores de symfony, pues crea, según ellos, esquemas “agnósticos” a la base de datos. Es decir, esquemas independientes del sistema gestor de base de datos utilizado. No obstante, suele ser más sencillo partir de una base de datos ya construida y, mediante ingeniería inversa (instrospección con el comando propel:build-schema), obtener el esquema. Nuestro punto de vista, siempre pensando en lo operativo y pragmático, es utilizar una herramienta CASE para diseñar el modelo de dato, construir a partir de ella la base de datos en el SGBD, generar entonces el esquema mediante instrospección y, entonces, modificar el esquema para que sea lo más neutral posible del SGBD.
+
+Ejercicio 2
+^^^^^^^^^^^
+
+En este ejercicio vamos a utilizar el ORM de Propel para manipular los datos del proyecto que acabamos de iniciar en esta unidad.
+
+1. Inserta 5 usuarios, 5 categorías  y 5 tipos de archivos  en la base de datos del proyecto que hemos iniciado en esta unidad, utilizando el ORM de Propel.
+
+.. hint::
+
+   Implementa en código en una nueva acción del módulo gesdoc   y ejecútala a través de la URL de dicha acción en el navegador. Utiliza phpMyAdmin para comprobar que los datos se han insertado listándolos. Las páginas 8 – 10 te servirán de ayuda.
+
+2. Actualiza los datos  de los 5 usuarios que acabas de insertar de manera que todos tengan un perfil denominado 'perfil_borrar'.
+
+.. hint::
+
+   De nuevo crea otra acción para realizar este ejercicio.
+
+3. Elimina en un sólo paso todos los usuarios cuyo perfil sea 'perfil_borrar'.
+Ayuda: Revisa el código de la clase base peer correspondiente y busca la función doDelete(). La documentación de dicha función te ayudará a realizar este ejercicio. 
+
+4. Crea una acción que muestre como salida todos los documentos que tienen, al menos, dos versiones. Muestra también, al lado de cada documento el autor del mismo. Construye la plantilla de manera que se visualice correctamente con las CSS's del proyecto. Para esto último fíjate en la estructura de la plantilla indexSuccess.php
+
+Ejercicio 3
+^^^^^^^^^^^
+Amplía el modelo de datos para almacenar la fecha de nacimiento de los usuarios y conocer la edad de los mismos.
+
+.. hint::
+ 
+   Debes añadir en la base de datos el campo 'fecha_nacimiento' del tipo DATE y con la posibilidad de ser nulo, y reflejar este cambio en el esquema del proyecto. Reconstruir de nuevo el modelo los formularios y los filtros. Entonces añade una función al objeto Usuarios que realice y devuelva el calculo de la edad a partir del dato almacenado en el campo ' fecha_nacimiento'. La función debe responder adecuadamente en el caso de que no se pueda calcular dicha edad por que no exista el dato.
+
+
+
 
 .. raw:: html
 

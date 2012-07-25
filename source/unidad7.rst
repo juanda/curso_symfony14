@@ -1338,6 +1338,49 @@ aquellas ideas y cuestiones que se te hayan podido plantear después de seguir
 esta unidad. Comprobarás que las posibilidades de todo lo aprendido van más allá
 de los ejemplos que hemos construido para ilustrar los conceptos. 
 
+Ejercicios
+----------
+
+Ejercicio 1. Acceso a la configuración por código mediante la clase ``sfConfig``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Para realizar este ejercicio hay que estudiar como se utiliza la clase  ``sfConfig`` para acceder a los valores de los parámetros de configuración definidos en los diversos archivos YAML del proyecto, aplicación y módulos. Para ellos se recomienda la lectura detallada del capítulo 5 del libro “A Gentle Introducction to Symfony” (http://www.symfony-project.org/gentle-introduction/1_4/en/05-Configuring-Symfony), especialmente la parte que trata de la clase sfConfig y del fichero de configuración de la aplicación app.yml.
+
+1. Comenzamos por definir un parámetro de configuración que almacenará el nombre de la aplicación. Lo llamaremos nombre_aplicacion y le daremos el valor “Gestor Documental (Entorno de desarrollo)” en el entorno 'dev' y “Gestor Documental” para el resto de los entornos (es decir para el entorno 'all').
+
+2. Ahora coloca en el layout de la aplicación, en alguna parte bien visible el valor de este parámetro de configuración. Usa para ello sfConfig::get('app_nombre_aplicacion')
+
+3. Comprueba como cambia el texto que acabas de añadir cuando cambias de controlador frontal. Recuerda que el controlador frontal de desarrollo utiliza  el entorno 'dev', mientras que el de producción utiliza el entorno 'prod'.
+
+Ejercicio 2. Refactorización de la acción verVersion mediante el objeto sfResponse de symfony
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+En este ejercicio vamos a refactorizar (es decir a volver a escribir código sin cambiar la funcionalidad) la acción executeVerVersion(), mediante la cual se envía al usuario el fichero correspondiente a una versión. En esta acción usamos la función header de PHP para construir la respuesta. Ahora lo haremos de manera más “symfónica” y elegante: Elimina todas las funciones header y construye un código equivalente utilizando el objeto sfResponse de symfony. 
+
+La lectura del capítulo del libro “A Gentle Introducction to Symfony” (http://www.symfony-project.org/gentle-introduction/1_4/en/07-Inside-the-View-Layer) te ayudará a resolver este ejercicio. Especialmente útil la lectura del aparatado “The Response Object”.
+
+Ejercicio 3. Implementación de un filtro
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Implementación de un filtro para colocar en todas las páginas de la aplicación frontend un aviso que muestre el entorno de configuración que se está utilizando.
+
+Ahora vas a implementar un “post-fitro” mediante el cual se incluya en todas las respuestas de la aplicación frontend un mensaje de aviso indicando el entorno de ejecución en que se encuentra la aplicación. Este mensaje no se mostrará si el entorno de ejecución es el de producción “prod”.
+
+.. hint:: 
+
+   La forma de obtener el nombre del entorno de producción desde un filtro (es decir desde una clase que deriva de sfFilter) es la siguiente:
+
+   .. code-block:: php
+
+      $this -> getContext()-> getConfiguration()-> getEnvironment();
+
+   Una posible forma de añadir dicho mensaje es, una vez que se ha generado la respuesta, colocar tras la etiqueta ``<body>`` el mensaje en cuestión. La función de PHP str_ireplace() te puede ayudar.
+
+Ejercicio 4. Implementación de un servicio web que dé información sobre los datos de un documento
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Implementa un servicio web al que se le pase como argumento a través de la URL un término de búsqueda y responda con un XML (diseña tú la estructura de dicho documento, si quieres puedes utilizar la estructura RSS) con los datos de los documento encontrados.
+
 
 .. raw:: html
 

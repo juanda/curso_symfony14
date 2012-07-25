@@ -513,3 +513,223 @@ Instalación de symfony en Ubuntu
    </style>
    </div>
 
+Ejercicios
+-----------
+
+Ejercicio 1
+^^^^^^^^^^^
+
+Índica cada una de las parte de la siguiente URL:
+
+.. code-block:: bash
+ 
+   https://www.mibuscador.com/buscar?q=php
+
+   protocolo:
+   servidor:
+   recurso:
+
+Ejercicio 2
+^^^^^^^^^^^
+
+Identifica los siguiente fragmentos:
+Posibles respuestas: 1) XML , 2) Petición HTTP, 3) YAML, 4) PHP, 5) Respuesta HTTP, 6) JSON, 7) HTML
+
+.. code-block:: bash
+
+   GET / HTTP/1.1
+   User-Agent: Mozilla
+   Host: cursosymfony.org
+   Connection: Keep-Alive
+
+   HTTP/1.1 200 OK
+   Date: Tue, 22 may 2010 12:34:23 GMT
+   Server: Apache/1.3.22 (unix)
+   Content-Lenght: 2980
+   Connection: close
+   Content-Type: text/html
+
+   class FiltroCSS extends sfFilter
+   {
+    public function execute($filterChain)
+    {
+        if($this  -> isFirstCall())
+        {
+            $user = $this->getContext()->getUser();
+            $perfil = ($user -> hasAttribute('perfil'))? $user -> getAttribute('perfil') : 'invitado';
+            $respuesta = $this -> getContext() -> getResponse();
+            $respuesta -> addStylesheet('default_'.$perfil);
+        }
+        //Ejecutar el próximo filtro
+        $filterChain->execute();
+    }
+   }
+
+   <div class="PiePagina">
+     <ul>
+       <li><a href="#" title="Aviso legal" target="">Aviso legal</a>|</li>
+       <li><a href="http://www.w3.org/WAI/" title="Accesibilidad" target="">Accesibilidad</a>|</li>
+       <li><a href="http://www.w3.org/WAI/" title="Logo de la WAI" target="">WAI</a>            </li>
+     </ul>
+   <p>
+    <a href="#" title="© Juan David Rodríguez" target="#">© Juan David Rodríguez</a>
+   <br/>
+    <a href="#" title="Mentor Soft" target="_blank">Mentor Soft</a>
+   </p>
+   <p> Información general : <a href="mailto:#" title="Contacte con el webmaster">webmaster at gmail dot com</a>
+  <br/>
+  C/ Torrelaguna, nº10 28005 Madrid
+   </p>
+
+  </div>
+
+
+   <title>Canal RSS del Gestor Documental del Curso de Symfony de Mentor.  </title>    <link>http://www.mentor.mec.es</link>
+   <description>Este canal RSS ofrece información actualizada sobre los documentos públicos que se van incorporando al gestor documental del curso de symfony de mentor</description>
+  <image> 
+  <url>http://localhost/curso_symfony/gestordocumental-1.4/web/images/logo.png</url>
+  <link>http://localhost/curso_symfony/gestordocumental-1.4/web/frontend_dev.php/gesdoc</link>
+  </image>
+
+   prod:
+     .settings:
+       no_script_name:         false
+       logging_enabled:        false
+
+   dev:
+     .settings:
+       error_reporting:        E_ALL
+       web_debug:              true
+       cache:                  false
+       no_script_name:         false
+       etag:                   false
+
+   {"menu": {
+      "id": "file",
+      "value": "File",
+      "popup": {
+        "menuitem": [
+          {"value": "New", "onclick": "CreateNewDoc()"},
+          {"value": "Open", "onclick": "OpenDoc()"},
+          {"value": "Close", "onclick": "CloseDoc()"}
+        ]
+      }
+    }}
+
+Ejercicio 3
+^^^^^^^^^^^
+Utilizando los siguiente términos, explica brevemente lo que ocurre desde que un cliente web realiza una petición HTTP a un servidor web hasta que recibe la respuesta de este.
+
+.. code-block:: bash
+
+   Usuario, Navegador, cliente web, petición (request), respuesta (response), URL, recurso, servidor web, puerto, internet, HTTP.
+ 
+Ejercicio 4
+^^^^^^^^^^^
+
+Analiza el siguiente código donde se definen dos clases y tres objetos:
+
+.. code-block:: php
+
+   Class A
+   {
+	protected $mensaje;
+
+	public function __construct($m)
+	{
+     	$this → mensaje = $m; 
+	}
+
+	public function hazAlgo()
+	{
+        	echo 'algo';
+	}
+
+     public function hazOtraCosa()
+     {
+	   	echo 'otra cosa';
+     }
+	
+	public function dameMensaje()
+	{
+		echo $this → mensaje;
+	}
+   }
+
+   class B extends A
+   {
+	protected $error;
+
+	public function __construct($m, $e)
+	{
+		parent::__construct($m);
+		$this → e = $e;
+	}
+
+	public function hazOtraCosa()
+	{
+		echo 'Esto es otra cosa';
+	}
+	
+	public function dameError()
+	{	
+		echo $this  → error;
+	}
+
+   }
+
+   $objetoA = new A('Hola');
+   $objetoB = new B('Adios','400 Bad Request');
+   $objetoC = new A('Hello');
+
+  Escribe en la columna de la derecha el resultado de cada una de las acciones siguientes:
+
+.. code-block:: bash
+
+============================= =====================================
+Acción                        Resultado 
+============================= =====================================
+$objetoA → hazAlgo();
+
+$objetoC → hazAlgo();
+
+$objetoB → hazAlgo();
+
+$objetoC → hazOtraCosa();
+
+$objetoB → dameMensaje();
+
+$objetoA → dameError();
+
+$objetoB → dameError();
+
+$objetoA → dameMensaje();
+
+$objetoB → hazOtraCosa();
+
+$objetoC → dameMensaje();
+
+$objetoC → dameError();
+============================= =====================================
+
+ 
+Ejercicio 5
+^^^^^^^^^^^
+Indica si son verdaderas o falsas las siguientes sentencias:
+
+* HTTP es un protocolo sin estado.
+
+* Las CSS's permiten ejecutar código en el navegador web.
+
+* XML es un lenguaje de marcado ampliamente utilizado en el mundo de la web para el intercambio de datos. 
+
+* Javascript es un lenguaje de programación del lado del servidor.
+
+* Javascript es un lenguaje de programación del lado del cliente.
+
+* Los estilos gráficos de las páginas web se definen en ficheros  javascript.
+
+* PHP es un lenguaje de programación, muy utilizado en el desarrollo de aplicaciones web, de la parte del servidor.
+
+* HTML es el protocolo utilizado para la construcción de la Word Wide Web. 
+

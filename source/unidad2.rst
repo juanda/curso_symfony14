@@ -1152,6 +1152,83 @@ navegador la *URL* correspondiente:
    
 ¡Suerte!
 
+Ejercicios
+----------
+
+Ejercicio 1. 
+^^^^^^^^^^^^
+Añade al menú una opción para mostrar un listado con todos los alimentos con enlaces a los artículos correspodientes de la wikipedia y construye dicha funcionalidad.
+
+.. hint::
+
+   Los artículos de la wikipedia presentan la siguiente URL:
+   
+   http://es.wikipedia.org/wiki/{término}, teniendo en cuenta las tildes, de manera que el artículo correspondiente a la fruta limón será: http://es.wikipedia.org/wiki/limón, puedes construir una tabla con dos columnas, en la primera muestras el nombre del alimento y en la segunda el enlace a la wikipedia
+
+
+Ejercicio 2.
+^^^^^^^^^^^^
+
+Enriquece los enlaces del ejercicio anterior con cajas modales.
+
+.. hint::
+
+   Las “pobres” interfaces HTML de las aplicaciones web pueden “enriquecerse” gracias al uso de javascript en la parte del cliente. En este ejercicio se propone al estudiante que convierta los enlaces del ejercicio anterior de manera que cuando se pique en ellos el enlace aparezca en una ventana situada encima de la página que muestra los enlaces, es decir, en una ventana modal. Esto se consigue utilizando javascript. Vamos a esbozar una posible solución que te ayude a realizar el ejercicio:
+
+   Descarga las siguientes librerías javascript:
+
+   * jquery, http://jqueryjs.googlecode.com/files/jquery-1.3.2.min.js 
+   * colorbox, http://colorpowered.com/colorbox/colorbox.zip
+
+   El siguiente código convierte todos los enlaces cuya clase (atributo class del elemento HTML) sea “cajamodal”:
+
+   .. code-block:: html
+
+      <script>
+      $(document).ready(function(){
+
+	$(".cajamodal").colorbox();
+      });
+      </script>
+    Para que dicho ejemplo funcione, el documento HTML debe incluir las librerías jquery-1.3.2.min.js y colorbox.js (en ese orden). Además, si quieres ver bien la caja modal, debes incluir la hoja de estilo colorbox.css que viene también en el archivo colorbox.zip que acabas de descargar. Si quieres más ayuda mira el código HTML de esta dirección:
+ 
+   .. code-block:: bash
+      
+      http://colorpowered.com/colorbox/core/example1/index.html
+
+   Tu tarea consiste en ubicar en los lugares que corresponda las librerías y el código anterior para que los enlaces a los artículos de la wikipedia del ejercicio anterior se vean en caja modal.
+
+
+Ejercicio 3
+^^^^^^^^^^^
+
+Añade al listado de alimentos del ejercicio 1 una columna más donde ubicarás un enlace que proporcione un archivo XML con los datos del alimento.
+
+.. hint:: 
+
+   Un posible formato para el fichero XML que esta funcionalidad debe entregar como respuesta puede ser (atención, cualquier parecido con los datos dietéticos reales de este ejemplo es pura casualidad) :
+
+   .. code-block:: xml
+
+      <?xml version="1.0"?>
+      <alimento>
+	<nombre>limón</nombre>
+	<energia>100</energia>
+	<proteinas>150</proteinas>
+	<hc>45</hc>
+	<fibra>24</fibra>
+	<grasa>10</grasa>
+      </alimento>
+
+   Además, para enviar como respuesta un XML en lugar del HTML, puedes utilizar la función header() de PHP en la propia acción que implemente esta funcionalidad, y terminar dicha acción con un exit, de manera que no se utilice la plantilla ni el layout que dan lugar al HTML. Mira la documentación de la función header() en el sitio web de PHP.
+   También podrías mejorar el sistema de la vista, agregando la posibilidad de utilizar, además del HTML,  un layout XML. Esta última solución es más elegante pero más compleja de implementar (no mucho más compleja).
+
+Ejercicio 4
+^^^^^^^^^^^
+
+Para terminar el tema explica brevemente las ventajas que tu ves en la organización del código según el patrón MVC.
+
+
 ------------
 
 .. [1] "Patrones de Diseño" de los autores Erich Gamma, Richard Helm, Ralph

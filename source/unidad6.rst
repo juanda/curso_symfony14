@@ -1323,6 +1323,71 @@ filtro de búsqueda entre peticiones y la autentificación y autorización del
 usuario en la aplicación, conceptos que también han sido estudiado en la unidad 
 junto con la estrategia propia de *symfony* para su tratamiento.
 
+Ejercicios
+----------
+
+Ejercicio 1. Estudio de la sesión de symfony.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+En este ejercicio vamos a realizar un estudio práctico de la sesión de symfony. Para ello haremos uso de una técnica de depuración muy sencilla que denominamos introspección de objetos de PHP. Se trata de utilizar el siguiente trozo de código, dentro de la acción donde se encuentre alguna variable cuya estructura deseemos inspeccionar:
+
+.. code-block:: php
+   
+   <?php
+   echo '<pre>';
+   print_r($ObjetoAInspeccionar);
+   echo '</pre>';
+   exit;
+
+.. note::
+
+   Debes enviar como respuesta a los ejercicios de esta unidad, pantallazos de los resultados que vas obteniendo. Puedes volcar en un pdf todas las imágenes correspondientes a los pantallazos o directamente comprimir dichas imágenes en un zip.
+
+1. Primero vamos a comprobar la creación de la sesión en el servidor. Busca el directorio donde tu servidor web crea los archivos de sesiones y, si en dicho directorio hubiera algún o algunos archivos, elimínalos. Entonces ejecuta tu navegador (si lo tienes abierto, ciérralo previamente) y realiza una petición a la aplicación frontend del gestor documental. Observa como inmediatamente se ha creado un archivo en el directorio del servidor donde php guarda las sesiones.
+
+2. Comprueba que en tu navegador existe una cookie asociada al servidor (localhost en nuestro caso ya que el servidor de desarrollo se encuentra en la misma máquina que el navegador web) denominada symfony y cuyo valor coincide con el sufijo del archivo de sesión del punto anterior. Ya tienes la relación entre el cliente web y el servidor. Abre dicho fichero y obsérvalo con detalle. Repasa lo que se dice en la página 2 de este tema.
+
+3. Ahora vamos a ver la representación que PHP hace de dicho fichero. Para ello crea una acción nueva (puedes llamarle executeEstudioSesion ) y realiza una inspección a la variable $_SESSION de PHP mediante la técnica de depuración que hemos indicado al principio del ejercicio. Ahora puedes confrontar el contenido del fichero de sesión con los datos de este array asociativo que es la forma nativa que tienen PHP para representar la sesión.
+
+4. A continuación realiza una inspección del objeto con el que symfony representa la sesión ($this → getUser()). Compáralo con el resultado del ejercicio 3. Te darás cuenta de que la representación de la sesión de symfony es mucho más completa que la que hace PHP de forma nativa.
+
+Ejercicio 2. Organizando la sesión con los attribute holders (contenedores de atributos).
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Hemos visto en esta unidad que los datos persistentes de la aplicación se pueden almacenar en la sesión utilizando la función setAttribute del objeto  sfUser. Existe un problema potencial cuando se utiliza la sesión para almacenar datos persistentes de la aplicación. Se trata de la posibilidad de colisiones entre atributos. Podría ocurrir que una parte de la aplicación crease un atributo determinado en la sesión, y que otra parte de la aplicación crease otro atributo, que no tenga que ver nada con el anterior, pero que se llame igual. En ese caso  el valor del atributo sería cambiado por uno nuevo, de manera que la primera parte de la aplicación estaría utilizando un valor erróneo del atributo, provocando un mal funcionamiento de la misma. Una manera de evitar este error, o al menos minimizarlo, es organizar los atributos de la sesión en contenedores de atributos.
+
+1. Revisa en el capítulo 2 del libro “A Gentle Introduction to Symfony” (http://www.symfony-project.org/gentle-introduction/1_4/en/) la parte donde se habla de los contenedores de atributo. 
+
+2. En la acción de prueba que has creado para realizar este ejercicio, crea un atributo de la sesión llamado “prueba” con el valor “esto es una prueba”, dentro de un “attribute holder” denominado “PRUEBA”. Ejecuta la acción y utiliza la barra de depuración de symfony para consultar el estado de la sesión. Verás como el atributo que acabas de crear aparece separado de los atributos “normales” de la aplicación.
+
+3. En la misma acción de prueba recupera el valor del atributo creado en el punto anterior y muéstralo por pantalla.
+
+Ejercicio 3. Atributos Flash de la sesión de symfony
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Ya hemos señalado el problema de las posibles colisiones entre los nombres de los atributos de la sesión y como se resuelve con los contenedores de parámetros. No obstante, no es una buena práctica sobrecargar la sesión con multitud de atributos que, probablemente sólo se utilizan una vez y quedan como atributos basura durante todo el tiempo que dura la sesión, aumentando la posibilidad de colisiones y efectos colaterales indeseados. Lo ideal sería que una vez que el atributo deja de utilizarse, se elimine de la sesión. Lo que ocurre es que implementar dicho control no es tarea sencilla. Symfony ofrece una solución que cubre una parte de dicho comportamiento. Se trata de los atributos Flash, los cuales duran en la sesión únicamente una acción más tras la acción que lo define.
+
+1. En la acción de prueba de este ejercicio, crea un atributo flash. Llámalo como quieras y ponle el valor que 
+quieras.
+
+2. Ejecuta la acción y muestra con el depurador de symfony el estado de esta. Verás el atributo flash que acabas de crear en un contenedor de parámetros especial.
+
+3. Ejecuta una acción distinta (index, por ejemplo) y vuelve a comprobar el estado de la sesión. Volverás a ver el atributo flash.
+
+4. Ejecuta otra vez la misma acción y y vuelve a comprobar el estado de la sesión. Verás como ha desaparecido el atributo flash.
+
+5. ¿Para que crees que puede venir bien este tipo de atributos?
+
+Ejercicio 4. Autorización y credenciales
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+1. Crea una acción denominada verDatosUsuarios y su plantilla asociada que muestre en una tabla los datos personales de todos los usuarios de la aplicación. Para esta acción autoriza únicamente a los usuarios que dispongan de la credencial 'escritura' y 'superadministracion'.
+
+2. Modifica el proceso de inicio de sesión para añadir la credencial 'superadministracion' al perfil 'administrador', de manera que puedas probar el punto anterior.
+
+3. En el proyecto crea una nueva tabla para almacenar las credenciales, y una tabla intermedia para relacionar las credenciales con los perfiles. Reconstruye el modelo. Usando phpMyAdmin inserta las credenciales en la tabla recién creada de credenciales así como las relaciones entre estas y los perfiles en la tabla intermedia. Ahora modifica el inicio de sesión para que asocie a los perfiles las credenciales que les corresponda según los datos almacenados en la base de datos. Con este ejercicio hemos mejorado el proceso de inicio de sesión ya que al definir las políticas de seguridad en base de datos, podremos desarrollar más adelante un módulo para la gestión de las credenciales y su asociación a los perfiles, permitiendo al administrador definir dicha política sin tener que tocar el código de la aplicación.
+
+
 
 .. raw:: html
 

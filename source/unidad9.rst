@@ -1527,6 +1527,268 @@ Practicar, investigar, ensayar, errar, conseguir resultados y asimilarlos es la
 mejor, si no la única receta, que te permitirá desarrollar sistemas software de 
 calidad.
 
+Ejercicio 1
+^^^^^^^^^^^
+Construye un módulo de administración para la gestión de los comentarios de los usuarios sobre los documentos
+
+.. note:
+  (Lee esta nota ahora y vuelve a leerla cuando vayas a ponerte a desarrollar el ejercicio)
+  Si has utilizado para desarrollar los ejercicios el proyecto “gestordocumental” que se facilita en los recursos del curso, te surgirá un pequeño problema en este ejercicio.
+
+  Resulta que ese proyecto ya viene con una base de datos con las tablas del plugin ``sfGuardPlugin`` que se utiliza en este ejercicio. Entonces cuando se genera el modelo también se generan las clases correspondientes a estas tablas. Ahora viene el problema. Cuando se instala el plugin ``sfGuardPlugin`` en el tema 9, se vuelven a generar (ahora en otro sitio, concretamente en el directorio lib del ``sfGuardPlugin``) las mismas clases, provocando una duplicación de clases que puede dar lugar a que algunas partes de este ejercicio no te funcionen.
+Para resolver este problema borra las clases ``sfGuardUser``, ``sfGuardGroup``, etcétera que están fuera del plugin ``sfGuardPlugin``, eliminando la duplicidad. 
+
+
+Ejercicio 2. Incorporación del plugin sfGuardPlugin al gestor documental.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Posiblemente el plugin público más conocido de symfony sea el ``sfGuardPlugin``, el cual ofrece una gestión completa de usuarios, grupos (equivalente a perfiles) y permisos (equivalente a credenciales) así como un proceso de inicio de sesión. El plugin utiliza un modelo similar al utilizado por el fichero de sistemas de Unix, de manera que: 
+
+* un usuario puede pertenecer a uno o varios grupos, 
+
+* un usuario puede tener asignado uno o varios permisos
+
+* un grupo puede tener asignado uno o varios permisos
+
+Lo cual da una gran flexibilidad para elaborar políticas de seguridad en la acción. 
+
+Todos los elementos de este modelo; usuarios, grupos y permisos, así como sus relaciones, se incorporan como tablas de la base de datos. El plugin ofrece módulos de administración para cada uno de los elementos del modelo. Los nombre de estos módulos son: ``sfGuardUser``, ``sfGuardGroup`` y ``sfGuardPermission``. Por último, el módulo  dispone de un módulo para relalizar el inicio de sesión que se denomina sfGuardAuth.  
+
+En este ejercicio te proponemos que incorpores el ``sfGuardPlugin`` al gestor documental, y lo utilices en lugar del plugin ``IniSesPlugin`` que hemos construido en este curso que, aunque didáctico, no deja de ser pobre. Si consigues dar este paso comprenderás la enorme mejora que supone. Mejora que puede ser aplicada a prácticamente cualquier aplicación web. 
+
+Sin lugar a duda este ejercicio es el más completo y complejo del curso. Por ello hemos elaborado dos niveles de ayuda. En el primer nivel se indican las cuestiones fundamentales que se han de tener en cuenta para realizar el ejercicio, sin entrar en detalles. En el segundo nivel se ofrece una guía paso a paso y detallada para resolver el ejercicio. De hecho es una posible resolución del ejercicio. Obviamente puedes irte directamente a esta receta detallada. Pero si realmente quieres aprender, te recomendamos que intentes realizar el ejercicio con las indicaciones de nivel 1, el manual del curso y los recursos de symfony en la red. Utiliza las indicaciones detalladas sólo cuando estés verdaderamente atascado. 
+
+Ayuda de nivel 1
+################
+
+En esencial el ejercicio consiste en sustituir el inicio de sesión que hemos elaborado en el curso por el que proporciona el ``sfGuardPlugin``, denominado ``sfGuardAuth``. Dicho módulo realiza el proceso de inicio de sesión consultando las tablas propias del plugin donde se establecen los usuarios, los grupos, los permisos (credenciales) y las relaciones que existen entre ello. Por ello hay que relacionar de alguna manera los registros de nuestra tabla de usuarios con los de la tabla de usuarios del plugin (denominada ``sf_guard_user``). Esta última tabla únicamente presenta campos relacionados con el proceso de login: ``username``, ``password``, ``last_login``, ``is_active``, ``is_superadmin``. 
+
+Por ello sigue siendo necesaria nuestra tabla de usuarios, ya que en ella se encuentra los datos personales como el nombre, los apellidos, la fecha de nacimiento y todos los que deseemos colocar. Así pues, lo primero que hay que hacer, una vez instalado el plugin, construido el modelo, formularios y filtros, e insertadas sus tablas en la base de datos del gestor documental, es crear tantos registros en la tabla ``sf_guard_user`` como usuarios tengamos en la tabla usuarios, haciendo corresponder de alguna manera a unos con otros. Para ello, lo más apropiado es crear un campo en la tabla usuarios que relacione sus  registros con los de la tabla ``sf_guard_user``. Este proceso de migración puedes hacerlo a través de una una acción que recorra todos los objetos del tipo ``Usuarios`` y vaya creando en tal recorrido los objetos de tipo ``SfGuardUser`` y la relación entre unos y otros.
+
+Ahora ya se puede utilizar el módulo de inicio de sesión del ``sfGuardPlugin``. Haciendo algunas adaptaciones. 
+
+En primer lugar hay que definir la política de seguridad, es decir la asignación de credenciales en función del perfil y del usuario. Esto lo hacemos utilizando los módulos ``sfGuardUser``, ``sfGuardGroup`` y ``sfGuardPermission``. Habilítalos en la aplicación backend así como en su menú y úsalos para añadir los grupos lector, autor y administrador, y los permisos lectura, escritura y administracion (cuida de que estos permisos se llamen igual para que los ficheros security.yml sigan siendo válidos). 
+
+También tendrás que ampliar la clase de Propel ``SfGuardUser`` con métodos getters que obtengan los datos de su registro de la tabla``Usuarios`` correspondiente, y adaptar el componente ``mostrarPerfil`` para que utilice un objeto del tipo ``SfGuardUser`` en lugar de un objeto Usuarios.
+
+Por último tendrás que definir la ruta ``@homepage``, que es la que utiliza el inicio de sesión del ``sfGuardPlugin`` para redirigir la acción una vez finalizado el proceso de inicio de sesión,  y redefinir los parámetros ``module_login`` y`` action_login`` para que la aplicación muestre el formulario de login del ``sfGuardPlugin`` cuando el usuario no este autenticado. Esto lo tendrás que hacer también en la aplicación frontend para que utilice  ``sfGuardAuth`` como módulo de inicio de sesión.
+
+Ayuda de nivel 2: la receta
+###########################
+
+Comenzamos por hacer un volcado de los datos de la base de datos para recuperarlos más tarde, ya que el proceso de instalación del plugin ``sfGuardPlugin``, tal y como lo vamos a hacer borra y vuelve a crear todas las tablas de la base de datos y añade las de ``sfGuardPlugin``.
+
+.. code-block:: bash
+
+   symfony propel:data-dump dump.yml
+
+Instalamos el plugin ``sfGuardplugin`` (necesitamos conexión a Internet)
+
+.. code-block:: bash
+
+   symfony plugin:install sfGuardPlugin
+
+Añadimos la siguiente linea a la definición de la tabla usuarios en nuestro esquema. Dicha linea incluye la relación de los registros de nuestra tabla usuarios con los de la tabla sf_guard_user del plugin.  (Mira el directorio config del ``sfGuardPlugin`` para ver  el esquema de este y la definición de dicha tabla):
+
+.. code-block:: yaml
+
+   id_sfuser: { phpName: IdSfuser, type: INTEGER, size: '11', required: false, foreignTable: sf_guard_user, foreignReference: id, onDelete: RESTRICT, onUpdate: CASCADE }
+
+Construimos el modelo, formulario, filtros y sentencias sql del nuevo esquema, que es la combinación del nuestro con el del ``sfGuardPlugin``.
+
+.. code-block:: bash
+
+   symfony propel:build-model
+   symfony propel:build-forms
+   symfony propel:build-filters
+   symfony propel:build-sql
+
+Construimos la nueva base de datos, que es combinación de la nuestra con la del plugin. Cuando hayas lanzado la instrucción siguiente, echa un vistazo a la base de datos con phpMyAdmin para que veas las nuevas tablas que el plugin ha construido:
+
+.. code-block:: bash
+
+   symfony propel:insert-sql
+
+Ahora cargamos los datos que teníamos antes de comenzar el proceso:
+
+.. code-block:: bash
+
+   symfony propel:data-load
+
+Y ya volvemos a tener la base de datos tal y como antes de empezar pero con las tablas que modelan las entidades del sfGuardPlugin y sus relaciones.
+
+Ahora vamos a implementar un módulo para poblar la tabla ``sf_guard_user`` con los usernames de la tabla usuarios. Desgraciadamente no podemos migrar los passwords. En el la aplicación backend creamos un módulo llamado migración:
+
+.. code-block:: bash
+
+   symfony generate:module backend migracion
+
+Y añadimos la siguiente acción:
+
+.. code-block:: php
+
+   <?php
+   public function executeIndex(sfWebRequest $request)
+   {
+      $c = new Criteria();
+
+      $usuarios = UsuariosPeer::doSelect($c);
+
+
+      foreach($usuarios as $u)
+      {
+        $sfuser = new sfGuardUser();
+
+        $sfuser -> setUsername($u -> getUsername());
+        $sfuser -> setPassword('pruebas');
+
+        $sfuser -> save();
+        $u -> setIdSfuser($sfuser -> getId());
+        $u -> save();
+      }
+
+      $this -> numUsuarios = count($usuarios);
+    }
+
+Y la siguiente plantilla (``indexSuccess.php``):
+
+.. code-block:: html+php
+
+   <?php echo $numUsuarios ?> Migrados
+
+Ejecutamos el módulo y comprobamos que se ha poblado la tabla ``sf_guard_user`` y que la tabla usuarios está debidamente relacionada con aquella a través del campo ``id_sfuser``.
+
+Habilitamos los módulos del plugin en la aplicación backend, a través de su archivo de configuración ``settings.yml``.
+
+.. code-block:: yaml
+
+   enabled_modules: [ default, inises, sfGuardUser, sfGuardGroup, sfGuardPermission, sfGuardAuth ]
+
+Y los enlazamos en el menú de la aplicación (``partial _menu``)
+
+Ahora podemos usar los módulos de gestión de usuarios, grupos y perfiles del ``sfGuardPlugin``. Observa la lista de usuarios que hemos migrados, añade los grupos lector, autor y administrador y los permisos lectura, escritura y administracion. Asocia al grupo lector el permiso lectura, al grupo autor los permisos lectura y escritura y al grupo administrador los permisos lectura, escritura y administracion , y a cada uno de los usuarios asígnales un grupo. (no es más que la política de seguridad que hemos definido en el curso)
+
+Ampliamos la clase ``sfGuardUser`` para que obtenga el nombre y apellidos del objeto Usuarios asociado, así como los perfiles asociados.
+
+.. code-block:: php
+
+   <?php 
+   class sfGuardUser extends PluginsfGuardUser
+   {
+      public function getNombre()
+      {
+        $c = new Criteria();
+
+        $c->add(UsuariosPeer::ID_SFUSER, $this -> getId());
+
+        $usuario = UsuariosPeer::doSelectOne($c);
+
+        return $usuario -> getNombre(). ' '.$usuario -> getApellidos();
+
+      }
+
+      public function getPerfiles()
+      {
+         $perfiles = $this -> getGroupNames();
+
+        $nombre = '|';
+        foreach ($perfiles as $p)
+        {
+
+            $nombre .= $p . '|';
+        }
+
+        return $nombre;    
+     }
+   }
+
+Y adaptamos el componente ``mostrarPerfiles`` para que use el objeto anterior. Recuerda que este componente está en el módulo ``inises`` del plugin ``IniSesPlugin``, por lo que aunque dejemos de usar su inicio de sesión, aún necesitamos este componente. (Como alternativa puedes pasar este componente al módulo ``sfGuardAuth`` del plugin ``sfGuardPlugin``, pero vas a tener que tocar más código en el proyecto para que tenga en cuenta este cambio).
+
+.. code-block:: php
+
+   <?php
+   class inisesComponents extends sfComponents
+   {
+      public function executeMostrarPerfil()
+      {
+        $user = $this -> getUser();
+
+        if($user -> isAuthenticated())
+        {
+            $id_usuario = $user -> getAttribute('user_id',null, 'sfGuardSecurityUser');
+
+            $usuario = sfGuardUserPeer::retrieveByPK($id_usuario);
+
+            $this -> nombre = $usuario -> getNombre();
+            $this -> perfil = $usuario -> getPerfiles();
+        }
+        else
+        {
+            $this -> nombre = 'usuario';
+            $this -> perfil = 'invitado';
+        }
+      }
+   }
+
+Y los enlaces del partial para el registro:
+
+.. code-block:: html+php
+
+   <?php if($sf_user -> isAuthenticated()) :?>
+   <?php echo link_to('desconectar', 'sfGuardAuth/signout') ?>
+   <?php else : ?>
+   <?php echo link_to('registro', 'sfGuardAuth/signin') ?>
+   <?php endif; ?>
+
+Ahora vamos a realizar el desvío del inicio de sesión nuestro al del ``sfGuardPlugin``. Definimos la ruta ``@homepage`` que utiliza el nuevo inicio de sesión para redireccionar después del proceso de login, y redefinimos los parámetros login_module y login_action:
+
+En el fichero ``app/backend/config/routing.yml``
+
+.. code-block:: yaml
+
+   homepage:
+     url:   /
+     param: { module: gesusu, action: index }
+
+En el fichero app/backend/config/settings:
+
+.. code-block:: yaml
+
+   all
+    .settings
+    ...   
+      login_module:  sfGuardAuth
+      login_action:  signin
+    ...
+
+Además, como se dice en las instrucciones de instalación del sfGuardPlugin, hay que hacer que la clase ``myUser`` derive de ``sfGuardSecurityUser``:
+
+El fichero ``app/backend/lib/myUser.class.php`` debe contener:
+
+.. code-block:: php
+   
+   <?php
+
+   class myUser extends sfGuardSecurityUser
+   {
+   }
+
+Y llegamos al final. Entra en la aplicación a través de la url del backend. Asegúrate de que no tenías una sesión anterior con el usuario autentificado. Ahora te aparece el formulario de login del ``sfGuardUser``  y el proceso de inicio de sesión lo lleva a cabo dicho plugin.
+
+Ejercicio 3
+^^^^^^^^^^^
+Responde a las siguientes preguntas:
+
+Tras los cambios del ejercicio 2, ¿sirven de algo los campos username, password y perfil de la tabla usuarios? ¿porqué?
+
+Otra solución posible podría haber sido ampliar la tabla ``sf_guard_user`` con los campos de la tabla ``usuarios`` que necesitásemos, realizar la migración y eliminan la tabla usuarios. ¿Te parece mejor o peor la solución que hemos resuelto adoptar? ¿Por qué?
+
+Por más vuelta que le des, en el proceso de migración encontramos un problema irresoluble. ¿En qué consiste? 
+Suponiendo que la aplicación estuviese en producción antes de realizar el cambio, y que contase con miles de usuarios ¿Cómo podemos paliar este problema?
+
+Haz una enumeración de las ventajas que encuentras en utilizar este plugin para el inicio de sesión en lugar del que hemos desarrollado en el curso.
+
+
 .. raw:: html
 
    <div style="background-color: rgb(242, 242, 242); text-align: center; margin: 20px; padding: 10px;">

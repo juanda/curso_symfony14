@@ -1980,6 +1980,77 @@ como hemos mostrado en esta unidad, también pueden sernos muy útiles en otras
 situaciones. Se trata siempre de estudiar qué objetos podemos reutilizar mediante
 su extensión y adaptación a nuestras necesidades.
 
+Ejercicios
+----------
+
+Ejercicio 1 
+^^^^^^^^^^^
+Utiliza el formulario de Propel ComentariosForm, para implementar los requisitos C.01, C.02 y C.03 que se establecieron en la unidad 4.
+
+1. Añade en cada fila del listado de documentos (acción ``gesdoc/index``) un link para que los usuarios registrados (no los invitados) puedan realizar comentarios de los documentos. Este link disparará una acción que mostrará al usuario un formulario para realizar un comentario. Una vez relleno y enviado al servidor se guardará en la base de datos y se realizará una redirección a la acción ``gesdoc/index``.
+
+2. Añade a cada fila del listado un link para visualizar los comentarios que se han realizado sobre cada documento. Fíjate que se trata simplemente de un listado de comentarios filtrado para cada documento en cuestión. Haz que este link presente el siguiente texto: “N comentarios”, donde N es el número de comentarios asociados al documento.
+
+3. En la pantalla que muestra el listado de comentarios de cada documento, coloca un link para añadir un nuevo comentario. Fíjate que este link debe apuntar a la misma acción que link del punto 1.
+
+Ejercicio 2
+^^^^^^^^^^^
+
+Implementación de un formulario para que los usuarios no registrados soliciten una cuenta de lector del gestor documental.
+
+1. En la pantalla de registro (``inises/signIn``), coloca un nuevo link, llamado “solicitar cuenta de lector” que lleve a un formulario en el que se piden los datos del usuario.
+
+2. Cuando el usuario envíe este formulario, si los datos son correcto (fundamentalmente que el login no esté duplicado), mostrará al usuario una pantalla informando que ha sido tramitada una cuenta de lector con los datos que el usuario introdujo.
+
+3. Para que un humano, el administrador, pueda controlar la activación de las cuentas solicitadas, vamos a introducir un nuevo campo en la tabla usuarios que se llame 'activo' y cuyo valor sea 0 (para inactivo) o 1 (para activo). Debes garantizar que cuando el usuario envía el formulario se graba un cero en dicho campo. También debes modificar el inicio de sesión para que tenga en cuenta este campo y no deje entrar en la aplicación a los usuario, que teniendo login y password correctos, no estén activados (campo activo=1). En la próxima unidad se construirá la aplicación de administración mediante la cual el administrador podrá activar manualmente las cuentas solicitadas.
+
+Ejercicio 3. Explorando los widgets de symfony.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Tanto en este como en el siguiente ejercicio necesitarás tener a mano el capítulo 12 sobre widgets de libro “Los formulario de symfony”:
+
+``http://www.librosweb.es/symfony_formularios/capitulo12.html``
+
+Construye un formulario que contenga los widgets de symfony enumerados en la página 6 de esta unidad de forma que:
+
+* El input text tenga una anchura de 300px
+
+* El text area tenga una altura de 10 filas y una anchura de 80 columnas
+
+Implementa los cuatro tipos de ``sfWidgetFormChoice`` que se pueden generar combinando las opciones expanded y multiple. En todos los casos haz que se muestre una lista con los días de la semana.
+
+Haz lo mismo que en el punto anterior pero con el ``sfWidgetFormPropelChoice``, tomando los valores a mostrar de la tabla usuarios. (Este widget no está en el listado de la página 6)
+
+El ``sfWidgetFormDate`` muestre la fecha en el formato dia-mes-año, y que se muestren los años comprendidos entre 1900 y el año actual.
+
+Ejercicio 4. Widgets enriquecidos.
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+En este ejercicio vamos a jugar con widgets enriquecidos. Es decir, con widgets que hacen uso de javascript para mejorar la usabilidad y la experiencia de usuario. Estos widgets no forman parte del núcleo de symfony. Hay que instalarlos a través de un plugin denominado ``sfFormExtraPlugin``. (En la próxima tratremos los plugins con detalle. Por lo pronto basta con saber que amplían las funcionalidades del framework).
+
+1. Instala el  ``sfFormExtraPlugin`` mediante la siguiente instrucción (debes tener conesión a internet):
+   
+   .. code-block:: bash
+
+      symfony plugin:install sfFormExtraPlugin
+
+2. Descarga el editor *tinyMCE*, que es un editor  WYSIWYG escrito en javascript.
+
+3. Una vez descomprimido el paquete del *tinyMCE* coloca la carpeta tiny_mce colgando del directorio ``web/js`` del proyecto.
+
+4. Edita el fichero ``app/frontend/config/view.yml`` para indicar que desea cargar la librería ``tiny_mce.js`` en todas las páginas. Para ello inserta esta línea:
+
+   .. code-block:: yaml
+
+      javascripts:    [tiny_mce/tiny_mce.js]
+
+5. Ahora sustituye el widget correspondiente a la descripción del formulario FormularioDocumentos por un ``sfWidgetFormTextareaTinyMCE``
+
+6. Observa el cambio producido en el formulario de altas de documentos. Esto es enriquecer un formulario.
+
+7. Si te quedan ganas juega con los otros widget que vienen en el plugin que acabas de instalar, a saber: ``sfWidgetFormSelectDoubleList``, ``sfWidgetFormJQueryAutocompleter`` y ``sfWidgetFormJQueryDate``.
+
+
 .. raw:: html
 
    <div style="background-color: rgb(242, 242, 242); text-align: center; margin: 20px; padding: 10px;">

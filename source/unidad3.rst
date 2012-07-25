@@ -1812,6 +1812,15 @@ cualquier tipo de aplicación *web* sobre *symfony*, aunque, por desconocimiento
 no uses toda la artillería pesada que el *framework* ofrece y que mejoraría 
 sustancialmente la calidad de la aplicación.
 
+Ejercicios
+----------
+
+Ejercicio 1
+^^^^^^^^^^^
+
+Implementa los ejercicios 1, 2 y 3 de la unidad 2 en el proyecto de esta unidad.
+
+
 .. raw:: html
 
    <div style="background-color: rgb(242, 242, 242); text-align: center; margin: 20px; padding: 10px;">
